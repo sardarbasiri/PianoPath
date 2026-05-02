@@ -167,3 +167,9 @@ button:hover {
   padding: 0.8rem;
   font-size: 1.1rem;
 }
+
+#page-6 {
+  display: none;
+  text-align: center;
+  padding: 2rem;
+}

@@ -43,20 +43,7 @@
     </div>
   </div>
 
-  <!-- PAGE 4 - SIGHT READING PRACTICE -->
-  <div id="page-4">
-    <button class="back-btn" onclick="showPage('page-3')">← Back</button>
-    <h1>🎯 Sight Reading Practice</h1>
-    <div id="staff-area"></div>
-    <div id="keyboard-area"></div>
-    <div id="feedback"></div>
-    <div class="buttons" style="margin-top: 2rem;">
-      <button id="next-btn" onclick="nextNote()">Next Note →</button>
-    </div>
-  </div>
-
-  <!-- PAGE 5 - INPUT METHOD -->
-  <div id="page-5">
+ <div id="page-5">
     <button class="back-btn" onclick="showPage('page-3')">← Back</button>
     <h1>🎹 Sight Reading Practice</h1>
     <p class="subtitle">How would you like to answer?</p>
@@ -65,6 +52,29 @@
       <button onclick="startWithInput('buttons')">🔘 Answer Buttons</button>
       <button onclick="startWithInput('midi')">🎵 MIDI Piano</button>
     </div>
+  </div>
+
+  <!-- PAGE 6 - DIFFICULTY -->
+  <div id="page-6">
+    <button class="back-btn" onclick="showPage('page-5')">← Back</button>
+    <h1>🎯 Choose Difficulty</h1>
+    <p class="subtitle">How much time per note?</p>
+    <div class="buttons">
+      <button onclick="selectDifficulty('beginner')">🟢 Beginner — 4s</button>
+      <button onclick="selectDifficulty('intermediate')">🟡 Intermediate — 2s</button>
+      <button onclick="selectDifficulty('advanced')">🟠 Advanced — 1s</button>
+      <button onclick="selectDifficulty('expert')">🔴 Expert — 0.5s</button>
+    </div>
+  </div>
+
+  <!-- PAGE 4 - PRACTICE -->
+  <div id="page-4">
+    <button class="back-btn" onclick="showPage('page-6')">← Back</button>
+    <h1>🎯 Sight Reading Practice</h1>
+
+    <div id="staff-area"></div>
+    <div id="keyboard-area"></div>
+    <div id="feedback"></div>
   </div>
 
   <script src="script.js"></script>
