@@ -20,14 +20,26 @@
     </div>
   </div>
 
-  <!-- PAGE 2 -->
+<!-- PAGE 2 -->
   <div id="page-2">
-    <button onclick="goBack()">← Back</button>
+    <button class="back-btn" onclick="showPage('page-1')">← Back</button>
     <h1 id="page2-title"></h1>
     <p class="subtitle">What would you like to do?</p>
     <div class="buttons">
       <button>📖 Learn</button>
-      <button>🎯 Practice</button>
+      <button onclick="practiceClick()">🎯 Practice</button>
+    </div>
+  </div>
+
+  <!-- PAGE 3 -->
+  <div id="page-3">
+    <button class="back-btn" onclick="showPage('page-2')">← Back</button>
+    <h1>🎵 Sight Reading</h1>
+    <p class="subtitle">Which clef would you like to practice?</p>
+    <div class="buttons">
+      <button>𝄞 Treble Clef</button>
+      <button>𝄢 Bass Clef</button>
+      <button>𝄞𝄢 Both</button>
     </div>
   </div>
 

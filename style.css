@@ -14,12 +14,12 @@ body {
   justify-content: center;
 }
 
-#page-1, #page-2 {
+#page-1, #page-2, #page-3 {
   text-align: center;
   padding: 2rem;
 }
 
-#page-2 {
+#page-2, #page-3 {
   display: none;
 }
 
@@ -56,4 +56,21 @@ button {
 button:hover {
   background: #c9a84c;
   color: #0d0d0f;
+}
+
+.back-btn {
+  display: inline-block;
+  margin-bottom: 1.5rem;
+  background: none;
+  border: none;
+  color: #888;
+  font-size: 0.95rem;
+  cursor: pointer;
+  padding: 0;
+  width: auto;
+}
+
+.back-btn:hover {
+  color: #f0ede6;
+  background: none;
 }
