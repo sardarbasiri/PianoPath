@@ -37,9 +37,9 @@
     <h1>🎵 Sight Reading</h1>
     <p class="subtitle">Which clef would you like to practice?</p>
     <div class="buttons">
-      <button onclick="startPractice('treble')">𝄞 Treble Clef</button>
-      <button onclick="startPractice('bass')">𝄢 Bass Clef</button>
-      <button onclick="startPractice('both')">𝄞𝄢 Both</button>
+      <button onclick="selectClef('treble')">𝄞 Treble Clef</button>
+      <button onclick="selectClef('bass')">𝄢 Bass Clef</button>
+      <button onclick="selectClef('both')">𝄞𝄢 Both</button>
     </div>
   </div>
 
@@ -47,15 +47,23 @@
   <div id="page-4">
     <button class="back-btn" onclick="showPage('page-3')">← Back</button>
     <h1>🎯 Sight Reading Practice</h1>
-
     <div id="staff-area"></div>
-
     <div id="keyboard-area"></div>
-
     <div id="feedback"></div>
-
     <div class="buttons" style="margin-top: 2rem;">
-      <button onclick="nextNote()">Next Note →</button>
+      <button id="next-btn" onclick="nextNote()">Next Note →</button>
+    </div>
+  </div>
+
+  <!-- PAGE 5 - INPUT METHOD -->
+  <div id="page-5">
+    <button class="back-btn" onclick="showPage('page-3')">← Back</button>
+    <h1>🎹 Sight Reading Practice</h1>
+    <p class="subtitle">How would you like to answer?</p>
+    <div class="buttons">
+      <button onclick="startWithInput('keyboard')">🎹 On-Screen Keyboard</button>
+      <button onclick="startWithInput('buttons')">🔘 Answer Buttons</button>
+      <button onclick="startWithInput('midi')">🎵 MIDI Piano</button>
     </div>
   </div>
 

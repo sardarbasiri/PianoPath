@@ -1,22 +1,73 @@
 let selectedTopic = '';
 let selectedClef = '';
+let selectedInput = '';
 let currentNote = null;
 let answered = false;
 
 // ── Audio ──────────────────────────────────────────────────────
 let audioCtx = null;
-function playFreq(freq) {
+
+function getCtx() {
   if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  const osc = audioCtx.createOscillator();
-  const gain = audioCtx.createGain();
-  osc.connect(gain);
-  gain.connect(audioCtx.destination);
-  osc.type = 'triangle';
-  osc.frequency.value = freq;
-  gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
-  gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.8);
-  osc.start();
-  osc.stop(audioCtx.currentTime + 0.8);
+  return audioCtx;
+}
+
+function playPiano(freq) {
+  const ac = getCtx();
+  const now = ac.currentTime;
+
+  const osc1 = ac.createOscillator();
+  const gain1 = ac.createGain();
+  osc1.type = 'triangle';
+  osc1.frequency.value = freq;
+  gain1.gain.setValueAtTime(0.5, now);
+  gain1.gain.exponentialRampToValueAtTime(0.001, now + 2.0);
+  osc1.connect(gain1);
+  gain1.connect(ac.destination);
+  osc1.start(now);
+  osc1.stop(now + 2.0);
+
+  const osc2 = ac.createOscillator();
+  const gain2 = ac.createGain();
+  osc2.type = 'sine';
+  osc2.frequency.value = freq * 2;
+  gain2.gain.setValueAtTime(0.2, now);
+  gain2.gain.exponentialRampToValueAtTime(0.001, now + 1.2);
+  osc2.connect(gain2);
+  gain2.connect(ac.destination);
+  osc2.start(now);
+  osc2.stop(now + 1.2);
+
+  const osc3 = ac.createOscillator();
+  const gain3 = ac.createGain();
+  osc3.type = 'sine';
+  osc3.frequency.value = freq * 3;
+  gain3.gain.setValueAtTime(0.08, now);
+  gain3.gain.exponentialRampToValueAtTime(0.001, now + 0.8);
+  osc3.connect(gain3);
+  gain3.connect(ac.destination);
+  osc3.start(now);
+  osc3.stop(now + 0.8);
+
+  const bufferSize = ac.sampleRate * 0.04;
+  const buffer = ac.createBuffer(1, bufferSize, ac.sampleRate);
+  const data = buffer.getChannelData(0);
+  for (let i = 0; i < bufferSize; i++) {
+    data[i] = (Math.random() * 2 - 1) * (1 - i / bufferSize);
+  }
+  const noise = ac.createBufferSource();
+  const noiseGain = ac.createGain();
+  const noiseFilter = ac.createBiquadFilter();
+  noiseFilter.type = 'bandpass';
+  noiseFilter.frequency.value = freq * 1.5;
+  noiseFilter.Q.value = 0.8;
+  noise.buffer = buffer;
+  noiseGain.gain.setValueAtTime(0.15, now);
+  noiseGain.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
+  noise.connect(noiseFilter);
+  noiseFilter.connect(noiseGain);
+  noiseGain.connect(ac.destination);
+  noise.start(now);
 }
 
 // ── Note Data ──────────────────────────────────────────────────
@@ -70,10 +121,32 @@ function practiceClick() {
   }
 }
 
-function startPractice(clef) {
+function selectClef(clef) {
   selectedClef = clef;
+  showPage('page-5');
+}
+
+function startWithInput(inputMethod) {
+  selectedInput = inputMethod;
   showPage('page-4');
-  buildKeyboard();
+
+  const kbArea = document.getElementById('keyboard-area');
+  const nextBtn = document.getElementById('next-btn');
+
+  if (inputMethod === 'keyboard') {
+    kbArea.style.display = 'block';
+    nextBtn.style.display = 'none';
+    buildKeyboard();
+  } else if (inputMethod === 'buttons') {
+    kbArea.style.display = 'none';
+    nextBtn.style.display = 'none';
+    buildAnswerButtons();
+  } else if (inputMethod === 'midi') {
+    kbArea.style.display = 'none';
+    nextBtn.style.display = 'none';
+    setupMIDI();
+  }
+
   nextNote();
 }
 
@@ -91,7 +164,6 @@ function nextNote() {
   currentNote = pickNote();
   const clef = TREBLE_NOTES.includes(currentNote) ? 'treble' : 'bass';
 
-  // if both selected, show two staves
   if (selectedClef === 'both') {
     document.getElementById('staff-area').innerHTML =
       drawStaffSVG(currentNote, 'treble', clef === 'treble') +
@@ -101,48 +173,50 @@ function nextNote() {
       drawStaffSVG(currentNote, selectedClef, true);
   }
 
-  document.getElementById('feedback').textContent = '';
-  document.getElementById('feedback').className = '';
-  playFreq(currentNote.freq);
-  highlightKey(null);
+  const fb = document.getElementById('feedback');
+  fb.textContent = '';
+  fb.style.color = '';
+
+  playPiano(currentNote.freq);
+  clearKeyHighlights();
+
+  if (selectedInput === 'buttons') buildAnswerButtons();
 }
 
 // ── Draw Staff SVG ─────────────────────────────────────────────
 function drawStaffSVG(note, clef, showNote) {
-  const W = 340, H = 140;
-  const lineSpacing = 14;
-  const staffTop = 30;
-  const noteX = 200;
+  const W = 400, H = 160;
+  const lineSpacing = 16;
+  const staffTop = 45;
+  const noteX = 220;
   const bottomLineY = staffTop + 4 * lineSpacing;
-  const noteY = showNote ? bottomLineY - (note.pos - 2) * (lineSpacing / 2) : 0;
+  const noteY = showNote ? bottomLineY - (note.pos - 2) * (lineSpacing / 2) : -999;
 
   let lines = '';
   for (let i = 0; i < 5; i++) {
     const y = staffTop + i * lineSpacing;
-    lines += `<line x1="30" x2="${W-20}" y1="${y}" y2="${y}" stroke="rgba(255,255,255,0.25)" stroke-width="1"/>`;
+    lines += `<line x1="40" x2="${W - 20}" y1="${y}" y2="${y}" stroke="rgba(255,255,255,0.3)" stroke-width="1.2"/>`;
   }
 
   const clefSymbol = clef === 'treble' ? '𝄞' : '𝄢';
-  const clefY = clef === 'treble' ? staffTop + lineSpacing * 3.5 + 10 : staffTop + lineSpacing * 2.5 + 6;
-  const clefSize = clef === 'treble' ? 64 : 42;
-  const clefEl = `<text x="36" y="${clefY}" font-size="${clefSize}" fill="rgba(255,255,255,0.5)" font-family="serif">${clefSymbol}</text>`;
-
-  const clefLabel = `<text x="170" y="${H - 6}" font-size="11" fill="rgba(255,255,255,0.3)" text-anchor="middle" font-family="sans-serif">${clef === 'treble' ? 'Treble Clef' : 'Bass Clef'}</text>`;
+  const clefY     = clef === 'treble' ? staffTop + lineSpacing * 4 + 12 : staffTop + lineSpacing * 2 + 8;
+  const clefSize  = clef === 'treble' ? 72 : 46;
+  const clefEl    = `<text x="44" y="${clefY}" font-size="${clefSize}" fill="rgba(255,255,255,0.55)" font-family="serif">${clefSymbol}</text>`;
+  const clefLabel = `<text x="${W/2}" y="${H - 8}" font-size="12" fill="rgba(255,255,255,0.3)" text-anchor="middle" font-family="sans-serif">${clef === 'treble' ? 'Treble Clef' : 'Bass Clef'}</text>`;
 
   let noteEl = '';
   if (showNote) {
-    // ledger line for C4 (treble) or G3 (bass)
-    if (note.ledger || (clef === 'treble' && note.pos === 0) || (clef === 'bass' && note.pos === 11)) {
-      noteEl += `<line x1="${noteX-14}" x2="${noteX+14}" y1="${noteY}" y2="${noteY}" stroke="rgba(255,255,255,0.5)" stroke-width="1.5"/>`;
+    if ((clef === 'treble' && note.pos === 0) || (clef === 'bass' && note.pos === 11)) {
+      noteEl += `<line x1="${noteX - 16}" x2="${noteX + 16}" y1="${noteY}" y2="${noteY}" stroke="rgba(255,255,255,0.6)" stroke-width="1.5"/>`;
     }
     const stemUp = note.pos < 6;
-    const stemX = stemUp ? noteX + 9 : noteX - 9;
-    const stemY2 = stemUp ? noteY - 42 : noteY + 42;
-    noteEl += `<ellipse cx="${noteX}" cy="${noteY}" rx="9" ry="6.5" fill="#c9a84c" transform="rotate(-15,${noteX},${noteY})"/>`;
-    noteEl += `<line x1="${stemX}" x2="${stemX}" y1="${noteY}" y2="${stemY2}" stroke="#c9a84c" stroke-width="1.5"/>`;
+    const stemX  = stemUp ? noteX + 10 : noteX - 10;
+    const stemY2 = stemUp ? noteY - 48 : noteY + 48;
+    noteEl += `<ellipse cx="${noteX}" cy="${noteY}" rx="10" ry="7" fill="#c9a84c" transform="rotate(-15,${noteX},${noteY})"/>`;
+    noteEl += `<line x1="${stemX}" x2="${stemX}" y1="${noteY}" y2="${stemY2}" stroke="#c9a84c" stroke-width="2"/>`;
   }
 
-  return `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:340px;display:block;margin:0.5rem auto;background:#1f1f24;border-radius:10px;border:1px solid rgba(255,255,255,0.08);">
+  return `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:420px;display:block;margin:0.5rem auto;background:#1f1f24;border-radius:12px;border:1px solid rgba(255,255,255,0.08);">
     ${lines}${clefEl}${clefLabel}${noteEl}
   </svg>`;
 }
@@ -171,6 +245,8 @@ const ALL_KEYS = [
   {note:'D5', type:'white', freq:587.33},{note:'D#5',type:'black', freq:622.25},
   {note:'E5', type:'white', freq:659.25},{note:'F5', type:'white', freq:698.46},
   {note:'F#5',type:'black', freq:739.99},{note:'G5', type:'white', freq:784.00},
+  {note:'G#5',type:'black', freq:830.61},{note:'A5', type:'white', freq:880.00},
+  {note:'A#5',type:'black', freq:932.33},{note:'B5', type:'white', freq:987.77},
 ];
 
 function buildKeyboard() {
@@ -182,6 +258,7 @@ function buildKeyboard() {
 
   const whites = ALL_KEYS.filter(k => k.type === 'white');
   const totalWhites = whites.length;
+  const whiteWidthPct = 100 / totalWhites;
 
   whites.forEach(k => {
     const el = document.createElement('div');
@@ -199,13 +276,12 @@ function buildKeyboard() {
 
   ALL_KEYS.forEach((k, i) => {
     if (k.type !== 'black') return;
-    const prevWhites = ALL_KEYS.slice(0, i).filter(x => x.type === 'white').length;
+    const whitesBefore = ALL_KEYS.slice(0, i).filter(x => x.type === 'white').length;
+    const leftPct = whitesBefore * whiteWidthPct - (whiteWidthPct * 0.3);
     const el = document.createElement('div');
     el.className = 'key-black';
     el.dataset.note = k.note;
-    const pct = (prevWhites / totalWhites) * 100;
-    const halfWhite = (1 / totalWhites) * 100;
-    el.style.left = (pct + halfWhite * 0.42) + '%';
+    el.style.left = leftPct + '%';
     el.addEventListener('click', () => onKeyClick(k, el));
     wrap.appendChild(el);
   });
@@ -216,28 +292,136 @@ function buildKeyboard() {
 function onKeyClick(k, el) {
   if (answered || !currentNote) return;
   answered = true;
-  playFreq(k.freq);
+  playPiano(k.freq);
 
   const fb = document.getElementById('feedback');
   if (k.note === currentNote.name) {
     el.style.background = '#4caf82';
     fb.textContent = '✓ Correct! That is ' + currentNote.name;
     fb.style.color = '#4caf82';
+    setTimeout(() => {
+      clearKeyHighlights();
+      nextNote();
+    }, 1000);
   } else {
     el.style.background = '#e05c5c';
     fb.textContent = '✗ Wrong. The note was ' + currentNote.name;
     fb.style.color = '#e05c5c';
-    highlightKey(currentNote.name, '#4caf82');
+    const correctEl = document.querySelector(`[data-note="${currentNote.name}"]`);
+    if (correctEl) correctEl.style.background = '#4caf82';
+    setTimeout(() => {
+      clearKeyHighlights();
+      nextNote();
+    }, 1500);
   }
+}
 
-  setTimeout(() => {
-    document.querySelectorAll('.key-white, .key-black').forEach(k => k.style.background = '');
-  }, 1200);
+function clearKeyHighlights() {
+  document.querySelectorAll('.key-white, .key-black').forEach(k => k.style.background = '');
 }
 
 function highlightKey(noteName, color) {
-  document.querySelectorAll('.key-white, .key-black').forEach(k => k.style.background = '');
+  clearKeyHighlights();
   if (!noteName) return;
   const el = document.querySelector(`[data-note="${noteName}"]`);
   if (el) el.style.background = color;
+}
+
+// ── Answer Buttons ─────────────────────────────────────────────
+function buildAnswerButtons() {
+  const kb = document.getElementById('keyboard-area');
+  kb.innerHTML = '';
+
+  const pool = selectedClef === 'treble' ? TREBLE_NOTES
+             : selectedClef === 'bass'   ? BASS_NOTES
+             : [...TREBLE_NOTES, ...BASS_NOTES];
+
+  const others = pool.filter(n => n.name !== currentNote.name);
+  const shuffled = others.sort(() => Math.random() - 0.5).slice(0, 3);
+  const choices = [...shuffled, currentNote].sort(() => Math.random() - 0.5);
+
+  const wrap = document.createElement('div');
+  wrap.className = 'answer-buttons';
+
+  choices.forEach(n => {
+    const btn = document.createElement('button');
+    btn.textContent = n.name;
+    btn.addEventListener('click', () => onAnswerClick(n, btn, wrap));
+    wrap.appendChild(btn);
+  });
+
+  kb.appendChild(wrap);
+}
+
+function onAnswerClick(n, btn, wrap) {
+  if (answered || !currentNote) return;
+  answered = true;
+  playPiano(n.freq);
+
+  const fb = document.getElementById('feedback');
+  if (n.name === currentNote.name) {
+    btn.style.background = '#4caf82';
+    btn.style.borderColor = '#4caf82';
+    fb.textContent = '✓ Correct! That is ' + currentNote.name;
+    fb.style.color = '#4caf82';
+  } else {
+    btn.style.background = '#e05c5c';
+    btn.style.borderColor = '#e05c5c';
+    fb.textContent = '✗ Wrong. The note was ' + currentNote.name;
+    fb.style.color = '#e05c5c';
+    wrap.querySelectorAll('button').forEach(b => {
+      if (b.textContent === currentNote.name) {
+        b.style.background = '#4caf82';
+        b.style.borderColor = '#4caf82';
+      }
+    });
+  }
+  setTimeout(() => nextNote(), 1500);
+}
+
+// ── MIDI ───────────────────────────────────────────────────────
+function setupMIDI() {
+  if (!navigator.requestMIDIAccess) {
+    document.getElementById('feedback').textContent = '⚠ MIDI not supported in this browser. Try Chrome.';
+    document.getElementById('feedback').style.color = '#e05c5c';
+    return;
+  }
+  navigator.requestMIDIAccess().then(access => {
+    document.getElementById('feedback').textContent = '✓ MIDI connected! Play a note on your piano.';
+    document.getElementById('feedback').style.color = '#4caf82';
+    access.inputs.forEach(input => {
+      input.onmidimessage = (msg) => {
+        const [status, note, velocity] = msg.data;
+        if (status === 144 && velocity > 0) {
+          const noteName = midiToName(note);
+          const freq = 440 * Math.pow(2, (note - 69) / 12);
+          playPiano(freq);
+          checkMidiAnswer(noteName);
+        }
+      };
+    });
+  }).catch(() => {
+    document.getElementById('feedback').textContent = '⚠ Could not connect to MIDI device.';
+    document.getElementById('feedback').style.color = '#e05c5c';
+  });
+}
+
+function midiToName(midiNote) {
+  const notes = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
+  const octave = Math.floor(midiNote / 12) - 1;
+  return notes[midiNote % 12] + octave;
+}
+
+function checkMidiAnswer(noteName) {
+  if (answered || !currentNote) return;
+  answered = true;
+  const fb = document.getElementById('feedback');
+  if (noteName === currentNote.name) {
+    fb.textContent = '✓ Correct! That is ' + currentNote.name;
+    fb.style.color = '#4caf82';
+  } else {
+    fb.textContent = '✗ Wrong. You played ' + noteName + '. The note was ' + currentNote.name;
+    fb.style.color = '#e05c5c';
+  }
+  setTimeout(() => nextNote(), 1500);
 }
