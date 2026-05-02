@@ -116,24 +116,26 @@ const TREBLE_NOTES = [
   { name:'A5', label:'A', octave:5, freq:880.00,  pos:12, clef:'treble' },
   { name:'B5', label:'B', octave:5, freq:987.77,  pos:13, clef:'treble' },
   { name:'C6', label:'C', octave:6, freq:1046.50, pos:14, clef:'treble' },
+  { name:'D6', label:'D', octave:6, freq:1174.66, pos:15, clef:'treble' },
+  { name:'E6', label:'E', octave:6, freq:1318.51, pos:16, clef:'treble' },
 ];
 
 const BASS_NOTES = [
-  { name:'C2', label:'C', octave:2, freq:65.41,  pos:0,  clef:'bass' },
-  { name:'D2', label:'D', octave:2, freq:73.42,  pos:1,  clef:'bass' },
-  { name:'E2', label:'E', octave:2, freq:82.41,  pos:2,  clef:'bass' },
-  { name:'F2', label:'F', octave:2, freq:87.31,  pos:3,  clef:'bass' },
-  { name:'G2', label:'G', octave:2, freq:98.00,  pos:4,  clef:'bass' },
-  { name:'A2', label:'A', octave:2, freq:110.00, pos:5,  clef:'bass' },
-  { name:'B2', label:'B', octave:2, freq:123.47, pos:6,  clef:'bass' },
-  { name:'C3', label:'C', octave:3, freq:130.81, pos:7,  clef:'bass' },
-  { name:'D3', label:'D', octave:3, freq:146.83, pos:8,  clef:'bass' },
-  { name:'E3', label:'E', octave:3, freq:164.81, pos:9,  clef:'bass' },
-  { name:'F3', label:'F', octave:3, freq:174.61, pos:10, clef:'bass' },
-  { name:'G3', label:'G', octave:3, freq:196.00, pos:11, clef:'bass' },
-  { name:'A3', label:'A', octave:3, freq:220.00, pos:12, clef:'bass' },
-  { name:'B3', label:'B', octave:3, freq:246.94, pos:13, clef:'bass' },
-  { name:'C4', label:'C', octave:4, freq:261.63, pos:14, clef:'bass' },
+  { name:'E2', label:'E', octave:2, freq:82.41,  pos:-2, clef:'bass' },
+  { name:'F2', label:'F', octave:2, freq:87.31,  pos:-1, clef:'bass' },
+  { name:'G2', label:'G', octave:2, freq:98.00,  pos:0,  clef:'bass' },
+  { name:'A2', label:'A', octave:2, freq:110.00, pos:1,  clef:'bass' },
+  { name:'B2', label:'B', octave:2, freq:123.47, pos:2,  clef:'bass' },
+  { name:'C3', label:'C', octave:3, freq:130.81, pos:3,  clef:'bass' },
+  { name:'D3', label:'D', octave:3, freq:146.83, pos:4,  clef:'bass' },
+  { name:'E3', label:'E', octave:3, freq:164.81, pos:5,  clef:'bass' },
+  { name:'F3', label:'F', octave:3, freq:174.61, pos:6,  clef:'bass' },
+  { name:'G3', label:'G', octave:3, freq:196.00, pos:7,  clef:'bass' },
+  { name:'A3', label:'A', octave:3, freq:220.00, pos:8,  clef:'bass' },
+  { name:'B3', label:'B', octave:3, freq:246.94, pos:9,  clef:'bass' },
+  { name:'C4', label:'C', octave:4, freq:261.63, pos:10, clef:'bass' },
+  { name:'D4', label:'D', octave:4, freq:293.66, pos:11, clef:'bass' },
+  { name:'E4', label:'E', octave:4, freq:329.63, pos:12, clef:'bass' },
 ];
 
 // ── Page Navigation ────────────────────────────────────────────
@@ -233,14 +235,17 @@ function renderStaff() {
 
 function drawStaff(clef, notes, activePos) {
   const W = 900;
-  const H = 200;
+  const H = 260;
   const lineSpacing = 16;
-  const staffTop = 55;
+  const staffTop = 90;
   const noteSpacing = 120;
   const startX = 110;
   const bottomLineY = staffTop + 4 * lineSpacing;
   const topLineY = staffTop;
-  const offset = clef === 'treble' ? 2 : 4;
+
+  // Treble: bottom line = E4 = pos 2, offset = 2
+  // Bass:   bottom line = G2 = pos 0, offset = 0
+  const offset = clef === 'treble' ? 2 : 0;
 
   let svg = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg"
     style="width:100%;display:block;background:#1a1a20;border-radius:12px;
@@ -285,15 +290,14 @@ function drawStaff(clef, notes, activePos) {
 
     // Active highlight box
     if (i === activePos) {
-      svg += `<rect x="${x-20}" y="${staffTop-10}" width="40"
-        height="${4 * lineSpacing + 20}" rx="4"
-        fill="rgba(201,168,76,0.08)" stroke="rgba(201,168,76,0.3)" stroke-width="1"/>`;
+      svg += `<rect x="${x-20}" y="${noteY - 50}" width="40" height="100"
+        rx="4" fill="rgba(201,168,76,0.08)" stroke="rgba(201,168,76,0.3)" stroke-width="1"/>`;
     }
 
     // Ledger lines below staff
     if (noteY > bottomLineY + lineSpacing / 2) {
       let ly = bottomLineY + lineSpacing;
-      while (ly <= noteY + lineSpacing / 2) {
+      while (ly <= noteY + 2) {
         svg += `<line x1="${x-14}" x2="${x+14}" y1="${ly}" y2="${ly}"
           stroke="rgba(255,255,255,0.5)" stroke-width="1.2"/>`;
         ly += lineSpacing;
@@ -303,7 +307,7 @@ function drawStaff(clef, notes, activePos) {
     // Ledger lines above staff
     if (noteY < topLineY - lineSpacing / 2) {
       let ly = topLineY - lineSpacing;
-      while (ly >= noteY - lineSpacing / 2) {
+      while (ly >= noteY - 2) {
         svg += `<line x1="${x-14}" x2="${x+14}" y1="${ly}" y2="${ly}"
           stroke="rgba(255,255,255,0.5)" stroke-width="1.2"/>`;
         ly -= lineSpacing;
@@ -315,7 +319,7 @@ function drawStaff(clef, notes, activePos) {
       fill="${fill}" transform="rotate(-15,${x},${noteY})"/>`;
 
     // Stem
-    const stemUp = note.pos < (clef === 'treble' ? 6 : 8);
+    const stemUp = note.pos < (clef === 'treble' ? 6 : 5);
     const stemX  = stemUp ? x + 9 : x - 9;
     const stemY2 = stemUp ? noteY - 42 : noteY + 42;
     svg += `<line x1="${stemX}" x2="${stemX}" y1="${noteY}" y2="${stemY2}"
@@ -324,7 +328,7 @@ function drawStaff(clef, notes, activePos) {
     // Note name label after answered
     if (note.state === 'correct' || note.state === 'wrong') {
       const labelColor = note.state === 'correct' ? '#4caf82' : '#e05c5c';
-      svg += `<text x="${x}" y="${H - 6}" font-size="11" fill="${labelColor}"
+      svg += `<text x="${x}" y="${H - 8}" font-size="11" fill="${labelColor}"
         text-anchor="middle" font-family="sans-serif" font-weight="500">${getNoteName(note)}</text>`;
     }
   });
