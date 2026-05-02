@@ -3,56 +3,33 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PianoPath – Sight Reading</title>
+  <title>PianoPath</title>
   <link rel="stylesheet" href="style.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 </head>
 <body>
-  <header>
-    <div class="logo">🎹 PianoPath</div>
-    <nav>
-      <a href="#" class="nav-link active">Sight Reading</a>
-      <a href="#" class="nav-link dim">Scales</a>
-      <a href="#" class="nav-link dim">Arpeggios</a>
-      <a href="#" class="nav-link dim">Chords</a>
-    </nav>
-    <div class="score-badge">Score: <span id="score">0</span></div>
-  </header>
 
-  <main>
-    <section class="intro">
-      <h1>Sight Reading</h1>
-      <p>Identify the note shown on the staff. Click the correct key on the piano.</p>
-    </section>
-
-    <div class="game-area">
-      <div class="staff-container">
-        <div class="clef-label">Treble Clef</div>
-        <svg id="staff-svg" viewBox="0 0 340 160" xmlns="http://www.w3.org/2000/svg"></svg>
-        <div class="feedback" id="feedback"></div>
-      </div>
-
-      <div class="keyboard-wrap">
-        <div id="keyboard" class="keyboard"></div>
-        <div class="keyboard-labels">
-          <span>C3</span><span>C4 (Middle C)</span><span>C5</span>
-        </div>
-      </div>
-
-      <div class="controls">
-        <button id="btn-next" onclick="nextNote()">Next Note →</button>
-        <button id="btn-hint" onclick="showHint()">Show Hint</button>
-        <div class="streak">Streak: <span id="streak">0</span> 🔥</div>
-      </div>
+  <!-- PAGE 1 -->
+  <div id="page-1">
+    <h1>🎹 PianoPath</h1>
+    <p class="subtitle">What would you like to work on today?</p>
+    <div class="buttons">
+      <button onclick="goTo('sight-reading', '🎵 Sight Reading')">🎵 Sight Reading</button>
+      <button onclick="goTo('scales', '🎼 Scales')">🎼 Scales</button>
+      <button onclick="goTo('arpeggios', '🎶 Arpeggios')">🎶 Arpeggios</button>
+      <button onclick="goTo('chords', '🎹 Chords')">🎹 Chords</button>
     </div>
+  </div>
 
-    <div class="stats-row">
-      <div class="stat"><div class="stat-num" id="stat-correct">0</div><div class="stat-label">Correct</div></div>
-      <div class="stat"><div class="stat-num" id="stat-wrong">0</div><div class="stat-label">Wrong</div></div>
-      <div class="stat"><div class="stat-num" id="stat-pct">—</div><div class="stat-label">Accuracy</div></div>
-      <div class="stat"><div class="stat-num" id="stat-best">0</div><div class="stat-label">Best Streak</div></div>
+  <!-- PAGE 2 -->
+  <div id="page-2">
+    <button onclick="goBack()">← Back</button>
+    <h1 id="page2-title"></h1>
+    <p class="subtitle">What would you like to do?</p>
+    <div class="buttons">
+      <button>📖 Learn</button>
+      <button>🎯 Practice</button>
     </div>
-  </main>
+  </div>
 
   <script src="script.js"></script>
 </body>
