@@ -175,15 +175,16 @@ function selectDifficulty(difficulty) {
   if (selectedInput === 'keyboard') {
     kbArea.style.display = 'block';
     buildKeyboard();
+  } else if (selectedInput === 'buttons') {
+    kbArea.style.display = 'block';
   } else if (selectedInput === 'midi') {
     kbArea.style.display = 'none';
     setupMIDI();
-  } else {
-    kbArea.style.display = 'none';
   }
 
   generateNoteQueue();
   renderStaff();
+  if (selectedInput === 'buttons') buildAnswerButtons();
   startTimer();
 }
 
@@ -336,21 +337,14 @@ function drawStaff(clef, notes, activePos) {
 function startTimer() {
   clearInterval(timer);
   timeLeft = DIFFICULTY[selectedDifficulty];
-  updateTimerDisplay();
 
   timer = setInterval(() => {
     timeLeft = parseFloat((timeLeft - 0.1).toFixed(1));
-    updateTimerDisplay();
     if (timeLeft <= 0) {
       clearInterval(timer);
       timeExpired();
     }
   }, 100);
-}
-
-function updateTimerDisplay() {
-  const label = document.getElementById('timer-label');
-  if (label) label.textContent = timeLeft.toFixed(1) + 's';
 }
 
 function timeExpired() {
@@ -368,7 +362,6 @@ function onKeyClick(k, el) {
 
   const currentNote = noteQueue[currentNoteIndex];
   clearInterval(timer);
-
   playPiano(k.freq);
 
   if (k.note === currentNote.name) {
@@ -385,6 +378,78 @@ function onKeyClick(k, el) {
     renderStaff();
     setTimeout(() => {
       el.style.background = '';
+      advanceNote();
+    }, 80);
+  }
+}
+
+// ── Answer Buttons ─────────────────────────────────────────────
+function buildAnswerButtons() {
+  const kb = document.getElementById('keyboard-area');
+  kb.innerHTML = '';
+
+  const wrap = document.createElement('div');
+  wrap.className = 'answer-buttons';
+
+  const noteNames = selectedNaming === 'american'
+    ? ['C', 'D', 'E', 'F', 'G', 'A', 'B']
+    : ['Do', 'Re', 'Mi', 'Fa', 'Sol', 'La', 'Si'];
+
+  const labels = ['C', 'D', 'E', 'F', 'G', 'A', 'B'];
+
+  labels.forEach((label, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'answer-btn';
+    btn.textContent = noteNames[i];
+    btn.dataset.label = label;
+    btn.addEventListener('click', () => onAnswerClick(label, btn));
+    wrap.appendChild(btn);
+  });
+
+  kb.appendChild(wrap);
+}
+
+function onAnswerClick(label, btn) {
+  if (!noteQueue.length) return;
+  if (noteQueue[currentNoteIndex].state !== 'pending') return;
+
+  const currentNote = noteQueue[currentNoteIndex];
+  clearInterval(timer);
+  playPiano(currentNote.freq);
+
+  // Reset all button styles first
+  document.querySelectorAll('.answer-btn').forEach(b => {
+    b.style.background = '';
+    b.style.borderColor = '';
+  });
+
+  if (label === currentNote.label) {
+    noteQueue[currentNoteIndex].state = 'correct';
+    btn.style.background = '#4caf82';
+    btn.style.borderColor = '#4caf82';
+    renderStaff();
+    setTimeout(() => {
+      btn.style.background = '';
+      btn.style.borderColor = '';
+      advanceNote();
+    }, 80);
+  } else {
+    noteQueue[currentNoteIndex].state = 'wrong';
+    btn.style.background = '#e05c5c';
+    btn.style.borderColor = '#e05c5c';
+    // highlight correct button
+    document.querySelectorAll('.answer-btn').forEach(b => {
+      if (b.dataset.label === currentNote.label) {
+        b.style.background = '#4caf82';
+        b.style.borderColor = '#4caf82';
+      }
+    });
+    renderStaff();
+    setTimeout(() => {
+      document.querySelectorAll('.answer-btn').forEach(b => {
+        b.style.background = '';
+        b.style.borderColor = '';
+      });
       advanceNote();
     }, 80);
   }
