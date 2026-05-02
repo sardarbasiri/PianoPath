@@ -2,6 +2,7 @@ let selectedTopic = '';
 let selectedClef = '';
 let selectedInput = '';
 let selectedDifficulty = 'beginner';
+let selectedNaming = 'american';
 let currentNoteIndex = 0;
 let windowStart = 0;
 let noteQueue = [];
@@ -83,23 +84,38 @@ function playPiano(freq) {
   noise.start(now);
 }
 
+// ── Note Naming ────────────────────────────────────────────────
+function toggleNaming() {
+  selectedNaming = selectedNaming === 'american' ? 'italian' : 'american';
+  const btn = document.getElementById('naming-btn');
+  btn.textContent = selectedNaming === 'american'
+    ? '🇺🇸 American (C, D, E...)'
+    : '🇮🇹 Italian (Do, Re, Mi...)';
+}
+
+function getNoteName(note) {
+  if (selectedNaming === 'american') return note.label;
+  const italian = { C:'Do', D:'Re', E:'Mi', F:'Fa', G:'Sol', A:'La', B:'Si' };
+  return italian[note.label];
+}
+
 // ── Note Data ──────────────────────────────────────────────────
 const TREBLE_NOTES = [
-  { name:'C4', label:'C', octave:4, freq:261.63, pos:0,  clef:'treble' },
-  { name:'D4', label:'D', octave:4, freq:293.66, pos:1,  clef:'treble' },
-  { name:'E4', label:'E', octave:4, freq:329.63, pos:2,  clef:'treble' },
-  { name:'F4', label:'F', octave:4, freq:349.23, pos:3,  clef:'treble' },
-  { name:'G4', label:'G', octave:4, freq:392.00, pos:4,  clef:'treble' },
-  { name:'A4', label:'A', octave:4, freq:440.00, pos:5,  clef:'treble' },
-  { name:'B4', label:'B', octave:4, freq:493.88, pos:6,  clef:'treble' },
-  { name:'C5', label:'C', octave:5, freq:523.25, pos:7,  clef:'treble' },
-  { name:'D5', label:'D', octave:5, freq:587.33, pos:8,  clef:'treble' },
-  { name:'E5', label:'E', octave:5, freq:659.25, pos:9,  clef:'treble' },
-  { name:'F5', label:'F', octave:5, freq:698.46, pos:10, clef:'treble' },
-  { name:'G5', label:'G', octave:5, freq:784.00, pos:11, clef:'treble' },
-  { name:'A5', label:'A', octave:5, freq:880.00, pos:12, clef:'treble' },
-  { name:'B5', label:'B', octave:5, freq:987.77, pos:13, clef:'treble' },
-  { name:'C6', label:'C', octave:6, freq:1046.50,pos:14, clef:'treble' },
+  { name:'C4', label:'C', octave:4, freq:261.63,  pos:0,  clef:'treble' },
+  { name:'D4', label:'D', octave:4, freq:293.66,  pos:1,  clef:'treble' },
+  { name:'E4', label:'E', octave:4, freq:329.63,  pos:2,  clef:'treble' },
+  { name:'F4', label:'F', octave:4, freq:349.23,  pos:3,  clef:'treble' },
+  { name:'G4', label:'G', octave:4, freq:392.00,  pos:4,  clef:'treble' },
+  { name:'A4', label:'A', octave:4, freq:440.00,  pos:5,  clef:'treble' },
+  { name:'B4', label:'B', octave:4, freq:493.88,  pos:6,  clef:'treble' },
+  { name:'C5', label:'C', octave:5, freq:523.25,  pos:7,  clef:'treble' },
+  { name:'D5', label:'D', octave:5, freq:587.33,  pos:8,  clef:'treble' },
+  { name:'E5', label:'E', octave:5, freq:659.25,  pos:9,  clef:'treble' },
+  { name:'F5', label:'F', octave:5, freq:698.46,  pos:10, clef:'treble' },
+  { name:'G5', label:'G', octave:5, freq:784.00,  pos:11, clef:'treble' },
+  { name:'A5', label:'A', octave:5, freq:880.00,  pos:12, clef:'treble' },
+  { name:'B5', label:'B', octave:5, freq:987.77,  pos:13, clef:'treble' },
+  { name:'C6', label:'C', octave:6, freq:1046.50, pos:14, clef:'treble' },
 ];
 
 const BASS_NOTES = [
@@ -200,9 +216,7 @@ function topUpQueue() {
 // ── Render Staff ───────────────────────────────────────────────
 function renderStaff() {
   const area = document.getElementById('staff-area');
-  // always slice exactly VISIBLE_NOTES from windowStart
   const visibleNotes = noteQueue.slice(windowStart, windowStart + VISIBLE_NOTES);
-  // active position is offset within the current window
   const activePos = currentNoteIndex - windowStart;
 
   let html = '';
@@ -240,8 +254,8 @@ function drawStaff(clef, notes, activePos) {
 
   // Clef symbol
   const clefSymbol = clef === 'treble' ? '𝄞' : '𝄢';
-  const clefY    = clef === 'treble' ? staffTop + lineSpacing * 4 + 10 : staffTop + lineSpacing * 1.2 + 6;
-  const clefSize = clef === 'treble' ? 68 : 42;
+  const clefY    = clef === 'treble' ? staffTop + lineSpacing * 3.5 : staffTop + lineSpacing * 2.8;
+  const clefSize = clef === 'treble' ? 90 : 70;
   svg += `<text x="32" y="${clefY}" font-size="${clefSize}"
     fill="rgba(255,255,255,0.5)" font-family="serif">${clefSymbol}</text>`;
 
@@ -310,7 +324,7 @@ function drawStaff(clef, notes, activePos) {
     if (note.state === 'correct' || note.state === 'wrong') {
       const labelColor = note.state === 'correct' ? '#4caf82' : '#e05c5c';
       svg += `<text x="${x}" y="${H - 6}" font-size="11" fill="${labelColor}"
-        text-anchor="middle" font-family="sans-serif" font-weight="500">${note.name}</text>`;
+        text-anchor="middle" font-family="sans-serif" font-weight="500">${getNoteName(note)}</text>`;
     }
   });
 
@@ -335,14 +349,7 @@ function startTimer() {
 }
 
 function updateTimerDisplay() {
-  const bar   = document.getElementById('timer-bar');
   const label = document.getElementById('timer-label');
-  const total = DIFFICULTY[selectedDifficulty];
-  const pct   = Math.max(0, (timeLeft / total) * 100);
-  if (bar) {
-    bar.style.width = pct + '%';
-    bar.style.background = pct > 50 ? '#4caf82' : pct > 25 ? '#c9a84c' : '#e05c5c';
-  }
   if (label) label.textContent = timeLeft.toFixed(1) + 's';
 }
 
@@ -387,19 +394,16 @@ function advanceNote() {
   clearInterval(timer);
   currentNoteIndex++;
 
-  // Check if all notes in current window are answered
   const windowEnd = windowStart + VISIBLE_NOTES;
   const windowNotes = noteQueue.slice(windowStart, windowEnd);
   const allDone = windowNotes.length === VISIBLE_NOTES &&
     windowNotes.every(n => n.state === 'correct' || n.state === 'wrong');
 
   if (allDone) {
-    // Move window forward by VISIBLE_NOTES
     windowStart += VISIBLE_NOTES;
     currentNoteIndex = windowStart;
   }
 
-  // Top up queue if running low
   if (windowStart + VISIBLE_NOTES * 2 >= noteQueue.length) {
     topUpQueue();
   }
@@ -416,8 +420,8 @@ const ALL_KEYS = [
   {note:'F#1',type:'black', freq:46.25  }, {note:'G1', type:'white', freq:49.00  },
   {note:'G#1',type:'black', freq:51.91  }, {note:'A1', type:'white', freq:55.00  },
   {note:'A#1',type:'black', freq:58.27  }, {note:'B1', type:'white', freq:61.74  },
-  {note:'C2', type:'white', freq:65.41  }, {note:'C#2',type:'black',freq:69.30   },
-  {note:'D2', type:'white', freq:73.42  }, {note:'D#2',type:'black',freq:77.78   },
+  {note:'C2', type:'white', freq:65.41  }, {note:'C#2',type:'black', freq:69.30  },
+  {note:'D2', type:'white', freq:73.42  }, {note:'D#2',type:'black', freq:77.78  },
   {note:'E2', type:'white', freq:82.41  }, {note:'F2', type:'white', freq:87.31  },
   {note:'F#2',type:'black', freq:92.50  }, {note:'G2', type:'white', freq:98.00  },
   {note:'G#2',type:'black', freq:103.83 }, {note:'A2', type:'white', freq:110.00 },
