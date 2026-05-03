@@ -21,8 +21,132 @@ const DIFFICULTY = {
   expert:       0.5
 };
 
+// ── Audio ──────────────────────────────────────────────────────
+let audioCtx = null;
+
+function getCtx() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  return audioCtx;
+}
+
+function playPiano(freq) {
+  const ac = getCtx();
+  const now = ac.currentTime;
+
+  const master = ac.createGain();
+  master.connect(ac.destination);
+
+  master.gain.setValueAtTime(0, now);
+  master.gain.linearRampToValueAtTime(0.8, now + 0.005);
+  master.gain.exponentialRampToValueAtTime(0.3, now + 0.1);
+  master.gain.exponentialRampToValueAtTime(0.001, now + 3.0);
+
+  const fundamental = ac.createOscillator();
+  const fGain = ac.createGain();
+  fundamental.type = 'sine';
+  fundamental.frequency.value = freq;
+  fGain.gain.value = 1.0;
+  fundamental.connect(fGain);
+  fGain.connect(master);
+  fundamental.start(now);
+  fundamental.stop(now + 3.0);
+
+  const h2 = ac.createOscillator();
+  const h2Gain = ac.createGain();
+  h2.type = 'sine';
+  h2.frequency.value = freq * 2;
+  h2Gain.gain.setValueAtTime(0.5, now);
+  h2Gain.gain.exponentialRampToValueAtTime(0.001, now + 1.5);
+  h2.connect(h2Gain);
+  h2Gain.connect(master);
+  h2.start(now);
+  h2.stop(now + 1.5);
+
+  const h3 = ac.createOscillator();
+  const h3Gain = ac.createGain();
+  h3.type = 'sine';
+  h3.frequency.value = freq * 3;
+  h3Gain.gain.setValueAtTime(0.25, now);
+  h3Gain.gain.exponentialRampToValueAtTime(0.001, now + 0.8);
+  h3.connect(h3Gain);
+  h3Gain.connect(master);
+  h3.start(now);
+  h3.stop(now + 0.8);
+
+  const h4 = ac.createOscillator();
+  const h4Gain = ac.createGain();
+  h4.type = 'sine';
+  h4.frequency.value = freq * 4;
+  h4Gain.gain.setValueAtTime(0.1, now);
+  h4Gain.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
+  h4.connect(h4Gain);
+  h4Gain.connect(master);
+  h4.start(now);
+  h4.stop(now + 0.4);
+
+  const h5 = ac.createOscillator();
+  const h5Gain = ac.createGain();
+  h5.type = 'sine';
+  h5.frequency.value = freq * 5;
+  h5Gain.gain.setValueAtTime(0.05, now);
+  h5Gain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+  h5.connect(h5Gain);
+  h5Gain.connect(master);
+  h5.start(now);
+  h5.stop(now + 0.2);
+
+  const strikeSize = Math.floor(ac.sampleRate * 0.015);
+  const strikeBuf = ac.createBuffer(1, strikeSize, ac.sampleRate);
+  const strikeData = strikeBuf.getChannelData(0);
+  for (let i = 0; i < strikeSize; i++) {
+    strikeData[i] = (Math.random() * 2 - 1) * (1 - i / strikeSize);
+  }
+  const strike = ac.createBufferSource();
+  const strikeFilter = ac.createBiquadFilter();
+  const strikeGain = ac.createGain();
+  strikeFilter.type = 'bandpass';
+  strikeFilter.frequency.value = freq * 6;
+  strikeFilter.Q.value = 0.5;
+  strikeGain.gain.setValueAtTime(0.3, now);
+  strikeGain.gain.exponentialRampToValueAtTime(0.001, now + 0.015);
+  strike.buffer = strikeBuf;
+  strike.connect(strikeFilter);
+  strikeFilter.connect(strikeGain);
+  strikeGain.connect(master);
+  strike.start(now);
+
+  const detune = ac.createOscillator();
+  const detuneGain = ac.createGain();
+  detune.type = 'sine';
+  detune.frequency.value = freq * 2.001;
+  detuneGain.gain.setValueAtTime(0.08, now);
+  detuneGain.gain.exponentialRampToValueAtTime(0.001, now + 1.0);
+  detune.connect(detuneGain);
+  detuneGain.connect(master);
+  detune.start(now);
+  detune.stop(now + 1.0);
+}
+
+// ── Note Naming ────────────────────────────────────────────────
+function toggleNaming() {
+  selectedNaming = selectedNaming === 'american' ? 'italian' : 'american';
+  const btn = document.getElementById('naming-btn');
+  btn.textContent = selectedNaming === 'american'
+    ? '🇺🇸 American (C, D, E...)'
+    : '🇮🇹 Italian (Do, Re, Mi...)';
+}
+
+function getNoteName(note) {
+  if (selectedNaming === 'american') return note.label;
+  const italian = { C:'Do', D:'Re', E:'Mi', F:'Fa', G:'Sol', A:'La', B:'Si' };
+  return italian[note.label];
+}
+
 // ── Note Data ──────────────────────────────────────────────────
 const TREBLE_NOTES = [
+  { name:'C3', label:'C', octave:3, freq:130.81,  pos:-7, clef:'treble' },
+  { name:'D3', label:'D', octave:3, freq:146.83,  pos:-6, clef:'treble' },
+  { name:'E3', label:'E', octave:3, freq:164.81,  pos:-5, clef:'treble' },
   { name:'F3', label:'F', octave:3, freq:174.61,  pos:-4, clef:'treble' },
   { name:'G3', label:'G', octave:3, freq:196.00,  pos:-3, clef:'treble' },
   { name:'A3', label:'A', octave:3, freq:220.00,  pos:-2, clef:'treble' },
@@ -108,87 +232,6 @@ const BASS_NOTES_BOTH = [
   { name:'C4', label:'C', octave:4, freq:261.63, pos:10, clef:'bass' },
 ];
 
-// ── Audio ──────────────────────────────────────────────────────
-let audioCtx = null;
-
-function getCtx() {
-  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  return audioCtx;
-}
-
-function playPiano(freq) {
-  const ac = getCtx();
-  const now = ac.currentTime;
-
-  const osc1 = ac.createOscillator();
-  const gain1 = ac.createGain();
-  osc1.type = 'triangle';
-  osc1.frequency.value = freq;
-  gain1.gain.setValueAtTime(0.5, now);
-  gain1.gain.exponentialRampToValueAtTime(0.001, now + 2.0);
-  osc1.connect(gain1);
-  gain1.connect(ac.destination);
-  osc1.start(now);
-  osc1.stop(now + 2.0);
-
-  const osc2 = ac.createOscillator();
-  const gain2 = ac.createGain();
-  osc2.type = 'sine';
-  osc2.frequency.value = freq * 2;
-  gain2.gain.setValueAtTime(0.2, now);
-  gain2.gain.exponentialRampToValueAtTime(0.001, now + 1.2);
-  osc2.connect(gain2);
-  gain2.connect(ac.destination);
-  osc2.start(now);
-  osc2.stop(now + 1.2);
-
-  const osc3 = ac.createOscillator();
-  const gain3 = ac.createGain();
-  osc3.type = 'sine';
-  osc3.frequency.value = freq * 3;
-  gain3.gain.setValueAtTime(0.08, now);
-  gain3.gain.exponentialRampToValueAtTime(0.001, now + 0.8);
-  osc3.connect(gain3);
-  gain3.connect(ac.destination);
-  osc3.start(now);
-  osc3.stop(now + 0.8);
-
-  const bufferSize = ac.sampleRate * 0.04;
-  const buffer = ac.createBuffer(1, bufferSize, ac.sampleRate);
-  const data = buffer.getChannelData(0);
-  for (let i = 0; i < bufferSize; i++) {
-    data[i] = (Math.random() * 2 - 1) * (1 - i / bufferSize);
-  }
-  const noise = ac.createBufferSource();
-  const noiseGain = ac.createGain();
-  const noiseFilter = ac.createBiquadFilter();
-  noiseFilter.type = 'bandpass';
-  noiseFilter.frequency.value = freq * 1.5;
-  noiseFilter.Q.value = 0.8;
-  noise.buffer = buffer;
-  noiseGain.gain.setValueAtTime(0.15, now);
-  noiseGain.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
-  noise.connect(noiseFilter);
-  noiseFilter.connect(noiseGain);
-  noiseGain.connect(ac.destination);
-  noise.start(now);
-}
-
-// ── Note Naming ────────────────────────────────────────────────
-function toggleNaming() {
-  selectedNaming = selectedNaming === 'american' ? 'italian' : 'american';
-  const btn = document.getElementById('naming-btn');
-  btn.textContent = selectedNaming === 'american'
-    ? '🇺🇸 American (C, D, E...)'
-    : '🇮🇹 Italian (Do, Re, Mi...)';
-}
-
-function getNoteName(note) {
-  if (selectedNaming === 'american') return note.label;
-  const italian = { C:'Do', D:'Re', E:'Mi', F:'Fa', G:'Sol', A:'La', B:'Si' };
-  return italian[note.label];
-}
-
 // ── Page Navigation ────────────────────────────────────────────
 function showPage(pageId) {
   document.querySelectorAll('div[id^="page-"]').forEach(p => p.style.display = 'none');
@@ -242,45 +285,6 @@ function selectDifficulty(difficulty) {
   startTimer();
 }
 
-function advanceNote() {
-  clearInterval(timer);
-
-  // Track accuracy here for all input modes
-  const answeredNote = noteQueue[currentNoteIndex];
-  if (answeredNote) {
-    totalAnswered++;
-    if (answeredNote.state === 'correct') totalCorrect++;
-    updateAccuracy();
-  }
-
-  currentNoteIndex++;
-
-  const windowEnd = windowStart + VISIBLE_NOTES;
-  const windowNotes = noteQueue.slice(windowStart, windowEnd);
-  const allDone = windowNotes.length === VISIBLE_NOTES &&
-    windowNotes.every(n => n.state === 'correct' || n.state === 'wrong');
-
-  if (allDone) {
-    windowStart += VISIBLE_NOTES;
-    currentNoteIndex = windowStart;
-  }
-
-  if (windowStart + VISIBLE_NOTES * 2 >= noteQueue.length) {
-    topUpQueue();
-  }
-
-  renderStaff();
-  startTimer();
-}
-
-function timeExpired() {
-  if (currentNoteIndex < noteQueue.length) {
-    noteQueue[currentNoteIndex].state = 'wrong';
-    renderStaff();
-  }
-  advanceNote();
-}
-
 // ── Note Queue ─────────────────────────────────────────────────
 function getPool() {
   if (selectedClef === 'treble') return TREBLE_NOTES;
@@ -310,6 +314,16 @@ function topUpQueue() {
   }
 }
 
+// ── Accuracy ───────────────────────────────────────────────────
+function updateAccuracy() {
+  const el = document.getElementById('accuracy-pct');
+  if (!el) return;
+  if (totalAnswered === 0) { el.textContent = '100%'; return; }
+  const bufferSize = 10;
+  const pct = Math.round(((totalCorrect + bufferSize) / (totalAnswered + bufferSize)) * 100);
+  el.textContent = pct + '%';
+}
+
 // ── Timer ──────────────────────────────────────────────────────
 function startTimer() {
   clearInterval(timer);
@@ -324,16 +338,41 @@ function startTimer() {
   }, 100);
 }
 
-function updateAccuracy() {
-  const el = document.getElementById('accuracy-pct');
-  if (!el) return;
-  if (totalAnswered === 0) {
-    el.textContent = '100%';
-    return;
+function timeExpired() {
+  if (currentNoteIndex < noteQueue.length) {
+    noteQueue[currentNoteIndex].state = 'wrong';
+    renderStaff();
   }
-  // Blend with a virtual buffer of 10 correct answers at start
-  // so early mistakes don't crash the percentage
-  const bufferSize = 10;
-  const pct = Math.round(((totalCorrect + bufferSize) / (totalAnswered + bufferSize)) * 100);
-  el.textContent = pct + '%';
+  advanceNote();
+}
+
+// ── Advance Note ───────────────────────────────────────────────
+function advanceNote() {
+  clearInterval(timer);
+
+  const answeredNote = noteQueue[currentNoteIndex];
+  if (answeredNote) {
+    totalAnswered++;
+    if (answeredNote.state === 'correct') totalCorrect++;
+    updateAccuracy();
+  }
+
+  currentNoteIndex++;
+
+  const windowEnd = windowStart + VISIBLE_NOTES;
+  const windowNotes = noteQueue.slice(windowStart, windowEnd);
+  const allDone = windowNotes.length === VISIBLE_NOTES &&
+    windowNotes.every(n => n.state === 'correct' || n.state === 'wrong');
+
+  if (allDone) {
+    windowStart += VISIBLE_NOTES;
+    currentNoteIndex = windowStart;
+  }
+
+  if (windowStart + VISIBLE_NOTES * 2 >= noteQueue.length) {
+    topUpQueue();
+  }
+
+  renderStaff();
+  startTimer();
 }
