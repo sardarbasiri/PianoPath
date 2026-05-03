@@ -40,7 +40,6 @@ function onAnswerClick(label, btn) {
   clearInterval(timer);
   playPiano(currentNote.freq);
 
-  // disable all buttons to prevent double clicks
   document.querySelectorAll('.answer-btn').forEach(b => b.disabled = true);
 
   if (label === currentNote.label) {
@@ -51,7 +50,7 @@ function onAnswerClick(label, btn) {
     setTimeout(() => {
       resetAnswerButtons();
       advanceNote();
-    }, 80);
+    }, 300);
   } else {
     noteQueue[currentNoteIndex].state = 'wrong';
     btn.style.background = '#e05c5c';
@@ -66,6 +65,6 @@ function onAnswerClick(label, btn) {
     setTimeout(() => {
       resetAnswerButtons();
       advanceNote();
-    }, 80);
+    }, 300);
   }
 }

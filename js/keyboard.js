@@ -67,32 +67,26 @@ function onKeyClick(k, el) {
   const currentNote = noteQueue[currentNoteIndex];
   clearInterval(timer);
 
-  // Match by note letter only (ignore octave)
   playPiano(currentNote.freq);
 
   if (k.note === currentNote.label) {
     noteQueue[currentNoteIndex].state = 'correct';
-    el.style.background = '#4caf82';
     renderStaff();
-    setTimeout(() => {
-      el.style.background = '';
-      advanceNote();
-    }, 80);
+    advanceNote();
   } else {
     noteQueue[currentNoteIndex].state = 'wrong';
-    el.style.background = '#e05c5c';
-    renderStaff();
     // highlight correct key
     document.querySelectorAll('.key-white, .key-black').forEach(key => {
       if (key.dataset.note === currentNote.label) {
         key.style.background = '#4caf82';
       }
     });
+    renderStaff();
     setTimeout(() => {
       document.querySelectorAll('.key-white, .key-black').forEach(key => {
         key.style.background = '';
       });
       advanceNote();
-    }, 80);
+    }, 300);
   }
 }

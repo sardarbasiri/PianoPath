@@ -12,15 +12,19 @@ function renderStaff() {
 
 function drawBothStaves(notes, activePos) {
   const W = 900;
-  const H = 340;
   const lineSpacing = 16;
-  const trebleStaffTop = 60;
-  const bassStaffTop = 210;
   const noteSpacing = 100;
   const startX = 110;
 
-  const trebleBottomY = trebleStaffTop + 4 * lineSpacing;
-  const bassBottomY   = bassStaffTop   + 4 * lineSpacing;
+  // Middle C ledger line sits exactly between the two staves
+  // Gap between staves = 2 * lineSpacing so middle C ledger is centered
+  const trebleStaffBottom = 130;
+  const trebleStaffTop    = trebleStaffBottom - 4 * lineSpacing;
+  const bassStaffTop      = trebleStaffBottom + 2 * lineSpacing;
+  const bassStaffBottom   = bassStaffTop + 4 * lineSpacing;
+  const middleCY          = trebleStaffBottom + lineSpacing;
+
+  const H = bassStaffBottom + 80;
 
   let svg = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg"
     style="width:100%;display:block;background:#1a1a20;border-radius:12px;
@@ -29,52 +33,69 @@ function drawBothStaves(notes, activePos) {
   // Treble staff lines
   for (let i = 0; i < 5; i++) {
     const y = trebleStaffTop + i * lineSpacing;
-    svg += `<line x1="30" x2="${W-10}" y1="${y}" y2="${y}" stroke="rgba(255,255,255,0.25)" stroke-width="1"/>`;
+    svg += `<line x1="30" x2="${W-10}" y1="${y}" y2="${y}"
+      stroke="rgba(255,255,255,0.25)" stroke-width="1"/>`;
   }
 
   // Bass staff lines
   for (let i = 0; i < 5; i++) {
     const y = bassStaffTop + i * lineSpacing;
-    svg += `<line x1="30" x2="${W-10}" y1="${y}" y2="${y}" stroke="rgba(255,255,255,0.25)" stroke-width="1"/>`;
+    svg += `<line x1="30" x2="${W-10}" y1="${y}" y2="${y}"
+      stroke="rgba(255,255,255,0.25)" stroke-width="1"/>`;
   }
 
   // Treble clef
-  svg += `<text x="32" y="${trebleStaffTop + lineSpacing * 3.5}" font-size="90"
-    fill="rgba(255,255,255,0.5)" font-family="serif">𝄞</text>`;
+  svg += `<text x="32" y="${trebleStaffTop + lineSpacing * 3.5}"
+    font-size="90" fill="rgba(255,255,255,0.5)" font-family="serif">𝄞</text>`;
 
   // Bass clef
-  svg += `<text x="32" y="${bassStaffTop + lineSpacing * 2.8}" font-size="70"
-    fill="rgba(255,255,255,0.5)" font-family="serif">𝄢</text>`;
+  svg += `<text x="32" y="${bassStaffTop + lineSpacing * 2.8}"
+    font-size="70" fill="rgba(255,255,255,0.5)" font-family="serif">𝄢</text>`;
 
-  // Vertical bar lines connecting both staves
-  svg += `<line x1="30" x2="30" y1="${trebleStaffTop}" y2="${bassStaffTop + 4 * lineSpacing}"
+  // Vertical bar line connecting both staves
+  svg += `<line x1="30" x2="30" y1="${trebleStaffTop}" y2="${bassStaffBottom}"
     stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>`;
 
   // Draw notes
   notes.forEach((note, i) => {
     const x = startX + i * noteSpacing;
-    const isTreeble = note.clef === 'treble';
-    const staffTop   = isTreeble ? trebleStaffTop : bassStaffTop;
-    const bottomLineY = staffTop + 4 * lineSpacing;
-    const topLineY    = staffTop;
-    const offset      = isTreeble ? 2 : 0;
-    const noteY       = bottomLineY - (note.pos - offset) * (lineSpacing / 2);
+    const isTreble = note.clef === 'treble';
+
+    // For treble: bottom line = E4 = pos 2, offset = 2
+    // For bass:   bottom line = G2 = pos 0, offset = 0
+    // Middle C (treble pos=0, bass pos=10) both map to middleCY
+    let noteY;
+    if (isTreble) {
+      // treble bottom line (E4) = trebleStaffBottom, pos 2
+      noteY = trebleStaffBottom - (note.pos - 2) * (lineSpacing / 2);
+    } else {
+      // bass top line (A3) = bassStaffTop, pos 8 for bass
+      // bass bottom line (G2) = bassStaffBottom, pos 0
+      noteY = bassStaffBottom - (note.pos - 0) * (lineSpacing / 2);
+    }
 
     let fill = 'rgba(255,255,255,0.35)';
     if (i === activePos)          fill = '#c9a84c';
     if (note.state === 'correct') fill = '#4caf82';
     if (note.state === 'wrong')   fill = '#e05c5c';
 
-    // Active highlight box spanning both staves
+    // Active highlight box
     if (i === activePos) {
       svg += `<rect x="${x-20}" y="${trebleStaffTop - 10}" width="40"
-        height="${bassStaffTop + 4 * lineSpacing - trebleStaffTop + 20}"
+        height="${bassStaffBottom - trebleStaffTop + 20}"
         rx="4" fill="rgba(201,168,76,0.06)" stroke="rgba(201,168,76,0.25)" stroke-width="1"/>`;
     }
 
-    // Ledger lines below staff
-    if (noteY > bottomLineY + lineSpacing / 2) {
-      let ly = bottomLineY + lineSpacing;
+    // Middle C ledger line
+    const isMiddleC = (isTreble && note.pos === 0) || (!isTreble && note.pos === 10);
+    if (isMiddleC) {
+      svg += `<line x1="${x-14}" x2="${x+14}" y1="${middleCY}" y2="${middleCY}"
+        stroke="rgba(255,255,255,0.5)" stroke-width="1.2"/>`;
+    }
+
+    // Ledger lines below treble staff (excluding middle C area)
+    if (isTreble && noteY > trebleStaffBottom + lineSpacing / 2 && !isMiddleC) {
+      let ly = trebleStaffBottom + lineSpacing;
       while (ly <= noteY + 2) {
         svg += `<line x1="${x-14}" x2="${x+14}" y1="${ly}" y2="${ly}"
           stroke="rgba(255,255,255,0.5)" stroke-width="1.2"/>`;
@@ -82,13 +103,33 @@ function drawBothStaves(notes, activePos) {
       }
     }
 
-    // Ledger lines above staff
-    if (noteY < topLineY - lineSpacing / 2) {
-      let ly = topLineY - lineSpacing;
+    // Ledger lines above treble staff
+    if (isTreble && noteY < trebleStaffTop - lineSpacing / 2) {
+      let ly = trebleStaffTop - lineSpacing;
       while (ly >= noteY - 2) {
         svg += `<line x1="${x-14}" x2="${x+14}" y1="${ly}" y2="${ly}"
           stroke="rgba(255,255,255,0.5)" stroke-width="1.2"/>`;
         ly -= lineSpacing;
+      }
+    }
+
+    // Ledger lines above bass staff (excluding middle C area)
+    if (!isTreble && noteY < bassStaffTop - lineSpacing / 2 && !isMiddleC) {
+      let ly = bassStaffTop - lineSpacing;
+      while (ly >= noteY - 2) {
+        svg += `<line x1="${x-14}" x2="${x+14}" y1="${ly}" y2="${ly}"
+          stroke="rgba(255,255,255,0.5)" stroke-width="1.2"/>`;
+        ly -= lineSpacing;
+      }
+    }
+
+    // Ledger lines below bass staff
+    if (!isTreble && noteY > bassStaffBottom + lineSpacing / 2) {
+      let ly = bassStaffBottom + lineSpacing;
+      while (ly <= noteY + 2) {
+        svg += `<line x1="${x-14}" x2="${x+14}" y1="${ly}" y2="${ly}"
+          stroke="rgba(255,255,255,0.5)" stroke-width="1.2"/>`;
+        ly += lineSpacing;
       }
     }
 
@@ -97,24 +138,25 @@ function drawBothStaves(notes, activePos) {
       fill="${fill}" transform="rotate(-15,${x},${noteY})"/>`;
 
     // Stem
-    const stemUp = note.pos < (isTreeble ? 6 : 5);
+    const stemUp = isTreble ? note.pos < 6 : note.pos < 5;
     const stemX  = stemUp ? x + 9 : x - 9;
     const stemY2 = stemUp ? noteY - 42 : noteY + 42;
     svg += `<line x1="${stemX}" x2="${stemX}" y1="${noteY}" y2="${stemY2}"
       stroke="${fill}" stroke-width="1.5"/>`;
 
-     // Note name label after answered
+    // Note name label after answered
     if (note.state === 'correct' || note.state === 'wrong') {
       const labelColor = note.state === 'correct' ? '#4caf82' : '#e05c5c';
+      const displayName = getNoteName(note);
+      // Place label below bass notes, above treble notes, always with clearance
       let labelY;
-      if (isTreeble) {
-        labelY = noteY < trebleStaffTop ? trebleStaffTop - 14 : trebleStaffTop - 14;
-        labelY = noteY - 18 < 12 ? noteY + 20 : noteY - 18;
+      if (isTreble) {
+        labelY = Math.max(12, noteY - 20);
       } else {
-        labelY = noteY + 20;
+        labelY = Math.min(H - 6, noteY + 26);
       }
       svg += `<text x="${x}" y="${labelY}" font-size="11" fill="${labelColor}"
-        text-anchor="middle" font-family="sans-serif" font-weight="500">${getNoteName(note)}</text>`;
+        text-anchor="middle" font-family="sans-serif" font-weight="500">${displayName}</text>`;
     }
   });
 
@@ -205,9 +247,11 @@ function drawStaff(clef, notes, activePos) {
     // Note name label after answered
     if (note.state === 'correct' || note.state === 'wrong') {
       const labelColor = note.state === 'correct' ? '#4caf82' : '#e05c5c';
-      const labelY = noteY > bottomLineY ? noteY + 20 : H - 8;
+      const displayName = getNoteName(note);
+      // Always place label below the note with enough clearance
+      const labelY = Math.min(H - 6, noteY + 26);
       svg += `<text x="${x}" y="${labelY}" font-size="11" fill="${labelColor}"
-        text-anchor="middle" font-family="sans-serif" font-weight="500">${getNoteName(note)}</text>`;
+        text-anchor="middle" font-family="sans-serif" font-weight="500">${displayName}</text>`;
     }
   });
 

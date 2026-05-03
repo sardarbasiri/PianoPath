@@ -21,6 +21,10 @@ const DIFFICULTY = {
 
 // ── Note Data ──────────────────────────────────────────────────
 const TREBLE_NOTES = [
+  { name:'F3', label:'F', octave:3, freq:174.61,  pos:-4, clef:'treble' },
+  { name:'G3', label:'G', octave:3, freq:196.00,  pos:-3, clef:'treble' },
+  { name:'A3', label:'A', octave:3, freq:220.00,  pos:-2, clef:'treble' },
+  { name:'B3', label:'B', octave:3, freq:246.94,  pos:-1, clef:'treble' },
   { name:'C4', label:'C', octave:4, freq:261.63,  pos:0,  clef:'treble' },
   { name:'D4', label:'D', octave:4, freq:293.66,  pos:1,  clef:'treble' },
   { name:'E4', label:'E', octave:4, freq:329.63,  pos:2,  clef:'treble' },
@@ -41,6 +45,10 @@ const TREBLE_NOTES = [
 ];
 
 const BASS_NOTES = [
+  { name:'A1', label:'A', octave:1, freq:55.00,  pos:-6, clef:'bass' },
+  { name:'B1', label:'B', octave:1, freq:61.74,  pos:-5, clef:'bass' },
+  { name:'C2', label:'C', octave:2, freq:65.41,  pos:-4, clef:'bass' },
+  { name:'D2', label:'D', octave:2, freq:73.42,  pos:-3, clef:'bass' },
   { name:'E2', label:'E', octave:2, freq:82.41,  pos:-2, clef:'bass' },
   { name:'F2', label:'F', octave:2, freq:87.31,  pos:-1, clef:'bass' },
   { name:'G2', label:'G', octave:2, freq:98.00,  pos:0,  clef:'bass' },
@@ -56,6 +64,46 @@ const BASS_NOTES = [
   { name:'C4', label:'C', octave:4, freq:261.63, pos:10, clef:'bass' },
   { name:'D4', label:'D', octave:4, freq:293.66, pos:11, clef:'bass' },
   { name:'E4', label:'E', octave:4, freq:329.63, pos:12, clef:'bass' },
+];
+
+const TREBLE_NOTES_BOTH = [
+  { name:'C4', label:'C', octave:4, freq:261.63,  pos:0,  clef:'treble' },
+  { name:'D4', label:'D', octave:4, freq:293.66,  pos:1,  clef:'treble' },
+  { name:'E4', label:'E', octave:4, freq:329.63,  pos:2,  clef:'treble' },
+  { name:'F4', label:'F', octave:4, freq:349.23,  pos:3,  clef:'treble' },
+  { name:'G4', label:'G', octave:4, freq:392.00,  pos:4,  clef:'treble' },
+  { name:'A4', label:'A', octave:4, freq:440.00,  pos:5,  clef:'treble' },
+  { name:'B4', label:'B', octave:4, freq:493.88,  pos:6,  clef:'treble' },
+  { name:'C5', label:'C', octave:5, freq:523.25,  pos:7,  clef:'treble' },
+  { name:'D5', label:'D', octave:5, freq:587.33,  pos:8,  clef:'treble' },
+  { name:'E5', label:'E', octave:5, freq:659.25,  pos:9,  clef:'treble' },
+  { name:'F5', label:'F', octave:5, freq:698.46,  pos:10, clef:'treble' },
+  { name:'G5', label:'G', octave:5, freq:784.00,  pos:11, clef:'treble' },
+  { name:'A5', label:'A', octave:5, freq:880.00,  pos:12, clef:'treble' },
+  { name:'B5', label:'B', octave:5, freq:987.77,  pos:13, clef:'treble' },
+  { name:'C6', label:'C', octave:6, freq:1046.50, pos:14, clef:'treble' },
+  { name:'D6', label:'D', octave:6, freq:1174.66, pos:15, clef:'treble' },
+  { name:'E6', label:'E', octave:6, freq:1318.51, pos:16, clef:'treble' },
+];
+
+const BASS_NOTES_BOTH = [
+  { name:'A1', label:'A', octave:1, freq:55.00,  pos:-6, clef:'bass' },
+  { name:'B1', label:'B', octave:1, freq:61.74,  pos:-5, clef:'bass' },
+  { name:'C2', label:'C', octave:2, freq:65.41,  pos:-4, clef:'bass' },
+  { name:'D2', label:'D', octave:2, freq:73.42,  pos:-3, clef:'bass' },
+  { name:'E2', label:'E', octave:2, freq:82.41,  pos:-2, clef:'bass' },
+  { name:'F2', label:'F', octave:2, freq:87.31,  pos:-1, clef:'bass' },
+  { name:'G2', label:'G', octave:2, freq:98.00,  pos:0,  clef:'bass' },
+  { name:'A2', label:'A', octave:2, freq:110.00, pos:1,  clef:'bass' },
+  { name:'B2', label:'B', octave:2, freq:123.47, pos:2,  clef:'bass' },
+  { name:'C3', label:'C', octave:3, freq:130.81, pos:3,  clef:'bass' },
+  { name:'D3', label:'D', octave:3, freq:146.83, pos:4,  clef:'bass' },
+  { name:'E3', label:'E', octave:3, freq:164.81, pos:5,  clef:'bass' },
+  { name:'F3', label:'F', octave:3, freq:174.61, pos:6,  clef:'bass' },
+  { name:'G3', label:'G', octave:3, freq:196.00, pos:7,  clef:'bass' },
+  { name:'A3', label:'A', octave:3, freq:220.00, pos:8,  clef:'bass' },
+  { name:'B3', label:'B', octave:3, freq:246.94, pos:9,  clef:'bass' },
+  { name:'C4', label:'C', octave:4, freq:261.63, pos:10, clef:'bass' },
 ];
 
 // ── Audio ──────────────────────────────────────────────────────
@@ -218,7 +266,7 @@ function advanceNote() {
 function getPool() {
   if (selectedClef === 'treble') return TREBLE_NOTES;
   if (selectedClef === 'bass')   return BASS_NOTES;
-  return [...TREBLE_NOTES, ...BASS_NOTES];
+  return [...TREBLE_NOTES_BOTH, ...BASS_NOTES_BOTH];
 }
 
 function generateNoteQueue() {
