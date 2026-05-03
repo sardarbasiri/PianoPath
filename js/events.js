@@ -59,3 +59,9 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('btn-learn-input-buttons').addEventListener('click', () => selectLearnInput('buttons'));
 
 });
+
+
+// Hide browser UI on mobile
+window.addEventListener('load', () => {
+  setTimeout(() => window.scrollTo(0, 1), 100);
+});

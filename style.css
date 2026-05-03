@@ -514,3 +514,8 @@ button:hover, button:active {
   font-size: 0.72rem;
   color: #888;
 }
+
+html {
+  height: 100%;
+  overflow: hidden;
+}
