@@ -10,7 +10,7 @@ let noteQueue = [];
 let timer = null;
 let timeLeft = 0;
 
-const VISIBLE_NOTES = 6;
+const VISIBLE_NOTES = 8;
 
 const DIFFICULTY = {
   beginner:     4,
@@ -170,7 +170,6 @@ function startWithInput(inputMethod) {
 }
 
 function selectDifficulty(difficulty) {
-    console.log('selectedInput is:', selectedInput);
   selectedDifficulty = difficulty;
   showPage('page-4');
 

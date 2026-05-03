@@ -134,9 +134,10 @@ button:hover {
 .keyboard {
   position: relative;
   display: flex;
-  height: 140px;
-  min-width: 700px;
+  height: 180px;
+  max-width: 500px;
   width: 100%;
+  margin: 1rem auto;
 }
 
 .key-white {
@@ -144,7 +145,7 @@ button:hover {
   background: #f5f2eb;
   border: 1px solid #aaa;
   border-top: none;
-  border-radius: 0 0 6px 6px;
+  border-radius: 0 0 8px 8px;
   cursor: pointer;
   position: relative;
   min-width: 0;
@@ -155,10 +156,10 @@ button:hover {
 
 .key-black {
   position: absolute;
-  width: 1.4%;
-  height: 60%;
+  width: 10%;
+  height: 58%;
   background: #1a1a1e;
-  border-radius: 0 0 5px 5px;
+  border-radius: 0 0 6px 6px;
   cursor: pointer;
   z-index: 2;
   top: 0;
@@ -171,10 +172,10 @@ button:hover {
 
 .key-label {
   position: absolute;
-  bottom: 5px;
+  bottom: 8px;
   left: 50%;
   transform: translateX(-50%);
-  font-size: 9px;
+  font-size: 12px;
   color: #aaa;
   pointer-events: none;
   white-space: nowrap;
