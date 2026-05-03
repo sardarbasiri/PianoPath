@@ -36,12 +36,12 @@
       <h1 id="page2-title"></h1>
       <p class="subtitle">What would you like to do?</p>
       <div class="buttons">
-        <button>📖 Learn</button>
+        <button onclick="learnClick()">📖 Learn</button>
         <button onclick="practiceClick()">🎯 Practice</button>
       </div>
     </div>
 
-    <!-- PAGE 3 -->
+    <!-- PAGE 3 - PRACTICE CLEF SELECT -->
     <div id="page-3">
       <button class="back-btn" onclick="showPage('page-2')">← Back</button>
       <h1>🎵 Sight Reading</h1>
@@ -94,6 +94,61 @@
       </div>
     </div>
 
+    <!-- PAGE 8 - LEARN DIFFICULTY -->
+    <div id="page-8">
+      <button class="back-btn" onclick="showPage('page-2')">← Back</button>
+      <h1>📖 Sight Reading — Learn</h1>
+      <p class="subtitle">How long to study each note?</p>
+      <div class="option-row">
+        <span>Note naming:</span>
+        <button class="toggle-btn" id="naming-btn-learn" onclick="toggleNaming()">🇺🇸 American (C, D, E...)</button>
+      </div>
+      <div class="buttons">
+        <button onclick="selectLearnDifficulty('slow')">🐢 Slow — 5s per note</button>
+        <button onclick="selectLearnDifficulty('medium')">🚶 Medium — 3s per note</button>
+        <button onclick="selectLearnDifficulty('fast')">🏃 Fast — 1.5s per note</button>
+      </div>
+    </div>
+
+    <!-- PAGE 9 - COURSES LIST -->
+    <div id="page-9">
+      <button class="back-btn" onclick="showPage('page-8')">← Back</button>
+      <h1>📖 Courses</h1>
+      <p class="subtitle">Complete each course to unlock the next</p>
+      <div id="courses-list" class="courses-grid"></div>
+    </div>
+
+    <!-- PAGE 10 - INTRO LESSON -->
+    <div id="page-10">
+      <button class="back-btn" onclick="showPage('page-9')">← Back</button>
+      <div class="practice-header">
+        <span class="practice-title" id="lesson-title">Lesson</span>
+        <span class="accuracy-badge" id="lesson-badge">Intro</span>
+      </div>
+      <div id="lesson-staff-area"></div>
+      <div id="lesson-info" class="lesson-info"></div>
+      <div class="lesson-nav">
+        <button id="lesson-prev-btn" onclick="lessonPrev()">← Prev</button>
+        <button id="lesson-next-btn" onclick="lessonNext()">Next →</button>
+        <button id="lesson-start-btn" onclick="startLearnPractice()" style="display:none;">🎯 Start Practice</button>
+      </div>
+    </div>
+
+    <!-- PAGE 11 - LEARN PRACTICE -->
+    <div id="page-11">
+      <button class="back-btn" onclick="showPage('page-9')">← Back</button>
+      <div class="practice-header">
+        <span class="practice-title" id="learn-practice-title">Practice</span>
+        <span class="accuracy-badge">Accuracy: <span id="learn-accuracy-pct">100%</span></span>
+      </div>
+      <div id="learn-progress" class="learn-progress">
+        Set <span id="learn-set-num">1</span> of 3
+      </div>
+      <div id="learn-staff-area"></div>
+      <div id="learn-keyboard-area"></div>
+      <div id="learn-feedback"></div>
+    </div>
+
   </div><!-- end #app -->
 
   <script src="js/core.js"></script>
@@ -101,5 +156,6 @@
   <script src="js/keyboard.js"></script>
   <script src="js/buttons.js"></script>
   <script src="js/midi.js"></script>
+  <script src="js/learn.js"></script>
 </body>
 </html>

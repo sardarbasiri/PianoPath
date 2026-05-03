@@ -35,7 +35,6 @@ function playPiano(freq) {
 
   const master = ac.createGain();
   master.connect(ac.destination);
-
   master.gain.setValueAtTime(0, now);
   master.gain.linearRampToValueAtTime(0.8, now + 0.005);
   master.gain.exponentialRampToValueAtTime(0.3, now + 0.1);
@@ -130,10 +129,12 @@ function playPiano(freq) {
 // ── Note Naming ────────────────────────────────────────────────
 function toggleNaming() {
   selectedNaming = selectedNaming === 'american' ? 'italian' : 'american';
-  const btn = document.getElementById('naming-btn');
-  btn.textContent = selectedNaming === 'american'
+  const text = selectedNaming === 'american'
     ? '🇺🇸 American (C, D, E...)'
     : '🇮🇹 Italian (Do, Re, Mi...)';
+  document.querySelectorAll('#naming-btn, #naming-btn-learn').forEach(btn => {
+    if (btn) btn.textContent = text;
+  });
 }
 
 function getNoteName(note) {
@@ -242,6 +243,14 @@ function goTo(topic, title) {
   selectedTopic = topic;
   document.getElementById('page2-title').textContent = title;
   showPage('page-2');
+}
+
+function learnClick() {
+  if (selectedTopic === 'sight-reading') {
+    showPage('page-8');
+  } else {
+    alert('Coming soon!');
+  }
 }
 
 function practiceClick() {
