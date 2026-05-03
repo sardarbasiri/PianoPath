@@ -9,57 +9,51 @@
 </head>
 <body>
 
-  <!-- Rotate message for portrait mode -->
   <div id="rotate-msg">
     <h2>📱 Please rotate your device</h2>
     <p>PianoPath works best in landscape mode</p>
   </div>
 
-  <!-- App wrapper -->
   <div id="app">
 
-    <!-- PAGE 1 -->
     <div id="page-1">
       <h1>🎹 PianoPath</h1>
       <p class="subtitle">What would you like to work on today?</p>
       <div class="buttons">
-        <button onclick="goTo('sight-reading', '🎵 Sight Reading')">🎵 Sight Reading</button>
-        <button onclick="goTo('scales', '🎼 Scales')">🎼 Scales</button>
-        <button onclick="goTo('arpeggios', '🎶 Arpeggios')">🎶 Arpeggios</button>
-        <button onclick="goTo('chords', '🎹 Chords')">🎹 Chords</button>
+        <button id="btn-sight-reading">🎵 Sight Reading</button>
+        <button id="btn-scales">🎼 Scales</button>
+        <button id="btn-arpeggios">🎶 Arpeggios</button>
+        <button id="btn-chords">🎹 Chords</button>
       </div>
     </div>
 
-    <!-- PAGE 2 -->
     <div id="page-2">
-      <button class="back-btn" onclick="showPage('page-1')">← Back</button>
+      <button class="back-btn" id="back-to-1">← Back</button>
       <h1 id="page2-title"></h1>
       <p class="subtitle">What would you like to do?</p>
       <div class="buttons">
-        <button onclick="learnClick()">📖 Learn</button>
-        <button onclick="practiceClick()">🎯 Practice</button>
+        <button id="btn-learn">📖 Learn</button>
+        <button id="btn-practice">🎯 Practice</button>
       </div>
     </div>
 
-    <!-- PAGE 3 - PRACTICE CLEF SELECT -->
     <div id="page-3">
-      <button class="back-btn" onclick="showPage('page-2')">← Back</button>
+      <button class="back-btn" id="back-to-2">← Back</button>
       <h1>🎵 Sight Reading</h1>
       <p class="subtitle">Which clef would you like to practice?</p>
       <div class="option-row">
         <span>Note naming:</span>
-        <button class="toggle-btn" id="naming-btn" onclick="toggleNaming()">🇺🇸 American (C, D, E...)</button>
+        <button class="toggle-btn" id="naming-btn">🇺🇸 American (C, D, E...)</button>
       </div>
       <div class="buttons">
-        <button onclick="selectClef('treble')">𝄞 Treble Clef</button>
-        <button onclick="selectClef('bass')">𝄢 Bass Clef</button>
-        <button onclick="selectClef('both')">𝄞𝄢 Both</button>
+        <button id="btn-treble">𝄞 Treble Clef</button>
+        <button id="btn-bass">𝄢 Bass Clef</button>
+        <button id="btn-both">𝄞𝄢 Both</button>
       </div>
     </div>
 
-    <!-- PAGE 4 - PRACTICE -->
     <div id="page-4">
-      <button class="back-btn" onclick="showPage('page-6')">← Back</button>
+      <button class="back-btn" id="back-to-6">← Back</button>
       <div class="practice-header">
         <span class="practice-title">🎯 Sight Reading</span>
         <span class="accuracy-badge">Accuracy: <span id="accuracy-pct">100%</span></span>
@@ -69,57 +63,52 @@
       <div id="feedback"></div>
     </div>
 
-    <!-- PAGE 5 - INPUT METHOD -->
     <div id="page-5">
-      <button class="back-btn" onclick="showPage('page-3')">← Back</button>
+      <button class="back-btn" id="back-to-3">← Back</button>
       <h1>🎹 How would you like to answer?</h1>
       <p class="subtitle">Choose your input method</p>
       <div class="buttons">
-        <button onclick="startWithInput('keyboard')">🎹 On-Screen Keyboard</button>
-        <button onclick="startWithInput('buttons')">🔘 Answer Buttons</button>
+        <button id="btn-input-keyboard">🎹 On-Screen Keyboard</button>
+        <button id="btn-input-buttons">🔘 Answer Buttons</button>
       </div>
     </div>
 
-    <!-- PAGE 6 - DIFFICULTY -->
     <div id="page-6">
-      <button class="back-btn" onclick="showPage('page-5')">← Back</button>
+      <button class="back-btn" id="back-to-5">← Back</button>
       <h1>🎯 Choose Difficulty</h1>
       <p class="subtitle">How much time per note?</p>
       <div class="buttons">
-        <button onclick="selectDifficulty('beginner')">🟢 Beginner — 4s</button>
-        <button onclick="selectDifficulty('intermediate')">🟡 Intermediate — 2s</button>
-        <button onclick="selectDifficulty('advanced')">🟠 Advanced — 1s</button>
-        <button onclick="selectDifficulty('expert')">🔴 Expert — 0.5s</button>
+        <button id="btn-diff-beginner">🟢 Beginner — 4s</button>
+        <button id="btn-diff-intermediate">🟡 Intermediate — 2s</button>
+        <button id="btn-diff-advanced">🟠 Advanced — 1s</button>
+        <button id="btn-diff-expert">🔴 Expert — 0.5s</button>
       </div>
     </div>
 
-    <!-- PAGE 8 - LEARN DIFFICULTY -->
     <div id="page-8">
-      <button class="back-btn" onclick="showPage('page-2')">← Back</button>
+      <button class="back-btn" id="back-to-2-learn">← Back</button>
       <h1>📖 Sight Reading — Learn</h1>
       <div class="option-row">
         <span>Note naming:</span>
-        <button class="toggle-btn" id="naming-btn-learn" onclick="toggleNaming()">🇺🇸 American (C, D, E...)</button>
+        <button class="toggle-btn" id="naming-btn-learn">🇺🇸 American (C, D, E...)</button>
       </div>
       <div class="buttons">
-        <button onclick="selectLearnDifficulty('beginner')">🟢 Beginner — 4s</button>
-        <button onclick="selectLearnDifficulty('intermediate')">🟡 Intermediate — 2s</button>
-        <button onclick="selectLearnDifficulty('advanced')">🟠 Advanced — 1s</button>
-        <button onclick="selectLearnDifficulty('expert')">🔴 Expert — 0.5s</button>
+        <button id="btn-learn-beginner">🟢 Beginner — 4s</button>
+        <button id="btn-learn-intermediate">🟡 Intermediate — 2s</button>
+        <button id="btn-learn-advanced">🟠 Advanced — 1s</button>
+        <button id="btn-learn-expert">🔴 Expert — 0.5s</button>
       </div>
     </div>
 
-    <!-- PAGE 9 - COURSES LIST -->
     <div id="page-9">
-      <button class="back-btn" onclick="showPage('page-12')">← Back</button>
+      <button class="back-btn" id="back-to-12">← Back</button>
       <h1>📖 Courses</h1>
       <p class="subtitle">Complete each course to unlock the next</p>
       <div id="courses-list" class="courses-grid"></div>
     </div>
 
-    <!-- PAGE 10 - INTRO LESSON -->
     <div id="page-10">
-      <button class="back-btn" onclick="showPage('page-9')">← Back</button>
+      <button class="back-btn" id="back-to-9">← Back</button>
       <div class="practice-header">
         <span class="practice-title" id="lesson-title">Lesson</span>
         <span class="accuracy-badge" id="lesson-badge">Intro</span>
@@ -127,15 +116,14 @@
       <div id="lesson-staff-area"></div>
       <div id="lesson-info" class="lesson-info"></div>
       <div class="lesson-nav">
-        <button id="lesson-prev-btn" onclick="lessonPrev()">← Prev</button>
-        <button id="lesson-next-btn" onclick="lessonNext()">Next →</button>
-        <button id="lesson-start-btn" onclick="startLearnPractice()" style="display:none;">🎯 Start Practice</button>
+        <button id="lesson-prev-btn">← Prev</button>
+        <button id="lesson-next-btn">Next →</button>
+        <button id="lesson-start-btn" style="display:none;">🎯 Start Practice</button>
       </div>
     </div>
 
-    <!-- PAGE 11 - LEARN PRACTICE -->
     <div id="page-11">
-      <button class="back-btn" onclick="showPage('page-9')">← Back</button>
+      <button class="back-btn" id="back-to-9-practice">← Back</button>
       <div class="practice-header">
         <span class="practice-title" id="learn-practice-title">Practice</span>
         <span class="accuracy-badge">Accuracy: <span id="learn-accuracy-pct">100%</span></span>
@@ -148,23 +136,23 @@
       <div id="learn-feedback"></div>
     </div>
 
-    <!-- PAGE 12 - LEARN INPUT METHOD -->
     <div id="page-12">
-      <button class="back-btn" onclick="showPage('page-8')">← Back</button>
+      <button class="back-btn" id="back-to-8">← Back</button>
       <h1>🎹 How would you like to answer?</h1>
       <p class="subtitle">Choose your input method</p>
       <div class="buttons">
-        <button onclick="selectLearnInput('keyboard')">🎹 On-Screen Keyboard</button>
-        <button onclick="selectLearnInput('buttons')">🔘 Answer Buttons</button>
+        <button id="btn-learn-input-keyboard">🎹 On-Screen Keyboard</button>
+        <button id="btn-learn-input-buttons">🔘 Answer Buttons</button>
       </div>
     </div>
 
-  </div><!-- end #app -->
+  </div>
 
   <script src="js/core.js"></script>
   <script src="js/staff.js"></script>
   <script src="js/keyboard.js"></script>
   <script src="js/buttons.js"></script>
   <script src="js/learn.js"></script>
+  <script src="js/events.js"></script>
 </body>
 </html>
