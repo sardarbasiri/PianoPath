@@ -754,10 +754,7 @@ function renderLesson() {
 
   document.getElementById('lesson-info').innerHTML = `
     <div class="lesson-note-name">${getNoteName(note)}</div>
-    <button class="lesson-play-btn" id="lesson-play-btn">▶ Play Sound</button>
   `;
-
-  document.getElementById('lesson-play-btn').addEventListener('click', () => playPiano(note.freq));
 
   playPiano(note.freq);
 }

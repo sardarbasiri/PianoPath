@@ -84,7 +84,7 @@ body {
   overflow: hidden;
 }
 
-#page-11, #page-4 {
+#page-11, #page-10, #page-4 {
   justify-content: flex-start;
   padding-top: 0.3rem;
 }
@@ -150,6 +150,7 @@ button:hover, button:active {
 }
 
 #page-11 .back-btn,
+#page-10 .back-btn,
 #page-4 .back-btn {
   align-self: flex-start;
   margin-bottom: 0.2rem;
