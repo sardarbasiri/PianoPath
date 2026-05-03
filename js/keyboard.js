@@ -66,27 +66,28 @@ function onKeyClick(k, el) {
 
   const currentNote = noteQueue[currentNoteIndex];
   clearInterval(timer);
-
   playPiano(currentNote.freq);
 
   if (k.note === currentNote.label) {
     noteQueue[currentNoteIndex].state = 'correct';
+    el.style.background = '#4caf82';
     renderStaff();
-    advanceNote();
+    requestAnimationFrame(() => {
+      el.style.background = '';
+      advanceNote();
+    });
   } else {
     noteQueue[currentNoteIndex].state = 'wrong';
-    // highlight correct key
+    el.style.background = '#e05c5c';
     document.querySelectorAll('.key-white, .key-black').forEach(key => {
-      if (key.dataset.note === currentNote.label) {
-        key.style.background = '#4caf82';
-      }
+      if (key.dataset.note === currentNote.label) key.style.background = '#4caf82';
     });
     renderStaff();
-    setTimeout(() => {
+    requestAnimationFrame(() => {
       document.querySelectorAll('.key-white, .key-black').forEach(key => {
         key.style.background = '';
       });
       advanceNote();
-    }, 300);
+    });
   }
 }

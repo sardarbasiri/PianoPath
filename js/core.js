@@ -262,6 +262,14 @@ function advanceNote() {
   startTimer();
 }
 
+function timeExpired() {
+  if (currentNoteIndex < noteQueue.length) {
+    noteQueue[currentNoteIndex].state = 'wrong';
+    renderStaff();
+  }
+  advanceNote();
+}
+
 // ── Note Queue ─────────────────────────────────────────────────
 function getPool() {
   if (selectedClef === 'treble') return TREBLE_NOTES;
@@ -300,12 +308,4 @@ function startTimer() {
       timeExpired();
     }
   }, 100);
-}
-
-function timeExpired() {
-  if (currentNoteIndex < noteQueue.length) {
-    noteQueue[currentNoteIndex].state = 'wrong';
-    renderStaff();
-  }
-  setTimeout(() => advanceNote(), 80);
 }

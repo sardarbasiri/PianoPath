@@ -47,12 +47,12 @@ function onAnswerClick(label, btn) {
     btn.style.background = '#4caf82';
     btn.style.borderColor = '#4caf82';
     renderStaff();
-    setTimeout(() => {
+    requestAnimationFrame(() => {
       resetAnswerButtons();
       advanceNote();
-    }, 300);
+    });
   } else {
-    noteQueue[currentNoteIndex].state = 'wrong';
+     noteQueue[currentNoteIndex].state = 'wrong';
     btn.style.background = '#e05c5c';
     btn.style.borderColor = '#e05c5c';
     document.querySelectorAll('.answer-btn').forEach(b => {
@@ -62,9 +62,9 @@ function onAnswerClick(label, btn) {
       }
     });
     renderStaff();
-    setTimeout(() => {
+    requestAnimationFrame(() => {
       resetAnswerButtons();
       advanceNote();
-    }, 300);
+    });
   }
 }

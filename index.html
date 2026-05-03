@@ -2,84 +2,96 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="screen-orientation" content="landscape" />
   <title>PianoPath</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-  <!-- PAGE 1 -->
-  <div id="page-1">
-    <h1>🎹 PianoPath</h1>
-    <p class="subtitle">What would you like to work on today?</p>
-    <div class="buttons">
-      <button onclick="goTo('sight-reading', '🎵 Sight Reading')">🎵 Sight Reading</button>
-      <button onclick="goTo('scales', '🎼 Scales')">🎼 Scales</button>
-      <button onclick="goTo('arpeggios', '🎶 Arpeggios')">🎶 Arpeggios</button>
-      <button onclick="goTo('chords', '🎹 Chords')">🎹 Chords</button>
-    </div>
+  <!-- Rotate message for portrait mode -->
+  <div id="rotate-msg">
+    <h2>📱 Please rotate your device</h2>
+    <p>PianoPath works best in landscape mode</p>
   </div>
 
-  <!-- PAGE 2 -->
-  <div id="page-2">
-    <button class="back-btn" onclick="showPage('page-1')">← Back</button>
-    <h1 id="page2-title"></h1>
-    <p class="subtitle">What would you like to do?</p>
-    <div class="buttons">
-      <button>📖 Learn</button>
-      <button onclick="practiceClick()">🎯 Practice</button>
-    </div>
-  </div>
+  <!-- App wrapper -->
+  <div id="app">
 
-  <!-- PAGE 3 -->
-  <div id="page-3">
-    <button class="back-btn" onclick="showPage('page-2')">← Back</button>
-    <h1>🎵 Sight Reading</h1>
-    <p class="subtitle">Which clef would you like to practice?</p>
-    <div class="option-row">
-      <span>Note naming:</span>
-      <button class="toggle-btn" id="naming-btn" onclick="toggleNaming()">🇺🇸 American (C, D, E...)</button>
+    <!-- PAGE 1 -->
+    <div id="page-1">
+      <h1>🎹 PianoPath</h1>
+      <p class="subtitle">What would you like to work on today?</p>
+      <div class="buttons">
+        <button onclick="goTo('sight-reading', '🎵 Sight Reading')">🎵 Sight Reading</button>
+        <button onclick="goTo('scales', '🎼 Scales')">🎼 Scales</button>
+        <button onclick="goTo('arpeggios', '🎶 Arpeggios')">🎶 Arpeggios</button>
+        <button onclick="goTo('chords', '🎹 Chords')">🎹 Chords</button>
+      </div>
     </div>
-    <div class="buttons">
-      <button onclick="selectClef('treble')">𝄞 Treble Clef</button>
-      <button onclick="selectClef('bass')">𝄢 Bass Clef</button>
-      <button onclick="selectClef('both')">𝄞𝄢 Both</button>
-    </div>
-  </div>
 
-  <!-- PAGE 4 - PRACTICE -->
-  <div id="page-4">
-    <button class="back-btn" onclick="showPage('page-6')">← Back</button>
-    <h1>🎯 Sight Reading Practice</h1>
-    <div id="staff-area"></div>
-    <div id="keyboard-area"></div>
-    <div id="feedback"></div>
-  </div>
-
-  <!-- PAGE 5 - INPUT METHOD -->
-  <div id="page-5">
-    <button class="back-btn" onclick="showPage('page-3')">← Back</button>
-    <h1>🎹 Sight Reading Practice</h1>
-    <p class="subtitle">How would you like to answer?</p>
-    <div class="buttons">
-      <button onclick="startWithInput('keyboard')">🎹 On-Screen Keyboard</button>
-      <button onclick="startWithInput('buttons')">🔘 Answer Buttons</button>
-      <button onclick="startWithInput('midi')">🎵 MIDI Piano</button>
+    <!-- PAGE 2 -->
+    <div id="page-2">
+      <button class="back-btn" onclick="showPage('page-1')">← Back</button>
+      <h1 id="page2-title"></h1>
+      <p class="subtitle">What would you like to do?</p>
+      <div class="buttons">
+        <button>📖 Learn</button>
+        <button onclick="practiceClick()">🎯 Practice</button>
+      </div>
     </div>
-  </div>
 
-  <!-- PAGE 6 - DIFFICULTY -->
-  <div id="page-6">
-    <button class="back-btn" onclick="showPage('page-5')">← Back</button>
-    <h1>🎯 Choose Difficulty</h1>
-    <p class="subtitle">How much time per note?</p>
-    <div class="buttons">
-      <button onclick="selectDifficulty('beginner')">🟢 Beginner — 4s</button>
-      <button onclick="selectDifficulty('intermediate')">🟡 Intermediate — 2s</button>
-      <button onclick="selectDifficulty('advanced')">🟠 Advanced — 1s</button>
-      <button onclick="selectDifficulty('expert')">🔴 Expert — 0.5s</button>
+    <!-- PAGE 3 -->
+    <div id="page-3">
+      <button class="back-btn" onclick="showPage('page-2')">← Back</button>
+      <h1>🎵 Sight Reading</h1>
+      <p class="subtitle">Which clef would you like to practice?</p>
+      <div class="option-row">
+        <span>Note naming:</span>
+        <button class="toggle-btn" id="naming-btn" onclick="toggleNaming()">🇺🇸 American (C, D, E...)</button>
+      </div>
+      <div class="buttons">
+        <button onclick="selectClef('treble')">𝄞 Treble Clef</button>
+        <button onclick="selectClef('bass')">𝄢 Bass Clef</button>
+        <button onclick="selectClef('both')">𝄞𝄢 Both</button>
+      </div>
     </div>
-  </div>
+
+    <!-- PAGE 4 - PRACTICE -->
+    <div id="page-4">
+      <button class="back-btn" onclick="showPage('page-6')">← Back</button>
+      <h1>🎯 Sight Reading Practice</h1>
+      <div id="staff-area"></div>
+      <div id="keyboard-area"></div>
+      <div id="feedback"></div>
+    </div>
+
+    <!-- PAGE 5 - INPUT METHOD -->
+    <div id="page-5">
+      <button class="back-btn" onclick="showPage('page-3')">← Back</button>
+      <h1>🎹 Sight Reading Practice</h1>
+      <p class="subtitle">How would you like to answer?</p>
+      <div class="buttons">
+        <button onclick="startWithInput('keyboard')">🎹 On-Screen Keyboard</button>
+        <button onclick="startWithInput('buttons')">🔘 Answer Buttons</button>
+        <button onclick="startWithInput('midi')">🎵 MIDI Piano</button>
+      </div>
+    </div>
+
+    <!-- PAGE 6 - DIFFICULTY -->
+    <div id="page-6">
+      <button class="back-btn" onclick="showPage('page-5')">← Back</button>
+      <h1>🎯 Choose Difficulty</h1>
+      <p class="subtitle">How much time per note?</p>
+      <div class="buttons">
+        <button onclick="selectDifficulty('beginner')">🟢 Beginner — 4s</button>
+        <button onclick="selectDifficulty('intermediate')">🟡 Intermediate — 2s</button>
+        <button onclick="selectDifficulty('advanced')">🟠 Advanced — 1s</button>
+        <button onclick="selectDifficulty('expert')">🔴 Expert — 0.5s</button>
+      </div>
+    </div>
+
+  </div><!-- end #app -->
 
   <script src="js/core.js"></script>
   <script src="js/staff.js"></script>
