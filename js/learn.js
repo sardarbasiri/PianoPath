@@ -882,9 +882,10 @@ function renderLearnStaff() {
 }
 
 function drawLearnSingleStaff(clef, notes, activePos) {
-  const W = 900, H = 260;
-  const lineSpacing = 16;
-  const staffTop = 90;
+  const W = 900;
+  const H = 320;
+  const lineSpacing = 22;
+  const staffTop = 110;
   const noteSpacing = 100;
   const startX = 110;
   const bottomLineY = staffTop + 4 * lineSpacing;
@@ -902,9 +903,9 @@ function drawLearnSingleStaff(clef, notes, activePos) {
 
   const clefSymbol = clef === 'treble' ? '𝄞' : '𝄢';
   const clefY    = clef === 'treble' ? staffTop + lineSpacing * 3.5 : staffTop + lineSpacing * 2.8;
-  const clefSize = clef === 'treble' ? 90 : 70;
-  svg += `<text x="32" y="${clefY}" font-size="${clefSize}" fill="rgba(255,255,255,0.5)" font-family="serif">${clefSymbol}</text>`;
-  svg += `<text x="15" y="${H-6}" font-size="10" fill="rgba(255,255,255,0.25)" font-family="sans-serif">${clef === 'treble' ? 'Treble Clef' : 'Bass Clef'}</text>`;
+  const clefSize = clef === 'treble' ? 110 : 88;
+  svg += `<text x="32" y="${trebleStaffTop + lineSpacing * 3.5}" font-size="110" fill="rgba(255,255,255,0.5)" font-family="serif">𝄞</text>`;
+  svg += `<text x="32" y="${bassStaffTop + lineSpacing * 2.8}" font-size="88" fill="rgba(255,255,255,0.5)" font-family="serif">𝄢</text>`;
 
   notes.forEach((note, i) => {
     const x     = startX + i * noteSpacing;
@@ -948,15 +949,15 @@ function drawLearnSingleStaff(clef, notes, activePos) {
 
 function drawLearnBothStaves(notes, activePos) {
   const W = 900;
-  const lineSpacing = 16;
+  const lineSpacing = 20;
   const noteSpacing = 100;
   const startX = 110;
-  const trebleStaffBottom = 130;
+  const trebleStaffBottom = 150;
   const trebleStaffTop    = trebleStaffBottom - 4 * lineSpacing;
   const bassStaffTop      = trebleStaffBottom + 2 * lineSpacing;
   const bassStaffBottom   = bassStaffTop + 4 * lineSpacing;
   const middleCY          = trebleStaffBottom + lineSpacing;
-  const H = bassStaffBottom + 80;
+  const H = bassStaffBottom + 100;
 
   let svg = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg"
     style="width:100%;display:block;background:#1a1a20;border-radius:12px;
