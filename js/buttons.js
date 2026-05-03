@@ -41,18 +41,21 @@ function onAnswerClick(label, btn) {
   playPiano(currentNote.freq);
 
   document.querySelectorAll('.answer-btn').forEach(b => b.disabled = true);
+  totalAnswered++;
 
   if (label === currentNote.label) {
+    totalCorrect++;
     noteQueue[currentNoteIndex].state = 'correct';
     btn.style.background = '#4caf82';
     btn.style.borderColor = '#4caf82';
     renderStaff();
+    updateAccuracy();
     requestAnimationFrame(() => {
       resetAnswerButtons();
       advanceNote();
     });
   } else {
-     noteQueue[currentNoteIndex].state = 'wrong';
+    noteQueue[currentNoteIndex].state = 'wrong';
     btn.style.background = '#e05c5c';
     btn.style.borderColor = '#e05c5c';
     document.querySelectorAll('.answer-btn').forEach(b => {
@@ -62,6 +65,7 @@ function onAnswerClick(label, btn) {
       }
     });
     renderStaff();
+    updateAccuracy();
     requestAnimationFrame(() => {
       resetAnswerButtons();
       advanceNote();

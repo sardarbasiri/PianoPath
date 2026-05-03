@@ -9,6 +9,8 @@ let windowStart = 0;
 let noteQueue = [];
 let timer = null;
 let timeLeft = 0;
+let totalCorrect = 0;
+let totalAnswered = 0;
 
 const VISIBLE_NOTES = 8;
 
@@ -265,6 +267,8 @@ function advanceNote() {
 function timeExpired() {
   if (currentNoteIndex < noteQueue.length) {
     noteQueue[currentNoteIndex].state = 'wrong';
+    totalAnswered++;
+    updateAccuracy();
     renderStaff();
   }
   advanceNote();
@@ -286,6 +290,9 @@ function generateNoteQueue() {
   }
   currentNoteIndex = 0;
   windowStart = 0;
+  totalCorrect = 0;
+  totalAnswered = 0;
+  updateAccuracy();
 }
 
 function topUpQueue() {
@@ -308,4 +315,18 @@ function startTimer() {
       timeExpired();
     }
   }, 100);
+}
+
+function updateAccuracy() {
+  const el = document.getElementById('accuracy-pct');
+  if (!el) return;
+  if (totalAnswered === 0) {
+    el.textContent = '100%';
+    return;
+  }
+  // Blend with a virtual buffer of 10 correct answers at start
+  // so early mistakes don't crash the percentage
+  const bufferSize = 10;
+  const pct = Math.round(((totalCorrect + bufferSize) / (totalAnswered + bufferSize)) * 100);
+  el.textContent = pct + '%';
 }
