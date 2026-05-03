@@ -830,8 +830,7 @@ function startLearnPractice() {
   if (el) el.textContent = '100%';
 
   showPage('page-11');
-  document.getElementById('learn-practice-title').textContent = COURSES[currentCourse].title;
-  document.getElementById('learn-set-num').textContent = '1 of 3';
+  
 
   generateLearnQueue();
   renderLearnStaff();
@@ -1220,7 +1219,6 @@ function advanceLearnNote() {
     learnWindowStart += LEARN_VISIBLE;
     learnNoteIndex    = learnWindowStart;
     learnSetNum       = Math.floor(learnWindowStart / LEARN_VISIBLE) + 1;
-    document.getElementById('learn-set-num').textContent = `${learnSetNum} of 3`;
   }
 
   updateLearnAccuracy();

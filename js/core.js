@@ -236,7 +236,7 @@ const BASS_NOTES_BOTH = [
 // ── Page Navigation ────────────────────────────────────────────
 function showPage(pageId) {
   document.querySelectorAll('div[id^="page-"]').forEach(p => p.style.display = 'none');
-  document.getElementById(pageId).style.display = 'block';
+  document.getElementById(pageId).style.display = 'flex';
 }
 
 function goTo(topic, title) {

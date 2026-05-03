@@ -67,14 +67,26 @@ body {
   display: none;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
   overflow: hidden;
 }
 
 #page-1 { display: flex; }
 
 #page-4, #page-11 {
-  justify-content: flex-start;
+  justify-content: center;
   padding-top: 0.4rem;
+}
+
+#page-9 {
+  justify-content: center;
+  padding-top: 0.5rem;
+  overflow: hidden;
+}
+
+#page-11, #page-4 {
+  justify-content: flex-start;
+  padding-top: 0.3rem;
 }
 
 /* ── Typography ── */
@@ -135,6 +147,12 @@ button:hover, button:active {
 .back-btn:hover, .back-btn:active {
   color: #f0ede6;
   background: none;
+}
+
+#page-11 .back-btn,
+#page-4 .back-btn {
+  align-self: flex-start;
+  margin-bottom: 0.2rem;
 }
 
 /* ── Option Row ── */
