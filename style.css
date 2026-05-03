@@ -55,7 +55,8 @@ body {
 }
 
 /* ── Pages ── */
-#page-1, #page-2, #page-3, #page-4, #page-5, #page-6 {
+#page-1, #page-2, #page-3, #page-4, #page-5, #page-6,
+#page-7, #page-8, #page-9, #page-10, #page-11, #page-12 {
   text-align: center;
   padding: 1rem;
   width: 100%;
@@ -63,7 +64,7 @@ body {
 }
 
 #page-2, #page-3, #page-4, #page-5, #page-6,
-#page-7, #page-8, #page-9, #page-10, #page-11 {
+#page-7, #page-8, #page-9, #page-10, #page-11, #page-12 {
   display: none;
 }
 
@@ -78,6 +79,21 @@ body {
   display: none;
 }
 
+#page-11 {
+  padding: 0.5rem 0.75rem;
+  max-width: 960px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+#page-10 {
+  padding: 0.5rem 0.75rem;
+  max-width: 960px;
+  margin: 0 auto;
+  width: 100%;
+  text-align: center;
+}
+
 /* ── Typography ── */
 h1 {
   font-size: clamp(1.2rem, 4vw, 2.5rem);
@@ -90,7 +106,6 @@ h1 {
   margin-bottom: 1rem;
 }
 
-/* ── Buttons ── */
 /* ── Buttons ── */
 .buttons {
   display: flex;
@@ -133,7 +148,10 @@ button:hover, button:active {
   touch-action: manipulation;
 }
 
-.back-btn:hover { color: #f0ede6; background: none; }
+.back-btn:hover, .back-btn:active {
+  color: #f0ede6;
+  background: none;
+}
 
 /* ── Option Row ── */
 .option-row {
@@ -160,7 +178,33 @@ button:hover, button:active {
   touch-action: manipulation;
 }
 
-.toggle-btn:hover { background: rgba(201,168,76,0.15); }
+.toggle-btn:hover, .toggle-btn:active {
+  background: rgba(201,168,76,0.15);
+}
+
+/* ── Practice Header ── */
+.practice-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.4rem;
+  padding: 0 0.25rem;
+}
+
+.practice-title {
+  font-size: clamp(0.85rem, 2vw, 1.1rem);
+  font-weight: 600;
+  color: #f0ede6;
+}
+
+.accuracy-badge {
+  font-size: clamp(0.8rem, 1.8vw, 1rem);
+  color: #c9a84c;
+  background: rgba(201,168,76,0.1);
+  border: 1px solid rgba(201,168,76,0.2);
+  border-radius: 20px;
+  padding: 0.25rem 0.75rem;
+}
 
 /* ── Staff ── */
 #staff-area {
@@ -175,16 +219,52 @@ button:hover, button:active {
   max-height: 45vh;
 }
 
+#learn-staff-area {
+  margin: 0.3rem auto;
+  width: 100%;
+  overflow-x: auto;
+}
+
+#learn-staff-area svg {
+  min-width: 320px;
+  width: 100%;
+  max-height: 45vh;
+}
+
+#lesson-staff-area {
+  margin: 0.5rem auto;
+  width: 100%;
+}
+
+#lesson-staff-area svg {
+  min-width: 280px;
+  width: 100%;
+  max-height: 35vh;
+}
+
 /* ── Feedback ── */
 #feedback {
-  font-size: 0.9rem;
+  font-size: 1rem;
   font-weight: 500;
-  min-height: 1.2rem;
+  min-height: 1.5rem;
+  margin: 0.5rem 0;
+}
+
+#learn-feedback {
+  text-align: center;
+  font-size: 1rem;
+  font-weight: 500;
+  min-height: 1.5rem;
   margin: 0.3rem 0;
 }
 
 /* ── Keyboard ── */
 #keyboard-area {
+  width: 100%;
+  padding-bottom: 4px;
+}
+
+#learn-keyboard-area {
   width: 100%;
   padding-bottom: 4px;
 }
@@ -195,7 +275,7 @@ button:hover, button:active {
   height: clamp(80px, 18vh, 150px);
   max-width: 480px;
   width: 100%;
-  margin: 0.4rem auto;
+  margin: 0.5rem auto;
 }
 
 .key-white {
@@ -271,27 +351,74 @@ button:hover, button:active {
   background: rgba(201,168,76,0.2);
 }
 
-.practice-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 0.4rem;
-  padding: 0 0.25rem;
+/* ── Learn Progress ── */
+.learn-progress {
+  text-align: center;
+  font-size: 0.85rem;
+  color: #888;
+  margin-bottom: 0.3rem;
 }
 
-.practice-title {
-  font-size: clamp(0.85rem, 2vw, 1.1rem);
-  font-weight: 600;
-  color: #f0ede6;
+/* ── Lesson ── */
+.lesson-info {
+  text-align: center;
+  margin: 0.5rem 0;
 }
 
-.accuracy-badge {
-  font-size: clamp(0.8rem, 1.8vw, 1rem);
+.lesson-note-name {
+  font-size: clamp(2rem, 6vw, 3.5rem);
+  font-weight: 700;
   color: #c9a84c;
-  background: rgba(201,168,76,0.1);
-  border: 1px solid rgba(201,168,76,0.2);
-  border-radius: 20px;
-  padding: 0.25rem 0.75rem;
+  margin-bottom: 0.2rem;
+}
+
+.lesson-note-detail {
+  font-size: 0.9rem;
+  color: #888;
+  margin-bottom: 0.5rem;
+}
+
+.lesson-play-btn {
+  width: auto;
+  padding: 0.6rem 1.2rem;
+  font-size: clamp(0.8rem, 1.8vw, 1rem);
+  border: 2px solid #c9a84c;
+  border-radius: 10px;
+  background: transparent;
+  color: #f0ede6;
+  cursor: pointer;
+  transition: background 0.2s;
+  touch-action: manipulation;
+}
+
+.lesson-play-btn:hover, .lesson-play-btn:active {
+  background: #c9a84c;
+  color: #0d0d0f;
+}
+
+.lesson-nav {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  margin-top: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.lesson-nav button {
+  width: auto;
+  padding: 0.6rem 1.2rem;
+  font-size: clamp(0.8rem, 1.8vw, 1rem);
+  border: 2px solid #c9a84c;
+  border-radius: 10px;
+  background: transparent;
+  color: #f0ede6;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.lesson-nav button:hover, .lesson-nav button:active {
+  background: #c9a84c;
+  color: #0d0d0f;
 }
 
 /* ── Courses Grid ── */
@@ -348,63 +475,4 @@ button:hover, button:active {
 .course-notes {
   font-size: 0.72rem;
   color: #888;
-}
-
-/* ── Lesson ── */
-.lesson-info {
-  text-align: center;
-  margin: 0.75rem 0;
-}
-
-.lesson-note-name {
-  font-size: clamp(2rem, 6vw, 3.5rem);
-  font-weight: 700;
-  color: #c9a84c;
-  margin-bottom: 0.2rem;
-}
-
-.lesson-note-detail {
-  font-size: 0.9rem;
-  color: #888;
-  margin-bottom: 0.75rem;
-}
-
-.lesson-play-btn {
-  width: auto;
-  padding: 0.5rem 1.5rem;
-  font-size: 0.9rem;
-  border: 1px solid #c9a84c;
-  border-radius: 20px;
-  background: transparent;
-  color: #c9a84c;
-  cursor: pointer;
-}
-
-.lesson-play-btn:hover {
-  background: rgba(201,168,76,0.15);
-}
-
-.lesson-nav {
-  display: flex;
-  gap: 0.75rem;
-  justify-content: center;
-  margin-top: 0.75rem;
-  flex-wrap: wrap;
-}
-
-/* ── Learn Progress ── */
-.learn-progress {
-  text-align: center;
-  font-size: 0.85rem;
-  color: #888;
-  margin-bottom: 0.3rem;
-}
-
-/* ── Learn feedback ── */
-#learn-feedback {
-  text-align: center;
-  font-size: 1rem;
-  font-weight: 500;
-  min-height: 1.5rem;
-  margin: 0.3rem 0;
 }

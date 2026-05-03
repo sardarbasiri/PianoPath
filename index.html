@@ -72,12 +72,11 @@
     <!-- PAGE 5 - INPUT METHOD -->
     <div id="page-5">
       <button class="back-btn" onclick="showPage('page-3')">← Back</button>
-      <h1>🎹 Sight Reading Practice</h1>
-      <p class="subtitle">How would you like to answer?</p>
+      <h1>🎹 How would you like to answer?</h1>
+      <p class="subtitle">Choose your input method</p>
       <div class="buttons">
         <button onclick="startWithInput('keyboard')">🎹 On-Screen Keyboard</button>
         <button onclick="startWithInput('buttons')">🔘 Answer Buttons</button>
-        <button onclick="startWithInput('midi')">🎵 MIDI Piano</button>
       </div>
     </div>
 
@@ -98,21 +97,21 @@
     <div id="page-8">
       <button class="back-btn" onclick="showPage('page-2')">← Back</button>
       <h1>📖 Sight Reading — Learn</h1>
-      <p class="subtitle">How long to study each note?</p>
       <div class="option-row">
         <span>Note naming:</span>
         <button class="toggle-btn" id="naming-btn-learn" onclick="toggleNaming()">🇺🇸 American (C, D, E...)</button>
       </div>
       <div class="buttons">
-        <button onclick="selectLearnDifficulty('slow')">🐢 Slow — 5s per note</button>
-        <button onclick="selectLearnDifficulty('medium')">🚶 Medium — 3s per note</button>
-        <button onclick="selectLearnDifficulty('fast')">🏃 Fast — 1.5s per note</button>
+        <button onclick="selectLearnDifficulty('beginner')">🟢 Beginner — 4s</button>
+        <button onclick="selectLearnDifficulty('intermediate')">🟡 Intermediate — 2s</button>
+        <button onclick="selectLearnDifficulty('advanced')">🟠 Advanced — 1s</button>
+        <button onclick="selectLearnDifficulty('expert')">🔴 Expert — 0.5s</button>
       </div>
     </div>
 
     <!-- PAGE 9 - COURSES LIST -->
     <div id="page-9">
-      <button class="back-btn" onclick="showPage('page-8')">← Back</button>
+      <button class="back-btn" onclick="showPage('page-12')">← Back</button>
       <h1>📖 Courses</h1>
       <p class="subtitle">Complete each course to unlock the next</p>
       <div id="courses-list" class="courses-grid"></div>
@@ -149,13 +148,23 @@
       <div id="learn-feedback"></div>
     </div>
 
+    <!-- PAGE 12 - LEARN INPUT METHOD -->
+    <div id="page-12">
+      <button class="back-btn" onclick="showPage('page-8')">← Back</button>
+      <h1>🎹 How would you like to answer?</h1>
+      <p class="subtitle">Choose your input method</p>
+      <div class="buttons">
+        <button onclick="selectLearnInput('keyboard')">🎹 On-Screen Keyboard</button>
+        <button onclick="selectLearnInput('buttons')">🔘 Answer Buttons</button>
+      </div>
+    </div>
+
   </div><!-- end #app -->
 
   <script src="js/core.js"></script>
   <script src="js/staff.js"></script>
   <script src="js/keyboard.js"></script>
   <script src="js/buttons.js"></script>
-  <script src="js/midi.js"></script>
   <script src="js/learn.js"></script>
 </body>
 </html>

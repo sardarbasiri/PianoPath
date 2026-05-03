@@ -286,9 +286,6 @@ function selectDifficulty(difficulty) {
     buildKeyboard();
   } else if (selectedInput === 'buttons') {
     buildAnswerButtons();
-  } else if (selectedInput === 'midi') {
-    kbArea.style.display = 'none';
-    setupMIDI();
   }
 
   startTimer();

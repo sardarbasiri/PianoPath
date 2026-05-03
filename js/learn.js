@@ -1,6 +1,7 @@
 // ── Learn Mode State ───────────────────────────────────────────
 let learnClef = 'treble';
 let learnSpeed = 3000;
+let learnInput = 'buttons';
 let currentCourse = 0;
 let lessonNoteIndex = 0;
 let learnNoteQueue = [];
@@ -15,21 +16,19 @@ let learnSetCorrect = 0;
 let learnSetAnswered = 0;
 let courseUnlocked = [true];
 let courseCompleted = [];
-let lessonTimer = null;
-let lessonAutoPlaying = false;
 
 const LEARN_VISIBLE = 8;
 
 // ── Course Definitions ─────────────────────────────────────────
 const COURSES = [
   { title: 'Course 1', notes: [
-    { name:'C4', label:'C', octave:4, freq:261.63, pos:0,  clef:'treble' },
-    { name:'D4', label:'D', octave:4, freq:293.66, pos:1,  clef:'treble' },
+    { name:'C4', label:'C', octave:4, freq:261.63, pos:0, clef:'treble' },
+    { name:'D4', label:'D', octave:4, freq:293.66, pos:1, clef:'treble' },
   ]},
   { title: 'Course 2', notes: [
-    { name:'C4', label:'C', octave:4, freq:261.63, pos:0,  clef:'treble' },
-    { name:'D4', label:'D', octave:4, freq:293.66, pos:1,  clef:'treble' },
-    { name:'E4', label:'E', octave:4, freq:329.63, pos:2,  clef:'treble' },
+    { name:'C4', label:'C', octave:4, freq:261.63, pos:0, clef:'treble' },
+    { name:'D4', label:'D', octave:4, freq:293.66, pos:1, clef:'treble' },
+    { name:'E4', label:'E', octave:4, freq:329.63, pos:2, clef:'treble' },
   ]},
   { title: 'Course 3', notes: [
     { name:'C4', label:'C', octave:4, freq:261.63, pos:0,  clef:'treble' },
@@ -95,13 +94,16 @@ const COURSES = [
 ];
 
 // ── Navigation ─────────────────────────────────────────────────
-function selectLearnClef(clef) {
-  learnClef = clef;
-  showPage('page-8');
+function selectLearnDifficulty(speed) {
+  learnSpeed = speed === 'beginner' ? 4000
+             : speed === 'intermediate' ? 2000
+             : speed === 'advanced' ? 1000
+             : 500;
+  showPage('page-12');
 }
 
-function selectLearnDifficulty(speed) {
-  learnSpeed = speed === 'slow' ? 5000 : speed === 'medium' ? 3000 : 1500;
+function selectLearnInput(input) {
+  learnInput = input;
   showPage('page-9');
   renderCourses();
 }
@@ -119,7 +121,10 @@ function renderCourses() {
     card.className = 'course-card' + (unlocked ? ' unlocked' : ' locked') + (completed ? ' completed' : '');
 
     const icon = completed ? '✅' : unlocked ? '🎵' : '🔒';
-    const noteList = course.notes.map(n => getNoteName(n)).filter((v,i,a) => a.indexOf(v) === i).join(', ');
+    const noteList = course.notes
+      .map(n => getNoteName(n))
+      .filter((v, i, a) => a.indexOf(v) === i)
+      .join(', ');
 
     card.innerHTML = `
       <div class="course-icon">${icon}</div>
@@ -150,27 +155,21 @@ function renderLesson() {
   const note = course.notes[lessonNoteIndex];
   const total = course.notes.length;
 
-  // Update nav buttons
   document.getElementById('lesson-prev-btn').style.display = lessonNoteIndex === 0 ? 'none' : 'inline-block';
   const isLast = lessonNoteIndex === total - 1;
   document.getElementById('lesson-next-btn').style.display = isLast ? 'none' : 'inline-block';
   document.getElementById('lesson-start-btn').style.display = isLast ? 'inline-block' : 'none';
   document.getElementById('lesson-badge').textContent = `${lessonNoteIndex + 1} / ${total}`;
 
-  // Draw staff with note highlighted and labeled
-  const clef = note.clef;
-  const staffHtml = drawLearnStaff(clef, note);
-  document.getElementById('lesson-staff-area').innerHTML = staffHtml;
+  document.getElementById('lesson-staff-area').innerHTML = drawLearnStaff(note.clef, note);
 
-  // Note info
   const noteName = getNoteName(note);
   document.getElementById('lesson-info').innerHTML = `
     <div class="lesson-note-name">${noteName}</div>
-    <div class="lesson-note-detail">${note.name} — ${clef === 'treble' ? 'Treble' : 'Bass'} Clef</div>
+    <div class="lesson-note-detail">${note.name} — ${note.clef === 'treble' ? 'Treble' : 'Bass'} Clef</div>
     <button class="lesson-play-btn" onclick="playPiano(${note.freq})">▶ Play Sound</button>
   `;
 
-  // Auto play sound
   playPiano(note.freq);
 }
 
@@ -186,35 +185,32 @@ function lessonPrev() {
 
 // ── Draw Learn Staff (single note, large) ─────────────────────
 function drawLearnStaff(clef, note) {
-  const W = 400;
-  const H = 200;
+  const W = 500;
+  const H = 220;
   const lineSpacing = 18;
-  const staffTop = 55;
-  const noteX = 200;
+  const staffTop = 60;
+  const noteX = 250;
   const bottomLineY = staffTop + 4 * lineSpacing;
   const topLineY = staffTop;
   const offset = clef === 'treble' ? 2 : 0;
   const noteY = bottomLineY - (note.pos - offset) * (lineSpacing / 2);
 
   let svg = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg"
-    style="width:100%;max-width:400px;display:block;margin:0 auto;
+    style="width:100%;max-width:500px;display:block;margin:0 auto;
     background:#1a1a20;border-radius:12px;border:1px solid rgba(255,255,255,0.08);">`;
 
-  // Staff lines
   for (let i = 0; i < 5; i++) {
     const y = staffTop + i * lineSpacing;
     svg += `<line x1="30" x2="${W-20}" y1="${y}" y2="${y}"
       stroke="rgba(255,255,255,0.3)" stroke-width="1.2"/>`;
   }
 
-  // Clef
   const clefSymbol = clef === 'treble' ? '𝄞' : '𝄢';
   const clefY    = clef === 'treble' ? staffTop + lineSpacing * 3.5 : staffTop + lineSpacing * 2.8;
   const clefSize = clef === 'treble' ? 90 : 70;
   svg += `<text x="32" y="${clefY}" font-size="${clefSize}"
     fill="rgba(255,255,255,0.5)" font-family="serif">${clefSymbol}</text>`;
 
-  // Ledger lines below
   if (noteY > bottomLineY + lineSpacing / 2) {
     let ly = bottomLineY + lineSpacing;
     while (ly <= noteY + 2) {
@@ -224,7 +220,6 @@ function drawLearnStaff(clef, note) {
     }
   }
 
-  // Ledger lines above
   if (noteY < topLineY - lineSpacing / 2) {
     let ly = topLineY - lineSpacing;
     while (ly >= noteY - 2) {
@@ -234,11 +229,9 @@ function drawLearnStaff(clef, note) {
     }
   }
 
-  // Note head (larger)
   svg += `<ellipse cx="${noteX}" cy="${noteY}" rx="11" ry="8"
     fill="#c9a84c" transform="rotate(-15,${noteX},${noteY})"/>`;
 
-  // Stem
   const stemUp = note.pos < (clef === 'treble' ? 6 : 5);
   const stemX  = stemUp ? noteX + 11 : noteX - 11;
   const stemY2 = stemUp ? noteY - 50 : noteY + 50;
@@ -249,7 +242,7 @@ function drawLearnStaff(clef, note) {
   return svg;
 }
 
-// ── Start Practice from Learn ──────────────────────────────────
+// ── Start Practice ─────────────────────────────────────────────
 function startLearnPractice() {
   learnNoteIndex = 0;
   learnWindowStart = 0;
@@ -259,20 +252,33 @@ function startLearnPractice() {
   learnSetCorrect = 0;
   learnSetAnswered = 0;
 
+  // Reset accuracy display immediately
+  const el = document.getElementById('learn-accuracy-pct');
+  if (el) el.textContent = '100%';
+
   showPage('page-11');
   document.getElementById('learn-practice-title').textContent = COURSES[currentCourse].title;
   document.getElementById('learn-set-num').textContent = learnSetNum;
 
   generateLearnQueue();
   renderLearnStaff();
-  buildLearnButtons();
+
+  const kbArea = document.getElementById('learn-keyboard-area');
+  kbArea.innerHTML = '';
+  kbArea.style.display = 'block';
+
+  if (learnInput === 'keyboard') {
+    buildLearnKeyboard();
+  } else {
+    buildLearnButtons();
+  }
+
   startLearnTimer();
 }
 
 function generateLearnQueue() {
   const pool = COURSES[currentCourse].notes;
   learnNoteQueue = [];
-  // 3 sets of 8 notes each = 24 notes
   for (let i = 0; i < LEARN_VISIBLE * 3; i++) {
     const note = pool[Math.floor(Math.random() * pool.length)];
     learnNoteQueue.push({ ...note, state: 'pending' });
@@ -287,11 +293,6 @@ function renderLearnStaff() {
   const visibleNotes = learnNoteQueue.slice(learnWindowStart, learnWindowStart + LEARN_VISIBLE);
   const activePos = learnNoteIndex - learnWindowStart;
 
-  // Determine which clef to show
-  const currentNote = learnNoteQueue[learnNoteIndex];
-  const clef = currentNote ? currentNote.clef : 'treble';
-
-  // For 'both' clef mode show both staves, otherwise show one
   const hasBass   = visibleNotes.some(n => n.clef === 'bass');
   const hasTreble = visibleNotes.some(n => n.clef === 'treble');
 
@@ -299,6 +300,7 @@ function renderLearnStaff() {
   if (hasTreble && hasBass) {
     html = drawLearnBothStaves(visibleNotes, activePos);
   } else {
+    const clef = visibleNotes[0] ? visibleNotes[0].clef : 'treble';
     html = drawLearnSingleStaff(clef, visibleNotes, activePos);
   }
 
@@ -307,9 +309,9 @@ function renderLearnStaff() {
 
 function drawLearnSingleStaff(clef, notes, activePos) {
   const W = 900;
-  const H = 240;
-  const lineSpacing = 18;
-  const staffTop = 70;
+  const H = 260;
+  const lineSpacing = 16;
+  const staffTop = 90;
   const noteSpacing = 100;
   const startX = 110;
   const bottomLineY = staffTop + 4 * lineSpacing;
@@ -318,7 +320,7 @@ function drawLearnSingleStaff(clef, notes, activePos) {
 
   let svg = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg"
     style="width:100%;display:block;background:#1a1a20;border-radius:12px;
-    border:1px solid rgba(255,255,255,0.08);margin:0.4rem 0;">`;
+    border:1px solid rgba(255,255,255,0.08);margin:0;">`;
 
   for (let i = 0; i < 5; i++) {
     const y = staffTop + i * lineSpacing;
@@ -332,11 +334,15 @@ function drawLearnSingleStaff(clef, notes, activePos) {
   svg += `<text x="32" y="${clefY}" font-size="${clefSize}"
     fill="rgba(255,255,255,0.5)" font-family="serif">${clefSymbol}</text>`;
 
+  svg += `<text x="15" y="${H - 6}" font-size="10"
+    fill="rgba(255,255,255,0.25)" font-family="sans-serif">
+    ${clef === 'treble' ? 'Treble Clef' : 'Bass Clef'}</text>`;
+
   notes.forEach((note, i) => {
     const x = startX + i * noteSpacing;
     const noteY = bottomLineY - (note.pos - offset) * (lineSpacing / 2);
 
-    let fill = 'rgba(255,255,255,0.3)';
+    let fill = 'rgba(255,255,255,0.35)';
     if (i === activePos)          fill = '#c9a84c';
     if (note.state === 'correct') fill = '#4caf82';
     if (note.state === 'wrong')   fill = '#e05c5c';
@@ -373,7 +379,6 @@ function drawLearnSingleStaff(clef, notes, activePos) {
     svg += `<line x1="${stemX}" x2="${stemX}" y1="${noteY}" y2="${stemY2}"
       stroke="${fill}" stroke-width="1.5"/>`;
 
-    // Always show note name in learn mode
     const labelColor = note.state === 'correct' ? '#4caf82'
                      : note.state === 'wrong'   ? '#e05c5c'
                      : i === activePos           ? '#c9a84c'
@@ -392,16 +397,16 @@ function drawLearnBothStaves(notes, activePos) {
   const lineSpacing = 16;
   const noteSpacing = 100;
   const startX = 110;
-  const trebleStaffBottom = 120;
+  const trebleStaffBottom = 130;
   const trebleStaffTop    = trebleStaffBottom - 4 * lineSpacing;
   const bassStaffTop      = trebleStaffBottom + 2 * lineSpacing;
   const bassStaffBottom   = bassStaffTop + 4 * lineSpacing;
   const middleCY          = trebleStaffBottom + lineSpacing;
-  const H = bassStaffBottom + 70;
+  const H = bassStaffBottom + 80;
 
   let svg = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg"
     style="width:100%;display:block;background:#1a1a20;border-radius:12px;
-    border:1px solid rgba(255,255,255,0.08);margin:0.4rem 0;">`;
+    border:1px solid rgba(255,255,255,0.08);margin:0;">`;
 
   for (let i = 0; i < 5; i++) {
     svg += `<line x1="30" x2="${W-10}" y1="${trebleStaffTop + i*lineSpacing}" y2="${trebleStaffTop + i*lineSpacing}" stroke="rgba(255,255,255,0.25)" stroke-width="1"/>`;
@@ -421,7 +426,7 @@ function drawLearnBothStaves(notes, activePos) {
       ? trebleStaffBottom - (note.pos - 2) * (lineSpacing / 2)
       : bassStaffBottom   - (note.pos - 0) * (lineSpacing / 2);
 
-    let fill = 'rgba(255,255,255,0.3)';
+    let fill = 'rgba(255,255,255,0.35)';
     if (i === activePos)          fill = '#c9a84c';
     if (note.state === 'correct') fill = '#4caf82';
     if (note.state === 'wrong')   fill = '#e05c5c';
@@ -445,6 +450,7 @@ function drawLearnBothStaves(notes, activePos) {
         ly += lineSpacing;
       }
     }
+
     if (noteY < staffTop2 - lineSpacing / 2 && !isMiddleC) {
       let ly = staffTop2 - lineSpacing;
       while (ly >= noteY - 2) {
@@ -462,7 +468,6 @@ function drawLearnBothStaves(notes, activePos) {
     svg += `<line x1="${stemX}" x2="${stemX}" y1="${noteY}" y2="${stemY2}"
       stroke="${fill}" stroke-width="1.5"/>`;
 
-    // Always show label in learn mode
     const labelColor = note.state === 'correct' ? '#4caf82'
                      : note.state === 'wrong'   ? '#e05c5c'
                      : i === activePos           ? '#c9a84c'
@@ -474,6 +479,89 @@ function drawLearnBothStaves(notes, activePos) {
 
   svg += `</svg>`;
   return svg;
+}
+
+// ── Learn Keyboard ─────────────────────────────────────────────
+function buildLearnKeyboard() {
+  const kb = document.getElementById('learn-keyboard-area');
+  kb.innerHTML = '';
+
+  const wrap = document.createElement('div');
+  wrap.className = 'keyboard';
+
+  const whites = OCTAVE_KEYS.filter(k => k.type === 'white');
+  const totalWhites = whites.length;
+  const whiteWidthPct = 100 / totalWhites;
+  const italianMap = { C:'Do', D:'Re', E:'Mi', F:'Fa', G:'Sol', A:'La', B:'Si' };
+
+  whites.forEach(k => {
+    const el = document.createElement('div');
+    el.className = 'key-white';
+    el.dataset.note = k.note;
+    const lbl = document.createElement('span');
+    lbl.className = 'key-label';
+    lbl.textContent = selectedNaming === 'italian' ? italianMap[k.note] : k.note;
+    el.appendChild(lbl);
+    el.addEventListener('click', () => onLearnKeyClick(k, el));
+    wrap.appendChild(el);
+  });
+
+  const blackKeys = [
+    { note:'C#', after:0 },
+    { note:'D#', after:1 },
+    { note:'F#', after:3 },
+    { note:'G#', after:4 },
+    { note:'A#', after:5 },
+  ];
+
+  blackKeys.forEach(k => {
+    const el = document.createElement('div');
+    el.className = 'key-black';
+    el.dataset.note = k.note;
+    const leftPct = (k.after + 1) * whiteWidthPct - 5;
+    el.style.left = leftPct + '%';
+    el.addEventListener('click', () => onLearnKeyClick(k, el));
+    wrap.appendChild(el);
+  });
+
+  kb.appendChild(wrap);
+}
+
+function onLearnKeyClick(k, el) {
+  if (!learnNoteQueue.length) return;
+  if (learnNoteQueue[learnNoteIndex].state !== 'pending') return;
+
+  const currentNote = learnNoteQueue[learnNoteIndex];
+  clearInterval(learnTimer);
+  playPiano(currentNote.freq);
+
+  learnSetAnswered++;
+  learnAnswered++;
+
+  if (k.note === currentNote.label) {
+    learnNoteQueue[learnNoteIndex].state = 'correct';
+    el.style.background = '#4caf82';
+    learnSetCorrect++;
+    learnCorrect++;
+    renderLearnStaff();
+    requestAnimationFrame(() => {
+      el.style.background = '';
+      advanceLearnNote();
+    });
+  } else {
+    learnNoteQueue[learnNoteIndex].state = 'wrong';
+    el.style.background = '#e05c5c';
+    document.querySelectorAll('#learn-keyboard-area .key-white, #learn-keyboard-area .key-black').forEach(key => {
+      if (key.dataset.note === currentNote.label) key.style.background = '#4caf82';
+    });
+    renderLearnStaff();
+    requestAnimationFrame(() => {
+      document.querySelectorAll('#learn-keyboard-area .key-white, #learn-keyboard-area .key-black').forEach(key => {
+        key.style.background = '';
+      });
+      advanceLearnNote();
+    });
+  }
 }
 
 // ── Learn Answer Buttons ───────────────────────────────────────
@@ -519,7 +607,6 @@ function onLearnAnswer(label, btn) {
   playPiano(currentNote.freq);
 
   document.querySelectorAll('#learn-answer-wrap .answer-btn').forEach(b => b.disabled = true);
-
   learnSetAnswered++;
   learnAnswered++;
 
@@ -587,15 +674,12 @@ function advanceLearnNote() {
     windowNotes.every(n => n.state === 'correct' || n.state === 'wrong');
 
   if (allDone) {
-    // Check accuracy for this set
     const setAccuracy = learnSetAnswered > 0
       ? (learnSetCorrect / learnSetAnswered) * 100 : 0;
 
     if (learnSetNum < 3) {
-      // Show set result then move to next set
       showLearnSetResult(setAccuracy);
     } else {
-      // All 3 sets done
       const totalAccuracy = learnAnswered > 0
         ? (learnCorrect / learnAnswered) * 100 : 0;
       showLearnComplete(totalAccuracy);
@@ -635,7 +719,6 @@ function showLearnComplete(accuracy) {
   const fb = document.getElementById('learn-feedback');
 
   if (passed) {
-    // Unlock next course
     if (currentCourse + 1 < COURSES.length) {
       courseUnlocked[currentCourse + 1] = true;
     }
