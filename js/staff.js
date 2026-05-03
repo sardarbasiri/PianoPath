@@ -12,15 +12,15 @@ function renderStaff() {
 
 function drawBothStaves(notes, activePos) {
   const W = 900;
-  const lineSpacing = 20;
+  const lineSpacing = 16;
   const noteSpacing = 100;
   const startX = 110;
-  const trebleStaffBottom = 150;
+  const trebleStaffBottom = 130;
   const trebleStaffTop    = trebleStaffBottom - 4 * lineSpacing;
   const bassStaffTop      = trebleStaffBottom + 2 * lineSpacing;
   const bassStaffBottom   = bassStaffTop + 4 * lineSpacing;
   const middleCY          = trebleStaffBottom + lineSpacing;
-  const H = bassStaffBottom + 100;
+  const H = bassStaffBottom + 80;
 
   let svg = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg"
     style="width:100%;display:block;background:#1a1a20;border-radius:12px;
@@ -162,9 +162,9 @@ function drawBothStaves(notes, activePos) {
 
 function drawStaff(clef, notes, activePos) {
    const W = 900;
-  const H = 320;
-  const lineSpacing = 22;
-  const staffTop = 110;
+  const H = 260;
+  const lineSpacing = 16;
+  const staffTop = 90;
   const noteSpacing = 100;
   const startX = 110;
   const bottomLineY = staffTop + 4 * lineSpacing;
@@ -185,14 +185,9 @@ function drawStaff(clef, notes, activePos) {
   // Clef symbol
   const clefSymbol = clef === 'treble' ? '𝄞' : '𝄢';
   const clefY    = clef === 'treble' ? staffTop + lineSpacing * 3.5 : staffTop + lineSpacing * 2.8;
-  const clefSize = clef === 'treble' ? 110 : 88;
-  svg += `<text x="32" y="${clefY}" font-size="${clefSize}"
-    fill="rgba(255,255,255,0.5)" font-family="serif">${clefSymbol}</text>`;
-
-  // Clef label
-  svg += `<text x="15" y="${H - 6}" font-size="10"
-    fill="rgba(255,255,255,0.25)" font-family="sans-serif">
-    ${clef === 'treble' ? 'Treble Clef' : 'Bass Clef'}</text>`;
+  const clefSize = clef === 'treble' ? 90 : 70;
+  svg += `<text x="32" y="${trebleStaffTop + lineSpacing * 3.5}" font-size="90" fill="rgba(255,255,255,0.5)" font-family="serif">𝄞</text>`;
+  svg += `<text x="32" y="${bassStaffTop + lineSpacing * 2.8}" font-size="70" fill="rgba(255,255,255,0.5)" font-family="serif">𝄢</text>`;
 
   notes.forEach((note, i) => {
     const x = startX + i * noteSpacing;
