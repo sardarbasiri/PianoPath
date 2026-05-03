@@ -41,15 +41,12 @@ function onAnswerClick(label, btn) {
   playPiano(currentNote.freq);
 
   document.querySelectorAll('.answer-btn').forEach(b => b.disabled = true);
-  totalAnswered++;
 
   if (label === currentNote.label) {
-    totalCorrect++;
     noteQueue[currentNoteIndex].state = 'correct';
     btn.style.background = '#4caf82';
     btn.style.borderColor = '#4caf82';
     renderStaff();
-    updateAccuracy();
     requestAnimationFrame(() => {
       resetAnswerButtons();
       advanceNote();
@@ -65,7 +62,6 @@ function onAnswerClick(label, btn) {
       }
     });
     renderStaff();
-    updateAccuracy();
     requestAnimationFrame(() => {
       resetAnswerButtons();
       advanceNote();

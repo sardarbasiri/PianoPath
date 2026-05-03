@@ -244,6 +244,15 @@ function selectDifficulty(difficulty) {
 
 function advanceNote() {
   clearInterval(timer);
+
+  // Track accuracy here for all input modes
+  const answeredNote = noteQueue[currentNoteIndex];
+  if (answeredNote) {
+    totalAnswered++;
+    if (answeredNote.state === 'correct') totalCorrect++;
+    updateAccuracy();
+  }
+
   currentNoteIndex++;
 
   const windowEnd = windowStart + VISIBLE_NOTES;
@@ -267,8 +276,6 @@ function advanceNote() {
 function timeExpired() {
   if (currentNoteIndex < noteQueue.length) {
     noteQueue[currentNoteIndex].state = 'wrong';
-    totalAnswered++;
-    updateAccuracy();
     renderStaff();
   }
   advanceNote();
