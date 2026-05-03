@@ -24,21 +24,20 @@ function buildKeyboard() {
   const totalWhites = whites.length;
   const whiteWidthPct = 100 / totalWhites;
 
-  // Draw white keys first
-  whites.forEach((k, wi) => {
+  const italianMap = { C:'Do', D:'Re', E:'Mi', F:'Fa', G:'Sol', A:'La', B:'Si' };
+
+  whites.forEach(k => {
     const el = document.createElement('div');
     el.className = 'key-white';
     el.dataset.note = k.note;
     const lbl = document.createElement('span');
     lbl.className = 'key-label';
-    lbl.textContent = k.note;
+    lbl.textContent = selectedNaming === 'italian' ? italianMap[k.note] : k.note;
     el.appendChild(lbl);
     el.addEventListener('click', () => onKeyClick(k, el));
     wrap.appendChild(el);
   });
 
-  // Black key positions: after which white key index (0-based) each black sits
-  // C#=after C(0), D#=after D(1), F#=after F(3), G#=after G(4), A#=after A(5)
   const blackKeys = [
     { note:'C#', after:0 },
     { note:'D#', after:1 },
