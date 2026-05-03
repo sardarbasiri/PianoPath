@@ -173,7 +173,6 @@ function renderLesson() {
 
   document.getElementById('lesson-info').innerHTML = `
     <div class="lesson-note-name">${getNoteName(note)}</div>
-    <div class="lesson-note-detail">${note.name} — ${note.clef === 'treble' ? 'Treble' : 'Bass'} Clef</div>
     <button class="lesson-play-btn" onclick="playPiano(${note.freq})">▶ Play Sound</button>
   `;
 
@@ -346,8 +345,11 @@ function drawLearnSingleStaff(clef, notes, activePos) {
     const stemX  = stemUp ? x + 9 : x - 9;
     svg += `<line x1="${stemX}" x2="${stemX}" y1="${noteY}" y2="${stemUp ? noteY-42 : noteY+42}" stroke="${fill}" stroke-width="1.5"/>`;
 
-    const labelColor = note.state === 'correct' ? '#4caf82' : note.state === 'wrong' ? '#e05c5c' : i === activePos ? '#c9a84c' : 'rgba(255,255,255,0.3)';
-    svg += `<text x="${x}" y="${Math.min(H-8, noteY+22)}" font-size="12" fill="${labelColor}" text-anchor="middle" font-family="sans-serif" font-weight="600">${getNoteName(note)}</text>`;
+    if (note.state === 'correct' || note.state === 'wrong') {
+      const labelColor = note.state === 'correct' ? '#4caf82' : '#e05c5c';
+      svg += `<text x="${x}" y="${Math.min(H-8, noteY+22)}" font-size="12" fill="${labelColor}"
+        text-anchor="middle" font-family="sans-serif" font-weight="600">${getNoteName(note)}</text>`;
+    }
   });
 
   svg += `</svg>`;
@@ -418,9 +420,12 @@ function drawLearnBothStaves(notes, activePos) {
     const stemX  = stemUp ? x + 9 : x - 9;
     svg += `<line x1="${stemX}" x2="${stemX}" y1="${noteY}" y2="${stemUp ? noteY-42 : noteY+42}" stroke="${fill}" stroke-width="1.5"/>`;
 
-    const labelColor = note.state === 'correct' ? '#4caf82' : note.state === 'wrong' ? '#e05c5c' : i === activePos ? '#c9a84c' : 'rgba(255,255,255,0.3)';
-    const labelY = isTreble ? Math.max(12, noteY-20) : Math.min(H-6, noteY+20);
-    svg += `<text x="${x}" y="${labelY}" font-size="11" fill="${labelColor}" text-anchor="middle" font-family="sans-serif" font-weight="600">${getNoteName(note)}</text>`;
+    if (note.state === 'correct' || note.state === 'wrong') {
+      const labelColor = note.state === 'correct' ? '#4caf82' : '#e05c5c';
+      const labelY = isTreble ? Math.max(12, noteY-20) : Math.min(H-6, noteY+20);
+      svg += `<text x="${x}" y="${labelY}" font-size="11" fill="${labelColor}"
+        text-anchor="middle" font-family="sans-serif" font-weight="600">${getNoteName(note)}</text>`;
+    }
   });
 
   svg += `</svg>`;
