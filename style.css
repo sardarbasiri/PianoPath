@@ -18,6 +18,10 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  padding-bottom: env(safe-area-inset-bottom);
+  padding-top: env(safe-area-inset-top);
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
 }
 
 /* ── Portrait lock overlay ── */
@@ -61,6 +65,7 @@ body {
 #page-7, #page-8, #page-9, #page-10, #page-11, #page-12 {
   text-align: center;
   padding: 0.5rem 0.75rem;
+  padding-bottom: max(0.5rem, env(safe-area-inset-bottom));
   width: 100%;
   max-width: 960px;
   height: 100dvh;
