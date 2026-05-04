@@ -440,3 +440,34 @@ button:hover, button:active {
   padding-top: 0.5rem;
   overflow: hidden;
 }
+
+#page-10 {
+  justify-content: flex-start;
+  padding-top: 0.3rem;
+  overflow: hidden;
+}
+
+#lesson-staff-area svg {
+  width: 100%;
+  max-width: 500px;
+  height: auto;
+  max-height: 35vh;
+  display: block;
+  margin: 0 auto;
+}
+
+.lesson-note-name {
+  font-size: clamp(1.4rem, 4vw, 2.5rem);
+  font-weight: 700;
+  color: #c9a84c;
+  margin-bottom: 0.2rem;
+  line-height: 1;
+}
+
+.lesson-nav {
+  display: flex;
+  gap: 0.4rem;
+  justify-content: center;
+  margin-top: 0.3rem;
+  flex-wrap: wrap;
+}
