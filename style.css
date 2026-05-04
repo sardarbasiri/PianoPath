@@ -14,7 +14,7 @@ body {
   font-family: sans-serif;
   background: #0d0d0f;
   color: #f0ede6;
-  height: 100vh;
+  height: 100dvh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -50,7 +50,7 @@ body {
 /* ── App wrapper ── */
 #app {
   width: 100%;
-  height: 100vh;
+  height: 100dvh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -63,7 +63,7 @@ body {
   padding: 0.5rem 0.75rem;
   width: 100%;
   max-width: 960px;
-  height: 100vh;
+  height: 100dvh;
   display: none;
   flex-direction: column;
   justify-content: center;
@@ -74,8 +74,8 @@ body {
 #page-1 { display: flex; }
 
 #page-4, #page-11 {
-  justify-content: center;
-  padding-top: 0.4rem;
+  justify-content: flex-start;
+  padding-top: 0.3rem;
 }
 
 #page-9 {
@@ -84,9 +84,10 @@ body {
   overflow: hidden;
 }
 
-#page-11, #page-10, #page-4 {
+#page-10 {
   justify-content: flex-start;
   padding-top: 0.3rem;
+  overflow: hidden;
 }
 
 /* ── Typography ── */
@@ -150,8 +151,8 @@ button:hover, button:active {
 }
 
 #page-11 .back-btn,
-#page-10 .back-btn,
-#page-4 .back-btn {
+#page-4 .back-btn,
+#page-10 .back-btn {
   align-self: flex-start;
   margin-bottom: 0.2rem;
 }
@@ -192,6 +193,7 @@ button:hover, button:active {
   justify-content: space-between;
   margin-bottom: 0.3rem;
   padding: 0 0.25rem;
+  width: 100%;
 }
 
 .practice-title {
@@ -232,6 +234,7 @@ button:hover, button:active {
 #lesson-staff-area svg {
   width: 100%;
   max-width: 500px;
+  max-height: 35dvh;
   height: auto;
   display: block;
   margin: 0 auto;
@@ -244,6 +247,7 @@ button:hover, button:active {
   min-height: 1.2rem;
   margin: 0.2rem 0;
   text-align: center;
+  width: 100%;
 }
 
 /* ── Keyboard ── */
@@ -256,7 +260,7 @@ button:hover, button:active {
 .keyboard {
   position: relative;
   display: flex;
-  height: clamp(70px, 15vh, 130px);
+  height: clamp(60px, 12dvh, 120px);
   max-width: 480px;
   width: 100%;
   margin: 0.3rem auto;
@@ -318,7 +322,7 @@ button:hover, button:active {
 .answer-btn {
   flex: 1;
   max-width: 80px;
-  height: clamp(40px, 7vh, 65px);
+  height: clamp(36px, 6dvh, 60px);
   font-size: clamp(0.75rem, 1.8vw, 1.1rem);
   font-weight: 600;
   border: 2px solid #c9a84c;
@@ -350,36 +354,18 @@ button:hover, button:active {
 }
 
 .lesson-note-name {
-  font-size: clamp(1.8rem, 5vw, 3rem);
+  font-size: clamp(1.4rem, 4vw, 2.5rem);
   font-weight: 700;
   color: #c9a84c;
   margin-bottom: 0.2rem;
   line-height: 1;
 }
 
-.lesson-play-btn {
-  width: auto;
-  padding: 0.4rem 1rem;
-  font-size: clamp(0.75rem, 1.6vw, 0.9rem);
-  border: 2px solid #c9a84c;
-  border-radius: 10px;
-  background: transparent;
-  color: #f0ede6;
-  cursor: pointer;
-  transition: background 0.2s;
-  touch-action: manipulation;
-}
-
-.lesson-play-btn:hover, .lesson-play-btn:active {
-  background: #c9a84c;
-  color: #0d0d0f;
-}
-
 .lesson-nav {
   display: flex;
   gap: 0.4rem;
   justify-content: center;
-  margin-top: 0.4rem;
+  margin-top: 0.3rem;
   flex-wrap: wrap;
 }
 
@@ -408,7 +394,7 @@ button:hover, button:active {
   justify-content: center;
   padding: 0.3rem;
   overflow-y: auto;
-  max-height: 75vh;
+  max-height: 75dvh;
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
@@ -433,41 +419,3 @@ button:hover, button:active {
 
 .course-icon { font-size: 1.2rem; margin-bottom: 0.2rem; }
 .course-title { font-size: clamp(0.7rem, 1.4vw, 0.82rem); font-weight: 600; color: #f0ede6; }
-
-/* ── Page 9 ── */
-#page-9 {
-  justify-content: flex-start;
-  padding-top: 0.5rem;
-  overflow: hidden;
-}
-
-#page-10 {
-  justify-content: flex-start;
-  padding-top: 0.3rem;
-  overflow: hidden;
-}
-
-#lesson-staff-area svg {
-  width: 100%;
-  max-width: 500px;
-  height: auto;
-  max-height: 35vh;
-  display: block;
-  margin: 0 auto;
-}
-
-.lesson-note-name {
-  font-size: clamp(1.4rem, 4vw, 2.5rem);
-  font-weight: 700;
-  color: #c9a84c;
-  margin-bottom: 0.2rem;
-  line-height: 1;
-}
-
-.lesson-nav {
-  display: flex;
-  gap: 0.4rem;
-  justify-content: center;
-  margin-top: 0.3rem;
-  flex-wrap: wrap;
-}

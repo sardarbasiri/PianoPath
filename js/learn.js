@@ -827,22 +827,25 @@ function startLearnPractice() {
   if (el) el.textContent = '100%';
 
   showPage('page-11');
-  
+  document.getElementById('learn-practice-title').textContent = COURSES[currentCourse].title;
 
   generateLearnQueue();
-  renderLearnStaff();
 
-  const kbArea = document.getElementById('learn-keyboard-area');
-  kbArea.innerHTML = '';
-  kbArea.style.display = 'block';
+  requestAnimationFrame(() => {
+    renderLearnStaff();
 
-  if (learnInput === 'keyboard') {
-    buildLearnKeyboard();
-  } else {
-    buildLearnButtons();
-  }
+    const kbArea = document.getElementById('learn-keyboard-area');
+    kbArea.innerHTML = '';
+    kbArea.style.display = 'block';
 
-  startLearnTimer();
+    if (learnInput === 'keyboard') {
+      buildLearnKeyboard();
+    } else {
+      buildLearnButtons();
+    }
+
+    startLearnTimer();
+  });
 }
 
 function generateLearnQueue() {

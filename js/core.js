@@ -280,15 +280,17 @@ function selectDifficulty(difficulty) {
   kbArea.style.display = 'block';
 
   generateNoteQueue();
-  renderStaff();
 
-  if (selectedInput === 'keyboard') {
-    buildKeyboard();
-  } else if (selectedInput === 'buttons') {
-    buildAnswerButtons();
-  }
-
-  startTimer();
+  // Use requestAnimationFrame to ensure page is visible before rendering
+  requestAnimationFrame(() => {
+    renderStaff();
+    if (selectedInput === 'keyboard') {
+      buildKeyboard();
+    } else if (selectedInput === 'buttons') {
+      buildAnswerButtons();
+    }
+    startTimer();
+  });
 }
 
 // ── Note Queue ─────────────────────────────────────────────────
