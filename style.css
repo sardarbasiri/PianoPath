@@ -490,6 +490,8 @@ button:hover, button:active {
   position: relative;
   height: clamp(70px, 15dvh, 130px);
   width: 100%;
+  max-width: 700px;
+  margin: 0 auto;
 }
 
 .scale-key-white {
@@ -521,11 +523,12 @@ button:hover, button:active {
 .scale-key-black.in-scale   { background: #2a4a6a; }
 .scale-key-black.highlighted { background: #c9a84c !important; }
 
-.scale-finger-display,
-.scale-note-display {
+.scale-finger-display {
   display: flex;
   justify-content: space-between;
   width: 100%;
+  max-width: 700px;
+  margin: 0 auto;
   padding: 0.1rem 0;
 }
 
@@ -539,15 +542,32 @@ button:hover, button:active {
 
 .scale-finger-num.highlighted { color: #c9a84c; }
 
-.scale-note-name {
-  flex: 1;
+.scale-key-label {
+  position: absolute;
+  bottom: 3px;
+  left: 0;
+  right: 0;
   text-align: center;
-  font-size: clamp(0.55rem, 1.1vw, 0.7rem);
-  color: #aaa;
+  font-size: clamp(0.38rem, 0.85vw, 0.52rem);
+  color: #1a1a1e;
+  font-weight: 600;
+  pointer-events: none;
+  line-height: 1;
+  user-select: none;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
-.scale-note-name.black-note   { color: #666; }
-.scale-note-name.highlighted  { color: #c9a84c; font-weight: 700; }
+.scale-key-black .scale-key-label {
+  color: #eee;
+  bottom: auto;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: clamp(0.33rem, 0.75vw, 0.46rem);
+}
+
+.scale-key-label.highlighted { color: #1a1a1e; }
+.scale-key-black .scale-key-label.highlighted { color: #1a1a1e; }
 
 .scale-play-btn {
   margin: 0.3rem auto 0;

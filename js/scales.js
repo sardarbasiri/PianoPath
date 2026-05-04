@@ -1,4 +1,4 @@
-// ── SCALES.JS ─────────────────────────────────────────────────
+﻿// ── SCALES.JS ─────────────────────────────────────────────────
 //
 // MUSIC THEORY USED:
 // Each course covers one key signature and teaches 3 things:
@@ -268,31 +268,27 @@ function getCurrentNotes() {
 }
  
 // ── GET CURRENT FINGERING ──────────────────────────────────────
+// Always returns fingering in ascending (spatial, low→high) order.
+// For descending playback the highlight index is mirrored in buildScaleKeyboard.
 function getCurrentFingering() {
-  const c   = SCALE_COURSES[scaleCourse];
-  const rh  = scaleHand === 'rh';
-  const asc = scaleDir  === 'asc';
+  const c = SCALE_COURSES[scaleCourse];
+  const rh = scaleHand === 'rh';
   const isMajor = scaleTab === 'major';
- 
-  if (isMajor) {
-    return rh ? (asc ? c.majorRhAsc : c.majorRhDesc)
-              : (asc ? c.majorLhAsc : c.majorLhDesc);
-  }
-  return rh ? (asc ? c.minorRhAsc : c.minorRhDesc)
-            : (asc ? c.minorLhAsc : c.minorLhDesc);
+  return isMajor
+    ? (rh ? c.majorRhAsc : c.majorLhAsc)
+    : (rh ? c.minorRhAsc : c.minorLhAsc);
 }
  
 // ── KEYBOARD RANGE ─────────────────────────────────────────────
-// Always show ascending range for keyboard, regardless of direction
+// Extend to white-key boundaries so boundary black keys always have
+// their anchor white key in range and get rendered correctly.
 function getKeyboardRange() {
-  const c = SCALE_COURSES[scaleCourse];
-  // Use the ascending version of current tab to define range
-  let notes;
-  if (scaleTab === 'major')    notes = c.major;
-  else if (scaleTab === 'natural')  notes = c.naturalMinor;
-  else if (scaleTab === 'harmonic') notes = c.harmonicMinor;
-  else notes = c.melodicAsc; // melodic: use ascending for range
-  return { start: notes[0], end: notes[14] };
+  const notes = getCurrentNotes();
+  let start = Math.min(...notes);
+  let end   = Math.max(...notes);
+  while (isBlackKey(start)) start--;
+  while (isBlackKey(end))   end++;
+  return { start, end };
 }
  
 // ── NAVIGATION ─────────────────────────────────────────────────
@@ -365,14 +361,20 @@ function buildScaleKeyboard() {
   const wPct      = 100 / numW; // width % per white key
  
   // ── Fingering row (above keyboard) ──
+  // Always displayed in spatial (low→high) order so numbers sit above their keys.
+  // For descending, mirror the highlight: playing note i means the key at
+  // ascending-position (14-i) is active, so highlight span at (14-i).
   const fRow = document.createElement('div');
   fRow.className = 'scale-finger-display';
-  notes.forEach((s, i) => {
+  const hlPos = scaleHlIdx < 0 ? -1
+    : scaleDir === 'asc' ? scaleHlIdx
+    : (notes.length - 1 - scaleHlIdx);
+  for (let i = 0; i < notes.length; i++) {
     const sp = document.createElement('span');
-    sp.className = 'scale-finger-num' + (i === scaleHlIdx ? ' highlighted' : '');
+    sp.className = 'scale-finger-num' + (i === hlPos ? ' highlighted' : '');
     sp.textContent = fingering[i];
     fRow.appendChild(sp);
-  });
+  }
   container.appendChild(fRow);
  
   // ── Keyboard ──
@@ -396,6 +398,12 @@ function buildScaleKeyboard() {
       `left:${wi * wPct}%;width:${wPct}%;` +
       `position:absolute;height:100%;box-sizing:border-box;`;
     el.addEventListener('click', () => playPiano(freq));
+    if (inScale) {
+      const lbl = document.createElement('span');
+      lbl.className = 'scale-key-label' + (isHl ? ' highlighted' : '');
+      lbl.textContent = displayName(s, useFlat);
+      el.appendChild(lbl);
+    }
     kb.appendChild(el);
   });
  
@@ -425,25 +433,16 @@ function buildScaleKeyboard() {
       `left:${leftPct}%;width:${widthPct}%;` +
       `position:absolute;height:62%;top:0;z-index:2;box-sizing:border-box;`;
     el.addEventListener('click', () => playPiano(freq));
+    if (inScale) {
+      const lbl = document.createElement('span');
+      lbl.className = 'scale-key-label' + (isHl ? ' highlighted' : '');
+      lbl.textContent = displayName(blackSemi, useFlat);
+      el.appendChild(lbl);
+    }
     kb.appendChild(el);
   });
  
   container.appendChild(kb);
- 
-  // ── Note name row (below keyboard) ──
-  const nRow = document.createElement('div');
-  nRow.className = 'scale-note-display';
-  notes.forEach((s, i) => {
-    const isHl  = i === scaleHlIdx;
-    const isBlk = isBlackKey(s);
-    const sp = document.createElement('span');
-    sp.className = 'scale-note-name' +
-      (isBlk ? ' black-note' : '') +
-      (isHl  ? ' highlighted' : '');
-    sp.textContent = displayName(s, useFlat);
-    nRow.appendChild(sp);
-  });
-  container.appendChild(nRow);
  
   // ── Play button ──
   const btn = document.createElement('button');
