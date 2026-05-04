@@ -268,15 +268,22 @@ function getCurrentNotes() {
 }
  
 // ── GET CURRENT FINGERING ──────────────────────────────────────
-// Always returns fingering in ascending (spatial, low→high) order.
-// For descending playback the highlight index is mirrored in buildScaleKeyboard.
+// Always returns fingering in spatial (low→high) order.
+// For descending, the desc array (in high→low play order) is reversed to spatial order.
 function getCurrentFingering() {
   const c = SCALE_COURSES[scaleCourse];
   const rh = scaleHand === 'rh';
   const isMajor = scaleTab === 'major';
-  return isMajor
-    ? (rh ? c.majorRhAsc : c.majorLhAsc)
-    : (rh ? c.minorRhAsc : c.minorLhAsc);
+  if (scaleDir === 'asc') {
+    return isMajor
+      ? (rh ? c.majorRhAsc : c.majorLhAsc)
+      : (rh ? c.minorRhAsc : c.minorLhAsc);
+  } else {
+    const desc = isMajor
+      ? (rh ? c.majorRhDesc : c.majorLhDesc)
+      : (rh ? c.minorRhDesc : c.minorLhDesc);
+    return [...desc].reverse(); // reverse from play-order to spatial low→high order
+  }
 }
  
 // ── KEYBOARD RANGE ─────────────────────────────────────────────
@@ -359,20 +366,38 @@ function buildScaleKeyboard() {
   const whiteKeys = allKeys.filter(s => !isBlackKey(s));
   const numW      = whiteKeys.length;
   const wPct      = 100 / numW; // width % per white key
- 
+
+  // Pre-build white-key index lookup for O(1) position calculation
+  const whiteKeyIdx = {};
+  whiteKeys.forEach((s, i) => { whiteKeyIdx[s] = i; });
+
+  // Spatial (low→high) order of scale notes — needed for finger positioning
+  const spatialNotes = scaleDir === 'asc' ? notes : [...notes].reverse();
+
   // ── Fingering row (above keyboard) ──
-  // Always displayed in spatial (low→high) order so numbers sit above their keys.
-  // For descending, mirror the highlight: playing note i means the key at
-  // ascending-position (14-i) is active, so highlight span at (14-i).
-  const fRow = document.createElement('div');
-  fRow.className = 'scale-finger-display';
+  // Each number is absolutely positioned above its actual key.
+  // hlPos maps the current playback index to the spatial (low→high) index.
   const hlPos = scaleHlIdx < 0 ? -1
     : scaleDir === 'asc' ? scaleHlIdx
     : (notes.length - 1 - scaleHlIdx);
-  for (let i = 0; i < notes.length; i++) {
+
+  const fRow = document.createElement('div');
+  fRow.className = 'scale-finger-display';
+  fRow.style.cssText = 'position:relative;display:block;min-height:1.2em;';
+
+  for (let i = 0; i < spatialNotes.length; i++) {
+    const s = spatialNotes[i];
+    let centerPct;
+    if (!isBlackKey(s)) {
+      centerPct = (whiteKeyIdx[s] + 0.5) * wPct;
+    } else {
+      // Black key rendered at (wi+0.63)*wPct, width 0.74*wPct → center = (wi+1.0)*wPct
+      centerPct = (whiteKeyIdx[s - 1] + 1.0) * wPct;
+    }
     const sp = document.createElement('span');
     sp.className = 'scale-finger-num' + (i === hlPos ? ' highlighted' : '');
     sp.textContent = fingering[i];
+    sp.style.cssText = `position:absolute;left:${centerPct}%;transform:translateX(-50%);`;
     fRow.appendChild(sp);
   }
   container.appendChild(fRow);

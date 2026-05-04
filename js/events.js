@@ -59,8 +59,16 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('btn-learn-input-buttons').addEventListener('click',  () => selectLearnInput('buttons'));
 
   // Scales
-  document.getElementById('back-to-2-scales').addEventListener('click',   () => showPage('page-2'));
-  document.getElementById('back-to-scales-list').addEventListener('click',() => showPage('page-scales-list'));
+  document.getElementById('back-to-2-scales').addEventListener('click', () => {
+    clearInterval(scalePlayTimer);
+    scaleHlIdx = -1;
+    showPage('page-2');
+  });
+  document.getElementById('back-to-scales-list').addEventListener('click', () => {
+    clearInterval(scalePlayTimer);
+    scaleHlIdx = -1;
+    showPage('page-scales-list');
+  });
   document.getElementById('btn-scale-major').addEventListener('click',     () => setScaleMode('major'));
   document.getElementById('btn-scale-natural').addEventListener('click',   () => setScaleMode('natural'));
   document.getElementById('btn-scale-harmonic').addEventListener('click',  () => setScaleMode('harmonic'));
