@@ -248,6 +248,8 @@ function goTo(topic, title) {
 function learnClick() {
   if (selectedTopic === 'sight-reading') {
     showPage('page-8');
+  } else if (selectedTopic === 'scales') {
+    goToScales();
   } else {
     alert('Coming soon!');
   }

@@ -7,9 +7,9 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('btn-chords').addEventListener('click',        () => goTo('chords',        '🎹 Chords'));
 
   // ── Page 2 ─────────────────────────────────────────────────
-  document.getElementById('back-to-1').addEventListener('click',  () => showPage('page-1'));
-  document.getElementById('btn-learn').addEventListener('click',   () => learnClick());
-  document.getElementById('btn-practice').addEventListener('click',() => practiceClick());
+  document.getElementById('back-to-1').addEventListener('click',   () => showPage('page-1'));
+  document.getElementById('btn-learn').addEventListener('click',    () => learnClick());
+  document.getElementById('btn-practice').addEventListener('click', () => practiceClick());
 
   // ── Page 3 ─────────────────────────────────────────────────
   document.getElementById('back-to-2').addEventListener('click',  () => showPage('page-2'));
@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('btn-both').addEventListener('click',    () => selectClef('both'));
 
   // ── Page 4 ─────────────────────────────────────────────────
-  document.getElementById('back-to-6').addEventListener('click',  () => showPage('page-6'));
+  document.getElementById('back-to-6').addEventListener('click', () => showPage('page-6'));
 
   // ── Page 5 ─────────────────────────────────────────────────
   document.getElementById('back-to-3').addEventListener('click',          () => showPage('page-3'));
@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('back-to-12').addEventListener('click', () => showPage('page-12'));
 
   // ── Page 10 ────────────────────────────────────────────────
-  document.getElementById('back-to-9').addEventListener('click',      () => showPage('page-9'));
+  document.getElementById('back-to-9').addEventListener('click',       () => showPage('page-9'));
   document.getElementById('lesson-prev-btn').addEventListener('click', () => lessonPrev());
   document.getElementById('lesson-next-btn').addEventListener('click', () => lessonNext());
   document.getElementById('lesson-start-btn').addEventListener('click',() => startLearnPractice());
@@ -54,14 +54,25 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('back-to-9-practice').addEventListener('click', () => showPage('page-9'));
 
   // ── Page 12 ────────────────────────────────────────────────
-  document.getElementById('back-to-8').addEventListener('click',               () => showPage('page-8'));
-  document.getElementById('btn-learn-input-keyboard').addEventListener('click',() => selectLearnInput('keyboard'));
-  document.getElementById('btn-learn-input-buttons').addEventListener('click', () => selectLearnInput('buttons'));
+  document.getElementById('back-to-8').addEventListener('click',                () => showPage('page-8'));
+  document.getElementById('btn-learn-input-keyboard').addEventListener('click', () => selectLearnInput('keyboard'));
+  document.getElementById('btn-learn-input-buttons').addEventListener('click',  () => selectLearnInput('buttons'));
 
-});
+  // Scales
+  document.getElementById('back-to-2-scales').addEventListener('click',   () => showPage('page-2'));
+  document.getElementById('back-to-scales-list').addEventListener('click',() => showPage('page-scales-list'));
+  document.getElementById('btn-scale-major').addEventListener('click',     () => setScaleMode('major'));
+  document.getElementById('btn-scale-natural').addEventListener('click',   () => setScaleMode('natural'));
+  document.getElementById('btn-scale-harmonic').addEventListener('click',  () => setScaleMode('harmonic'));
+  document.getElementById('btn-scale-melodic').addEventListener('click',   () => setScaleMode('melodic'));
+  document.getElementById('btn-scale-asc').addEventListener('click',       () => setScaleDirection('asc'));
+  document.getElementById('btn-scale-desc').addEventListener('click',      () => setScaleDirection('desc'));
+  document.getElementById('btn-scale-rh').addEventListener('click',        () => setScaleHand('rh'));
+  document.getElementById('btn-scale-lh').addEventListener('click',        () => setScaleHand('lh'));
 
+  // Hide browser bar on mobile
+  window.addEventListener('load', () => {
+    setTimeout(() => window.scrollTo(0, 1), 100);
+  });
 
-// Hide browser UI on mobile
-window.addEventListener('load', () => {
-  setTimeout(() => window.scrollTo(0, 1), 100);
 });
