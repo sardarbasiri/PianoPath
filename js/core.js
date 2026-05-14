@@ -135,12 +135,15 @@ function toggleNaming() {
   const shortText = selectedNaming === 'american'
     ? '🇺🇸 American'
     : '🇮🇹 Italian';
-  document.querySelectorAll('#naming-btn, #naming-btn-learn, #naming-btn-scales').forEach(btn => {
+  document.querySelectorAll('#naming-btn, #naming-btn-learn, #naming-btn-scales, #naming-btn-arps').forEach(btn => {
     if (btn) btn.textContent = text;
   });
   const courseBtn = document.getElementById('naming-btn-scales-course');
   if (courseBtn) courseBtn.textContent = shortText;
+  const arpCourseBtn = document.getElementById('naming-btn-arps-course');
+  if (arpCourseBtn) arpCourseBtn.textContent = shortText;
   renderScalesList();
+  renderArpList();
 }
 
 function getNoteName(note) {
@@ -258,6 +261,10 @@ function learnClick() {
     scalePracticeMode = false;
     document.querySelector('#page-scales-list .subtitle').textContent = 'Choose a scale to learn';
     goToScales();
+  } else if (selectedTopic === 'arpeggios') {
+    arpPracticeMode = false;
+    document.getElementById('arps-list-subtitle').textContent = 'Choose an arpeggio to learn';
+    goToArpeggios();
   } else {
     alert('Coming soon!');
   }
@@ -271,6 +278,11 @@ function practiceClick() {
     document.querySelector('#page-scales-list .subtitle').textContent = 'Choose a scale to practice';
     showPage('page-scales-list');
     renderScalesList();
+  } else if (selectedTopic === 'arpeggios') {
+    arpPracticeMode = true;
+    document.getElementById('arps-list-subtitle').textContent = 'Choose an arpeggio to practice';
+    showPage('page-arpeggios-list');
+    renderArpList();
   } else {
     alert('Coming soon!');
   }

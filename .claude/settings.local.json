@@ -1,7 +1,11 @@
 {
   "permissions": {
     "allow": [
-      "PowerShell(winget upgrade *)"
+      "PowerShell(winget upgrade *)",
+      "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\sandn\\\\Desktop\\\\PianoPath\" -Recurse -File)",
+      "Bash(Select-Object FullName)",
+      "Bash(Sort-Object FullName)",
+      "Bash(node *)"
     ]
   }
 }

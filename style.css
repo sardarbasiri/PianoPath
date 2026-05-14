@@ -63,7 +63,8 @@ body {
 /* ── Pages ── */
 #page-1, #page-2, #page-3, #page-4, #page-5, #page-6,
 #page-7, #page-8, #page-9, #page-10, #page-11, #page-12,
-#page-scales-list, #page-scales-course, #page-scales-practice {
+#page-scales-list, #page-scales-course, #page-scales-practice,
+#page-arpeggios-list, #page-arpeggios-course {
   text-align: center;
   padding: 0.5rem 0.75rem;
   padding-bottom: max(0.5rem, env(safe-area-inset-bottom));
@@ -174,7 +175,9 @@ button:hover, button:active {
 #page-10 .back-btn,
 #page-scales-list .back-btn,
 #page-scales-course .back-btn,
-#page-scales-practice .back-btn {
+#page-scales-practice .back-btn,
+#page-arpeggios-list .back-btn,
+#page-arpeggios-course .back-btn {
   align-self: flex-start;
   margin-bottom: 0.2rem;
 }
@@ -478,7 +481,8 @@ button:hover, button:active {
   color: #f0ede6;
 }
 
-#scale-keyboard-container {
+#scale-keyboard-container,
+#arp-keyboard-container {
   width: 100%;
   flex: 1;
   display: flex;

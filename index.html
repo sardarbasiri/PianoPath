@@ -146,6 +146,40 @@
       </div>
     </div>
 
+    <!-- ARPEGGIOS LIST -->
+    <div id="page-arpeggios-list">
+      <button class="back-btn" id="back-to-2-arps">← Back</button>
+      <h1>🎶 Arpeggios</h1>
+      <p class="subtitle" id="arps-list-subtitle">Choose an arpeggio to learn</p>
+      <div class="option-row">
+        <span>Note naming:</span>
+        <button class="toggle-btn" id="naming-btn-arps">🇺🇸 American (C, D, E...)</button>
+      </div>
+      <div id="arps-courses-list" class="courses-grid"></div>
+    </div>
+
+    <!-- ARPEGGIOS COURSE -->
+    <div id="page-arpeggios-course">
+      <button class="back-btn" id="back-to-arps-list">← Back</button>
+      <div class="practice-header">
+        <span class="practice-title" id="arp-course-title">C Major</span>
+      </div>
+      <div class="scale-tabs">
+        <button class="scale-mode-btn arp-mode-btn active" data-arp-mode="major" id="btn-arp-major">Major</button>
+        <button class="scale-mode-btn arp-mode-btn"        data-arp-mode="minor" id="btn-arp-minor">Minor</button>
+        <button class="scale-mode-btn arp-mode-btn"        data-arp-mode="dom7"  id="btn-arp-dom7">Dom 7th</button>
+        <button class="scale-mode-btn arp-mode-btn"        data-arp-mode="dim7"  id="btn-arp-dim7">Dim 7th</button>
+      </div>
+      <div class="scale-tabs">
+        <button class="scale-dir-btn arp-dir-btn active"  data-arp-dir="asc"  id="btn-arp-asc">↑ Ascending</button>
+        <button class="scale-dir-btn arp-dir-btn"         data-arp-dir="desc" id="btn-arp-desc">↓ Descending</button>
+        <button class="scale-hand-btn arp-hand-btn active" data-arp-hand="rh" id="btn-arp-rh">Right Hand</button>
+        <button class="scale-hand-btn arp-hand-btn"        data-arp-hand="lh" id="btn-arp-lh">Left Hand</button>
+        <button class="toggle-btn" id="naming-btn-arps-course">🇺🇸 American</button>
+      </div>
+      <div id="arp-keyboard-container"></div>
+    </div>
+
     <!-- SCALES LIST -->
     <div id="page-scales-list">
       <button class="back-btn" id="back-to-2-scales">← Back</button>
@@ -210,6 +244,7 @@
   <script src="js/buttons.js"></script>
   <script src="js/learn.js"></script>
   <script src="js/scales.js"></script>
+  <script src="js/arpeggios.js"></script>
   <script src="js/events.js"></script>
 </body>
 </html>

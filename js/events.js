@@ -115,6 +115,33 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('btn-scale-rh').addEventListener('click',        () => setScaleHand('rh'));
   document.getElementById('btn-scale-lh').addEventListener('click',        () => setScaleHand('lh'));
 
+  // ── Arpeggio list page ────────────────────────────────────────
+  document.getElementById('back-to-2-arps').addEventListener('click', () => {
+    clearInterval(arpPlayTimer);
+    arpHlIdx = -1;
+    showPage('page-2');
+  });
+  document.getElementById('naming-btn-arps').addEventListener('click', () => toggleNaming());
+
+  // ── Arpeggio course page ──────────────────────────────────────
+  document.getElementById('back-to-arps-list').addEventListener('click', () => {
+    clearInterval(arpPlayTimer);
+    arpHlIdx = -1;
+    showPage('page-arpeggios-list');
+  });
+  document.getElementById('btn-arp-major').addEventListener('click',  () => setArpMode('major'));
+  document.getElementById('btn-arp-minor').addEventListener('click',  () => setArpMode('minor'));
+  document.getElementById('btn-arp-dom7').addEventListener('click',   () => setArpMode('dom7'));
+  document.getElementById('btn-arp-dim7').addEventListener('click',   () => setArpMode('dim7'));
+  document.getElementById('btn-arp-asc').addEventListener('click',    () => setArpDirection('asc'));
+  document.getElementById('btn-arp-desc').addEventListener('click',   () => setArpDirection('desc'));
+  document.getElementById('btn-arp-rh').addEventListener('click',     () => setArpHand('rh'));
+  document.getElementById('btn-arp-lh').addEventListener('click',     () => setArpHand('lh'));
+  document.getElementById('naming-btn-arps-course').addEventListener('click', () => {
+    toggleNaming();
+    renderArpCourse();
+  });
+
   // Hide browser bar on mobile
   window.addEventListener('load', () => {
     setTimeout(() => window.scrollTo(0, 1), 100);
