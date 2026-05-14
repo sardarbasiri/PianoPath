@@ -256,6 +256,7 @@ function learnClick() {
     showPage('page-8');
   } else if (selectedTopic === 'scales') {
     scalePracticeMode = false;
+    document.querySelector('#page-scales-list .subtitle').textContent = 'Choose a scale to learn';
     goToScales();
   } else {
     alert('Coming soon!');
@@ -267,6 +268,7 @@ function practiceClick() {
     showPage('page-3');
   } else if (selectedTopic === 'scales') {
     scalePracticeMode = true;
+    document.querySelector('#page-scales-list .subtitle').textContent = 'Choose a scale to practice';
     showPage('page-scales-list');
     renderScalesList();
   } else {
