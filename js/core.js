@@ -132,9 +132,15 @@ function toggleNaming() {
   const text = selectedNaming === 'american'
     ? '🇺🇸 American (C, D, E...)'
     : '🇮🇹 Italian (Do, Re, Mi...)';
-  document.querySelectorAll('#naming-btn, #naming-btn-learn').forEach(btn => {
+  const shortText = selectedNaming === 'american'
+    ? '🇺🇸 American'
+    : '🇮🇹 Italian';
+  document.querySelectorAll('#naming-btn, #naming-btn-learn, #naming-btn-scales').forEach(btn => {
     if (btn) btn.textContent = text;
   });
+  const courseBtn = document.getElementById('naming-btn-scales-course');
+  if (courseBtn) courseBtn.textContent = shortText;
+  renderScalesList();
 }
 
 function getNoteName(note) {
@@ -249,6 +255,7 @@ function learnClick() {
   if (selectedTopic === 'sight-reading') {
     showPage('page-8');
   } else if (selectedTopic === 'scales') {
+    scalePracticeMode = false;
     goToScales();
   } else {
     alert('Coming soon!');
@@ -258,6 +265,10 @@ function learnClick() {
 function practiceClick() {
   if (selectedTopic === 'sight-reading') {
     showPage('page-3');
+  } else if (selectedTopic === 'scales') {
+    scalePracticeMode = true;
+    showPage('page-scales-list');
+    renderScalesList();
   } else {
     alert('Coming soon!');
   }

@@ -58,6 +58,43 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('btn-learn-input-keyboard').addEventListener('click', () => selectLearnInput('keyboard'));
   document.getElementById('btn-learn-input-buttons').addEventListener('click',  () => selectLearnInput('buttons'));
 
+  // ── Scale Practice Page ────────────────────────────────────
+  document.getElementById('back-to-scales-course-prac').addEventListener('click', () => {
+    showPage('page-scales-course');
+    renderScaleCourse();
+  });
+
+  document.querySelectorAll('[data-sp-mode]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      spMode = btn.dataset.spMode;
+      spReset();
+      renderSpPage();
+    });
+  });
+
+  document.querySelectorAll('[data-sp-dir]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      spDir = btn.dataset.spDir;
+      spReset();
+      renderSpPage();
+    });
+  });
+
+  document.querySelectorAll('[data-sp-hand]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      spHand = btn.dataset.spHand;
+      spReset();
+      renderSpPage();
+    });
+  });
+
+  // Scales naming
+  document.getElementById('naming-btn-scales').addEventListener('click', () => toggleNaming());
+  document.getElementById('naming-btn-scales-course').addEventListener('click', () => {
+    toggleNaming();
+    renderScaleCourse();
+  });
+
   // Scales
   document.getElementById('back-to-2-scales').addEventListener('click', () => {
     clearInterval(scalePlayTimer);

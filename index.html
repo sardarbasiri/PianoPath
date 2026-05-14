@@ -151,7 +151,33 @@
       <button class="back-btn" id="back-to-2-scales">← Back</button>
       <h1>🎼 Scales</h1>
       <p class="subtitle">Choose a scale to learn</p>
+      <div class="option-row">
+        <span>Note naming:</span>
+        <button class="toggle-btn" id="naming-btn-scales">🇺🇸 American (C, D, E...)</button>
+      </div>
       <div id="scales-courses-list" class="courses-grid"></div>
+    </div>
+
+    <!-- SCALES PRACTICE -->
+    <div id="page-scales-practice">
+      <button class="back-btn" id="back-to-scales-course-prac">← Back</button>
+      <div class="practice-header">
+        <span class="practice-title" id="sp-title">Practice</span>
+        <span class="accuracy-badge" id="sp-progress">1 / 15</span>
+      </div>
+      <div class="scale-tabs" id="sp-mode-tabs">
+        <button class="scale-mode-btn" data-sp-mode="major">Major</button>
+        <button class="scale-mode-btn" data-sp-mode="natural">Natural Minor</button>
+        <button class="scale-mode-btn" data-sp-mode="harmonic">Harmonic Minor</button>
+        <button class="scale-mode-btn" data-sp-mode="melodic">Melodic Minor</button>
+      </div>
+      <div class="scale-tabs" id="sp-dir-hand-tabs">
+        <button class="scale-dir-btn" data-sp-dir="asc">↑ Ascending</button>
+        <button class="scale-dir-btn" data-sp-dir="desc">↓ Descending</button>
+        <button class="scale-hand-btn" data-sp-hand="rh">Right Hand</button>
+        <button class="scale-hand-btn" data-sp-hand="lh">Left Hand</button>
+      </div>
+      <div id="sp-container"></div>
     </div>
 
     <!-- SCALES COURSE -->
@@ -171,6 +197,7 @@
         <button class="scale-dir-btn"         data-dir="desc" id="btn-scale-desc">↓ Descending</button>
         <button class="scale-hand-btn active" data-hand="rh"  id="btn-scale-rh">Right Hand</button>
         <button class="scale-hand-btn"        data-hand="lh"  id="btn-scale-lh">Left Hand</button>
+        <button class="toggle-btn" id="naming-btn-scales-course">🇺🇸 American</button>
       </div>
       <div id="scale-keyboard-container"></div>
     </div>

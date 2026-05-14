@@ -88,21 +88,43 @@ const FINGERINGS = {
     minorLhAsc:  [5,4,3,2,1,3,2,1,4,3,2,1,3,2,1],
     minorLhDesc: [1,2,3,1,2,3,4,1,2,3,1,2,3,4,5],
   },
+  // D major / B minor — B minor LH needs thumb on E & A, not F# (black)
+  D: {
+    majorRhAsc:  [1,2,3,1,2,3,4,1,2,3,1,2,3,4,5],
+    majorRhDesc: [5,4,3,2,1,3,2,1,4,3,2,1,3,2,1],
+    majorLhAsc:  [5,4,3,2,1,3,2,1,4,3,2,1,3,2,1],
+    majorLhDesc: [1,2,3,1,2,3,4,1,2,3,1,2,3,4,5],
+    minorRhAsc:  [1,2,3,1,2,3,4,1,2,3,1,2,3,4,5],
+    minorRhDesc: [5,4,3,2,1,3,2,1,4,3,2,1,3,2,1],
+    minorLhAsc:  [4,3,2,1,3,2,1,4,3,2,1,3,2,1,4],
+    minorLhDesc: [4,1,2,3,1,2,3,4,1,2,3,1,2,3,4],
+  },
+  // E major / C# minor — C# minor starts on black key, needs thumb on E & B
+  E: {
+    majorRhAsc:  [1,2,3,1,2,3,4,1,2,3,1,2,3,4,5],
+    majorRhDesc: [5,4,3,2,1,3,2,1,4,3,2,1,3,2,1],
+    majorLhAsc:  [5,4,3,2,1,3,2,1,4,3,2,1,3,2,1],
+    majorLhDesc: [1,2,3,1,2,3,4,1,2,3,1,2,3,4,5],
+    minorRhAsc:  [2,3,1,2,3,4,1,2,3,1,2,3,4,1,2],
+    minorRhDesc: [2,1,4,3,2,1,3,2,1,4,3,2,1,3,2],
+    minorLhAsc:  [3,2,1,4,3,2,1,3,2,1,4,3,2,1,3],
+    minorLhDesc: [3,1,2,3,4,1,2,3,1,2,3,4,1,2,3],
+  },
   // F major starts on F (white but different thumb position)
   F: {
     majorRhAsc:  [1,2,3,4,1,2,3,1,2,3,4,1,2,3,4],
-    majorRhDesc: [4,3,2,1,3,2,1,4,3,2,1,3,2,1,4],
+    majorRhDesc: [4,3,2,1,4,3,2,1,3,2,1,4,3,2,1],
     majorLhAsc:  [5,4,3,2,1,3,2,1,4,3,2,1,3,2,1],
     majorLhDesc: [1,2,3,1,2,3,4,1,2,3,1,2,3,4,5],
-    minorRhAsc:  [1,2,3,4,1,2,3,1,2,3,4,1,2,3,4],
-    minorRhDesc: [4,3,2,1,3,2,1,4,3,2,1,3,2,1,4],
+    minorRhAsc:  [1,2,3,1,2,3,4,1,2,3,1,2,3,4,5],
+    minorRhDesc: [5,4,3,2,1,3,2,1,4,3,2,1,3,2,1],
     minorLhAsc:  [5,4,3,2,1,3,2,1,4,3,2,1,3,2,1],
     minorLhDesc: [1,2,3,1,2,3,4,1,2,3,1,2,3,4,5],
   },
   // Bb major
   Bb: {
     majorRhAsc:  [4,1,2,3,1,2,3,4,1,2,3,1,2,3,4],
-    majorRhDesc: [4,3,2,1,4,3,2,1,3,2,1,4,3,2,1],
+    majorRhDesc: [4,3,2,1,3,2,1,4,3,2,1,3,2,1,4],
     majorLhAsc:  [3,2,1,4,3,2,1,3,2,1,4,3,2,1,3],
     majorLhDesc: [3,1,2,3,4,1,2,3,1,2,3,4,1,2,3],
     minorRhAsc:  [1,2,3,1,2,3,4,1,2,3,1,2,3,4,5],
@@ -127,8 +149,8 @@ const FINGERINGS = {
     majorRhDesc: [3,2,1,3,2,1,4,3,2,1,3,2,1,4,3],
     majorLhAsc:  [3,2,1,4,3,2,1,3,2,1,4,3,2,1,3],
     majorLhDesc: [3,1,2,3,4,1,2,3,1,2,3,4,1,2,3],
-    minorRhAsc:  [1,2,3,1,2,3,4,1,2,3,1,2,3,4,5],
-    minorRhDesc: [5,4,3,2,1,3,2,1,4,3,2,1,3,2,1],
+    minorRhAsc:  [1,2,3,4,1,2,3,1,2,3,4,1,2,3,4],
+    minorRhDesc: [4,3,2,1,4,3,2,1,3,2,1,4,3,2,1],
     minorLhAsc:  [5,4,3,2,1,3,2,1,4,3,2,1,3,2,1],
     minorLhDesc: [1,2,3,1,2,3,4,1,2,3,1,2,3,4,5],
   },
@@ -138,10 +160,10 @@ const FINGERINGS = {
     majorRhDesc: [2,1,4,3,2,1,3,2,1,4,3,2,1,3,2],
     majorLhAsc:  [3,2,1,4,3,2,1,3,2,1,4,3,2,1,3],
     majorLhDesc: [3,1,2,3,4,1,2,3,1,2,3,4,1,2,3],
-    minorRhAsc:  [2,3,1,2,3,4,1,2,3,1,2,3,4,1,2],
-    minorRhDesc: [2,1,4,3,2,1,3,2,1,4,3,2,1,3,2],
-    minorLhAsc:  [3,2,1,4,3,2,1,3,2,1,4,3,2,1,3],
-    minorLhDesc: [3,1,2,3,4,1,2,3,1,2,3,4,1,2,3],
+    minorRhAsc:  [4,1,2,3,1,2,3,4,1,2,3,1,2,3,4],
+    minorRhDesc: [4,3,2,1,3,2,1,4,3,2,1,3,2,1,4],
+    minorLhAsc:  [2,1,3,2,1,4,3,2,1,3,2,1,4,3,2],
+    minorLhDesc: [2,3,4,1,2,3,1,2,3,4,1,2,3,1,2],
   },
   // Gb/F# major
   Gb: {
@@ -149,21 +171,34 @@ const FINGERINGS = {
     majorRhDesc: [4,3,2,1,4,3,2,1,4,3,2,1,4,3,2],
     majorLhAsc:  [4,3,2,1,4,3,2,1,4,3,2,1,4,3,2],
     majorLhDesc: [2,3,4,1,2,3,4,1,2,3,4,1,2,3,4],
-    minorRhAsc:  [2,3,4,1,2,3,4,1,2,3,4,1,2,3,4],
-    minorRhDesc: [4,3,2,1,4,3,2,1,4,3,2,1,4,3,2],
-    minorLhAsc:  [4,3,2,1,4,3,2,1,4,3,2,1,4,3,2],
-    minorLhDesc: [2,3,4,1,2,3,4,1,2,3,4,1,2,3,4],
+    minorRhAsc:  [3,1,2,3,4,1,2,3,1,2,3,4,1,2,3],
+    minorRhDesc: [3,2,1,4,3,2,1,3,2,1,4,3,2,1,3],
+    minorLhAsc:  [2,1,4,3,2,1,3,2,1,4,3,2,1,3,2],
+    minorLhDesc: [2,3,1,2,3,4,1,2,3,1,2,3,4,1,2],
   },
-  // B major
+  // B major / G# minor — B major LH thumb on B&E (white); G# minor starts on black, thumbs on B&E only
   B: {
     majorRhAsc:  [1,2,3,1,2,3,4,1,2,3,1,2,3,4,5],
     majorRhDesc: [5,4,3,2,1,3,2,1,4,3,2,1,3,2,1],
-    majorLhAsc:  [4,3,2,1,4,3,2,1,4,3,2,1,4,3,2],
-    majorLhDesc: [2,3,4,1,2,3,4,1,2,3,4,1,2,3,4],
-    minorRhAsc:  [1,2,3,1,2,3,4,1,2,3,1,2,3,4,5],
-    minorRhDesc: [5,4,3,2,1,3,2,1,4,3,2,1,3,2,1],
-    minorLhAsc:  [4,3,2,1,4,3,2,1,4,3,2,1,4,3,2],
-    minorLhDesc: [2,3,4,1,2,3,4,1,2,3,4,1,2,3,4],
+    majorLhAsc:  [4,3,2,1,4,3,2,1,3,2,1,4,3,2,1],
+    majorLhDesc: [1,2,3,4,1,2,3,1,2,3,4,1,2,3,4],
+    minorRhAsc:  [3,4,1,2,3,1,2,3,4,1,2,3,1,2,3],
+    minorRhDesc: [3,2,1,3,2,1,4,3,2,1,3,2,1,4,3],
+    minorLhAsc:  [3,2,1,3,2,1,4,3,2,1,3,2,1,4,3],
+    minorLhDesc: [3,4,1,2,3,1,2,3,4,1,2,3,1,2,3],
+  },
+  // A major (standard) / F# minor (starts on black key F#)
+  // RH: thumb-under on A (3rd note), then repeats; starts on finger 2
+  // LH: starts on finger 4, thumb-over on B, repeats every 4 notes
+  FshMin: {
+    majorRhAsc:  [1,2,3,1,2,3,4,1,2,3,1,2,3,4,5],
+    majorRhDesc: [5,4,3,2,1,3,2,1,4,3,2,1,3,2,1],
+    majorLhAsc:  [5,4,3,2,1,3,2,1,4,3,2,1,3,2,1],
+    majorLhDesc: [1,2,3,1,2,3,4,1,2,3,1,2,3,4,5],
+    minorRhAsc:  [2,3,1,2,3,4,1,2,3,1,2,3,4,1,2],
+    minorRhDesc: [2,1,4,3,2,1,3,2,1,4,3,2,1,3,2],
+    minorLhAsc:  [3,2,1,4,3,2,1,3,2,1,4,3,2,1,3],
+    minorLhDesc: [3,1,2,3,4,1,2,3,1,2,3,4,1,2,3],
   },
 };
  
@@ -203,9 +238,9 @@ const SCALE_COURSES = (function() {
     course('G♭ Major / E♭ Minor',  6,   3, true,  'Gb'),
     // Sharps (easiest to hardest)
     course('G Major / E Minor',    7,   4, false, 'standard'),
-    course('D Major / B Minor',    2,  -1, false, 'standard'),
-    course('A Major / F♯ Minor',   9,   6, false, 'standard'),
-    course('E Major / C♯ Minor',   4,   1, false, 'standard'),
+    course('D Major / B Minor',    2,  -1, false, 'D'),
+    course('A Major / F♯ Minor',   9,   6, false, 'FshMin'),
+    course('E Major / C♯ Minor',   4,   1, false, 'E'),
     course('B Major / G♯ Minor',  11,   8, false, 'B'),
     course('F♯ Major / D♯ Minor',  6,   3, false, 'Gb'),
   ];
@@ -231,6 +266,12 @@ function toItalian(name) {
   const acc  = name.match(/[♭#♯]/) ? name.match(/[♭#♯]/)[0] : '';
   return (m[base] || base) + acc;
 }
+
+function localizeScaleTitle(title) {
+  if (selectedNaming === 'american') return title;
+  const m = {'C':'Do','D':'Re','E':'Mi','F':'Fa','G':'Sol','A':'La','B':'Si'};
+  return title.replace(/\b([A-G])([♭♯#]?)/g, (_, n, acc) => (m[n] || n) + acc);
+}
  
 function displayName(semi, useFlat) {
   let n = noteName(semi, useFlat);
@@ -244,6 +285,7 @@ function midiToFreq(midi) {
  
 // ── STATE ──────────────────────────────────────────────────────
 let scaleCourse    = 0;
+let scalePracticeMode = false;
 let scaleTab       = 'major';   // 'major' | 'natural' | 'harmonic' | 'melodic'
 let scaleDir       = 'asc';     // 'asc' | 'desc'
 let scaleHand      = 'rh';      // 'rh' | 'lh'
@@ -322,8 +364,15 @@ function renderScalesList() {
   SCALE_COURSES.forEach((c, i) => {
     const card = document.createElement('div');
     card.className = 'course-card unlocked';
-    card.innerHTML = `<div class="course-icon">🎵</div><div class="course-title">${c.title}</div>`;
-    card.addEventListener('click', () => openScaleCourse(i));
+    card.innerHTML = `<div class="course-icon">${scalePracticeMode ? '🎯' : '🎵'}</div><div class="course-title">${localizeScaleTitle(c.title)}</div>`;
+    card.addEventListener('click', () => {
+      if (scalePracticeMode) {
+        scalePracticeMode = false;
+        startScalePractice(i);
+      } else {
+        openScaleCourse(i);
+      }
+    });
     list.appendChild(card);
   });
 }
@@ -331,7 +380,7 @@ function renderScalesList() {
 // ── RENDER COURSE PAGE ─────────────────────────────────────────
 function renderScaleCourse() {
   const c = SCALE_COURSES[scaleCourse];
-  document.getElementById('scale-course-title').textContent = c.title;
+  document.getElementById('scale-course-title').textContent = localizeScaleTitle(c.title);
  
   // Update tab active states
   document.querySelectorAll('.scale-mode-btn').forEach(b =>
@@ -469,12 +518,25 @@ function buildScaleKeyboard() {
  
   container.appendChild(kb);
  
-  // ── Play button ──
-  const btn = document.createElement('button');
-  btn.className = 'scale-play-btn';
-  btn.textContent = '▶ Play Scale';
-  btn.addEventListener('click', playScaleAnim);
-  container.appendChild(btn);
+  // ── Buttons ──
+  const btnRow = document.createElement('div');
+  btnRow.style.cssText = 'display:flex;gap:0.5rem;justify-content:center;margin:0.3rem auto 0;flex-shrink:0;';
+
+  const playBtn = document.createElement('button');
+  playBtn.className = 'scale-play-btn';
+  playBtn.style.margin = '0';
+  playBtn.textContent = '▶ Play Scale';
+  playBtn.addEventListener('click', playScaleAnim);
+
+  const practBtn = document.createElement('button');
+  practBtn.className = 'scale-play-btn';
+  practBtn.style.margin = '0';
+  practBtn.textContent = '🎯 Practice';
+  practBtn.addEventListener('click', () => startScalePractice(scaleCourse));
+
+  btnRow.appendChild(playBtn);
+  btnRow.appendChild(practBtn);
+  container.appendChild(btnRow);
 }
  
 // ── PLAY ANIMATION ─────────────────────────────────────────────
@@ -518,4 +580,322 @@ function setScaleHand(hand) {
   scaleHlIdx = -1;
   clearInterval(scalePlayTimer);
   renderScaleCourse();
+}
+
+// ── PRACTICE MODE ──────────────────────────────────────────────
+
+let spCourse    = 0;
+let spMode      = 'major';
+let spDir       = 'asc';
+let spHand      = 'rh';
+let spNoteIdx   = 0;     // next note to play (play-order index 0–14)
+let spErrors    = 0;
+let spWrongKey  = null;  // semitone of last incorrect key pressed
+let spWaiting   = false; // blocks rapid wrong-key spam
+let spCompleted = false;
+
+function getSpNotes() {
+  const c = SCALE_COURSES[spCourse];
+  if (spMode === 'major')    return spDir === 'asc' ? c.major         : [...c.major].reverse();
+  if (spMode === 'natural')  return spDir === 'asc' ? c.naturalMinor  : [...c.naturalMinor].reverse();
+  if (spMode === 'harmonic') return spDir === 'asc' ? c.harmonicMinor : [...c.harmonicMinor].reverse();
+  return spDir === 'asc' ? c.melodicAsc : c.melodicDesc;
+}
+
+// Returns fingering in spatial (low→high) order, same as getCurrentFingering()
+function getSpFingering() {
+  const c    = SCALE_COURSES[spCourse];
+  const rh   = spHand === 'rh';
+  const isMaj = spMode === 'major';
+  if (spDir === 'asc') {
+    return isMaj ? (rh ? c.majorRhAsc : c.majorLhAsc) : (rh ? c.minorRhAsc : c.minorLhAsc);
+  }
+  const desc = isMaj ? (rh ? c.majorRhDesc : c.majorLhDesc) : (rh ? c.minorRhDesc : c.minorLhDesc);
+  return [...desc].reverse();
+}
+
+function getSpRange() {
+  const notes = getSpNotes();
+  let start = Math.min(...notes);
+  let end   = Math.max(...notes);
+  while (isBlackKey(start)) start--;
+  while (isBlackKey(end))   end++;
+  return { start, end };
+}
+
+function startScalePractice(courseIdx) {
+  spCourse    = courseIdx;
+  spMode      = scaleTab;  // inherit current learn-mode settings
+  spDir       = scaleDir;
+  spHand      = scaleHand;
+  spNoteIdx   = 0;
+  spErrors    = 0;
+  spWrongKey  = null;
+  spWaiting   = false;
+  spCompleted = false;
+  clearInterval(scalePlayTimer);
+  scaleHlIdx = -1;
+  showPage('page-scales-practice');
+  renderSpPage();
+}
+
+function renderSpPage() {
+  const c = SCALE_COURSES[spCourse];
+  document.getElementById('sp-title').textContent = localizeScaleTitle(c.title);
+
+  document.querySelectorAll('[data-sp-mode]').forEach(b =>
+    b.classList.toggle('active', b.dataset.spMode === spMode));
+  document.querySelectorAll('[data-sp-dir]').forEach(b =>
+    b.classList.toggle('active', b.dataset.spDir === spDir));
+  document.querySelectorAll('[data-sp-hand]').forEach(b =>
+    b.classList.toggle('active', b.dataset.spHand === spHand));
+
+  buildSpContainer();
+}
+
+function buildSpContainer() {
+  const container = document.getElementById('sp-container');
+  container.innerHTML = '';
+
+  const notes     = getSpNotes();
+  const fingering = getSpFingering();
+  const c         = SCALE_COURSES[spCourse];
+
+  if (spCompleted) {
+    renderSpCompletion(container, notes);
+    return;
+  }
+
+  // Play-order index → spatial (low→high) index
+  const spatialIdx   = spDir === 'asc' ? spNoteIdx : (notes.length - 1 - spNoteIdx);
+  const currentNote  = notes[spNoteIdx];
+  const currentFinger = fingering[spatialIdx];
+
+  // Spatial (low→high) order for key/finger rendering
+  const spatialNotes = spDir === 'asc' ? notes : [...notes].reverse();
+
+  // Progress badge
+  document.getElementById('sp-progress').textContent = `${spNoteIdx + 1} / ${notes.length}`;
+
+  // ── Info row: finger circle + note name ──
+  const infoRow = document.createElement('div');
+  infoRow.className = 'sp-info-row';
+
+  const circle = document.createElement('div');
+  circle.className = 'sp-finger-circle';
+  circle.textContent = currentFinger;
+
+  const noteInfo = document.createElement('div');
+  noteInfo.className = 'sp-note-info';
+  noteInfo.innerHTML =
+    `<span class="sp-note-label">${spHand === 'rh' ? 'Right Hand' : 'Left Hand'} — finger</span>` +
+    `<span class="sp-note-name">${displayName(currentNote, c.useFlat)}</span>`;
+
+  infoRow.appendChild(circle);
+  infoRow.appendChild(noteInfo);
+  container.appendChild(infoRow);
+
+  // ── Keyboard layout helpers ──
+  const { start, end } = getSpRange();
+  const allKeys  = [];
+  for (let s = start; s <= end; s++) allKeys.push(s);
+  const whiteKeys = allKeys.filter(s => !isBlackKey(s));
+  const numW      = whiteKeys.length;
+  const wPct      = 100 / numW;
+  const wkIdx     = {};
+  whiteKeys.forEach((s, i) => { wkIdx[s] = i; });
+
+  // ── Finger number row ──
+  const fRow = document.createElement('div');
+  fRow.className = 'scale-finger-display';
+  fRow.style.cssText = 'position:relative;display:block;min-height:1.4em;width:100%;max-width:700px;margin:0 auto;';
+
+  for (let i = 0; i < spatialNotes.length; i++) {
+    const s = spatialNotes[i];
+    let ctrPct;
+    if (!isBlackKey(s)) {
+      ctrPct = (wkIdx[s] + 0.5) * wPct;
+    } else {
+      ctrPct = (wkIdx[s - 1] + 1.0) * wPct;
+    }
+
+    // Determine if this spatial note is done / current / upcoming
+    const playIdx = spDir === 'asc' ? i : (notes.length - 1 - i);
+    let cls = 'scale-finger-num';
+    if (i === spatialIdx)      cls += ' sp-finger-current';
+    else if (playIdx < spNoteIdx) cls += ' sp-finger-done';
+    else                          cls += ' sp-finger-upcoming';
+
+    const sp = document.createElement('span');
+    sp.className = cls;
+    sp.textContent = fingering[i];
+    sp.style.cssText = `position:absolute;left:${ctrPct}%;transform:translateX(-50%);`;
+    fRow.appendChild(sp);
+  }
+  container.appendChild(fRow);
+
+  // ── Piano keyboard ──
+  const scaleSet = new Set(notes);
+  const kb = document.createElement('div');
+  kb.className = 'scale-keyboard';
+  kb.style.cssText = 'position:relative;width:100%;flex-shrink:0;';
+
+  function makeKey(s, leftPct, widthPct, heightPct, isBlack) {
+    const inScale  = scaleSet.has(s);
+    const isCurrent = s === currentNote && spWrongKey === null;
+    const isWrong   = s === spWrongKey;
+    const isHint    = spWrongKey !== null && s === currentNote;
+
+    const el = document.createElement('div');
+    el.className = (isBlack ? 'scale-key-black' : 'scale-key-white') +
+      (inScale   ? ' in-scale'        : '') +
+      (isCurrent ? ' sp-key-current'  : '') +
+      (isWrong   ? ' sp-key-wrong'    : '') +
+      (isHint    ? ' sp-key-hint'     : '');
+
+    const zIdx = isBlack ? 2 : (inScale ? 1 : 0);
+    el.style.cssText =
+      `left:${leftPct}%;width:${widthPct}%;position:absolute;` +
+      `height:${heightPct}%;top:0;z-index:${zIdx};box-sizing:border-box;`;
+    el.addEventListener('click', () => spHandleClick(s));
+
+    if (inScale) {
+      const lbl = document.createElement('span');
+      lbl.className = 'scale-key-label' + (isHint || isCurrent ? ' highlighted' : '');
+      lbl.textContent = displayName(s, c.useFlat);
+      el.appendChild(lbl);
+    }
+    return el;
+  }
+
+  whiteKeys.forEach((s, wi) => {
+    kb.appendChild(makeKey(s, wi * wPct, wPct, 100, false));
+  });
+
+  whiteKeys.forEach((ws, wi) => {
+    const s = ws + 1;
+    if (!isBlackKey(s) || s < start || s > end || wi >= numW - 1) return;
+    kb.appendChild(makeKey(s, (wi + 0.63) * wPct, wPct * 0.74, 62, true));
+  });
+
+  container.appendChild(kb);
+
+  // ── Progress dots ──
+  const dotsRow = document.createElement('div');
+  dotsRow.className = 'sp-progress-dots';
+  for (let i = 0; i < notes.length; i++) {
+    const dot = document.createElement('span');
+    dot.className = 'sp-dot' +
+      (i < spNoteIdx  ? ' done'    : '') +
+      (i === spNoteIdx ? ' current' : '');
+    dotsRow.appendChild(dot);
+  }
+  container.appendChild(dotsRow);
+
+  // ── Feedback text ──
+  const fb = document.createElement('div');
+  fb.className = 'sp-feedback';
+  if (spWrongKey !== null) {
+    fb.innerHTML =
+      `<span class="sp-feedback-wrong">✗ You pressed <strong>${displayName(spWrongKey, c.useFlat)}</strong>` +
+      ` — the correct note is <strong>${displayName(currentNote, c.useFlat)}</strong> (finger ${currentFinger})</span>`;
+  } else if (spNoteIdx === 0) {
+    fb.innerHTML = `<span class="sp-feedback-hint">Tap the glowing key to start</span>`;
+  } else {
+    fb.textContent = '';
+  }
+  container.appendChild(fb);
+}
+
+function spHandleClick(semi) {
+  if (spCompleted) return;
+
+  const notes    = getSpNotes();
+  const expected = notes[spNoteIdx];
+  const baseMidi = 60;
+
+  if (semi === expected) {
+    // Correct — always process even if a wrong-key timeout is pending
+    spWrongKey  = null;
+    spWaiting   = false;
+    playPiano(midiToFreq(baseMidi + semi));
+    spNoteIdx++;
+    if (spNoteIdx >= notes.length) spCompleted = true;
+
+    // Bounce the finger circle briefly then rebuild
+    buildSpContainer();
+    const circle = document.querySelector('.sp-finger-circle');
+    if (circle) {
+      circle.classList.add('changed');
+      setTimeout(() => circle.classList.remove('changed'), 200);
+    }
+  } else {
+    // Wrong key
+    if (spWaiting) return;
+    spErrors++;
+    spWrongKey = semi;
+    spWaiting  = true;
+    playPiano(midiToFreq(baseMidi + semi));
+    buildSpContainer();
+    setTimeout(() => {
+      if (spWrongKey === semi) {
+        spWrongKey = null;
+        spWaiting  = false;
+        buildSpContainer();
+      }
+    }, 1800);
+  }
+}
+
+function renderSpCompletion(container, notes) {
+  document.getElementById('sp-progress').textContent = '✓ Done';
+
+  const errClass = spErrors === 0 ? 'sp-stat-good' : spErrors <= 4 ? 'sp-stat-warn' : 'sp-stat-err';
+  const msg = spErrors === 0
+    ? 'Perfect run — no mistakes!'
+    : spErrors <= 3 ? 'Great job! Nearly flawless.'
+    : spErrors <= 7 ? 'Good practice. Try again for a clean run!'
+    : 'Keep at it — repetition builds muscle memory.';
+
+  const panel = document.createElement('div');
+  panel.className = 'sp-completion';
+  panel.innerHTML =
+    `<div class="sp-completion-icon">🎉</div>` +
+    `<div class="sp-completion-title">Scale Complete!</div>` +
+    `<div class="sp-completion-stats">` +
+      `<span class="sp-stat-good">✓ ${notes.length} notes</span>` +
+      `<span class="${errClass}">${spErrors === 0 ? '✓' : '✗'} ${spErrors} error${spErrors !== 1 ? 's' : ''}</span>` +
+    `</div>` +
+    `<div class="sp-completion-msg">${msg}</div>`;
+
+  const btnRow = document.createElement('div');
+  btnRow.className = 'sp-completion-btns';
+
+  const againBtn = document.createElement('button');
+  againBtn.textContent = '↺ Practice Again';
+  againBtn.addEventListener('click', () => {
+    spNoteIdx   = 0;
+    spErrors    = 0;
+    spWrongKey  = null;
+    spWaiting   = false;
+    spCompleted = false;
+    buildSpContainer();
+  });
+
+  const backBtn = document.createElement('button');
+  backBtn.textContent = '← Back to Scale';
+  backBtn.addEventListener('click', () => showPage('page-scales-course'));
+
+  btnRow.appendChild(againBtn);
+  btnRow.appendChild(backBtn);
+  panel.appendChild(btnRow);
+  container.appendChild(panel);
+}
+
+function spReset() {
+  spNoteIdx   = 0;
+  spErrors    = 0;
+  spWrongKey  = null;
+  spWaiting   = false;
+  spCompleted = false;
 }
