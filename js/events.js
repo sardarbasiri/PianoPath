@@ -177,8 +177,10 @@ document.addEventListener('DOMContentLoaded', () => {
   // ── Chords practice page ─────────────────────────────────────
   document.getElementById('back-to-chords-course-prac').addEventListener('click', () => {
     clearInterval(chordPlayTimer);
-    showPage('page-chords-course');
-    renderChordCourse();
+    chordPracticeMode = true;
+    document.querySelector('#page-chords-list .subtitle').textContent = 'Choose a key to practice';
+    showPage('page-chords-list');
+    renderChordsList();
   });
 
   // ── Chords list page ──────────────────────────────────────────

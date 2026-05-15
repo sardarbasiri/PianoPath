@@ -135,15 +135,18 @@ function toggleNaming() {
   const shortText = selectedNaming === 'american'
     ? '🇺🇸 American'
     : '🇮🇹 Italian';
-  document.querySelectorAll('#naming-btn, #naming-btn-learn, #naming-btn-scales, #naming-btn-arps').forEach(btn => {
+  document.querySelectorAll('#naming-btn, #naming-btn-learn, #naming-btn-scales, #naming-btn-arps, #naming-btn-chords').forEach(btn => {
     if (btn) btn.textContent = text;
   });
   const courseBtn = document.getElementById('naming-btn-scales-course');
   if (courseBtn) courseBtn.textContent = shortText;
   const arpCourseBtn = document.getElementById('naming-btn-arps-course');
   if (arpCourseBtn) arpCourseBtn.textContent = shortText;
+  const chordCourseBtn = document.getElementById('naming-btn-chords-course');
+  if (chordCourseBtn) chordCourseBtn.textContent = shortText;
   renderScalesList();
   renderArpList();
+  renderChordsList();
 }
 
 function getNoteName(note) {
@@ -265,6 +268,10 @@ function learnClick() {
     arpPracticeMode = false;
     document.getElementById('arps-list-subtitle').textContent = 'Choose an arpeggio to learn';
     goToArpeggios();
+  } else if (selectedTopic === 'chords') {
+    chordPracticeMode = false;
+    document.querySelector('#page-chords-list .subtitle').textContent = 'Choose a key to explore its chords';
+    goToChords();
   } else {
     alert('Coming soon!');
   }
@@ -283,6 +290,10 @@ function practiceClick() {
     document.getElementById('arps-list-subtitle').textContent = 'Choose an arpeggio to practice';
     showPage('page-arpeggios-list');
     renderArpList();
+  } else if (selectedTopic === 'chords') {
+    chordPracticeMode = true;
+    document.querySelector('#page-chords-list .subtitle').textContent = 'Choose a key to practice';
+    goToChords();
   } else {
     alert('Coming soon!');
   }
