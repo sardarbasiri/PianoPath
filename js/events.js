@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('btn-both').addEventListener('click',    () => selectClef('both'));
 
   // ── Page 4 ─────────────────────────────────────────────────
-  document.getElementById('back-to-6').addEventListener('click', () => showPage('page-6'));
+  document.getElementById('back-to-6').addEventListener('click', () => { clearInterval(timer); showPage('page-6'); });
 
   // ── Page 5 ─────────────────────────────────────────────────
   document.getElementById('back-to-3').addEventListener('click',          () => showPage('page-3'));
@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('lesson-start-btn').addEventListener('click',() => startLearnPractice());
 
   // ── Page 11 ────────────────────────────────────────────────
-  document.getElementById('back-to-9-practice').addEventListener('click', () => showPage('page-9'));
+  document.getElementById('back-to-9-practice').addEventListener('click', () => { clearInterval(learnTimer); showPage('page-9'); });
 
   // ── Page 12 ────────────────────────────────────────────────
   document.getElementById('back-to-8').addEventListener('click',                () => showPage('page-8'));

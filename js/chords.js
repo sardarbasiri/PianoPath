@@ -718,10 +718,12 @@ function renderCpCompletion(container) {
     startChordPractice(cpCourse, cpTypeIdx, cpHand));
 
   const backBtn = document.createElement('button');
-  backBtn.textContent = '← Back to Chord';
+  backBtn.textContent = '← Back to List';
   backBtn.addEventListener('click', () => {
-    showPage('page-chords-course');
-    renderChordCourse();
+    chordPracticeMode = true;
+    document.querySelector('#page-chords-list .subtitle').textContent = 'Choose a key to practice';
+    showPage('page-chords-list');
+    renderChordsList();
   });
 
   btnRow.appendChild(againBtn);

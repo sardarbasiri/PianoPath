@@ -106,9 +106,16 @@ body {
 
 #page-scales-course,
 #page-scales-practice,
+#page-arpeggios-course,
 #page-arpeggios-practice {
   justify-content: flex-start;
   padding-top: 0.3rem;
+  overflow: hidden;
+}
+
+#page-arpeggios-list {
+  justify-content: flex-start;
+  padding-top: 0.4rem;
   overflow: hidden;
 }
 
