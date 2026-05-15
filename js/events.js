@@ -183,6 +183,27 @@ document.addEventListener('DOMContentLoaded', () => {
     renderChordsList();
   });
 
+  document.querySelectorAll('[data-cp-type]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const idx = CHORD_TYPES.findIndex(t => t.id === btn.dataset.cpType);
+      startChordPractice(cpCourse, idx, cpHand);
+    });
+  });
+
+  document.querySelectorAll('[data-cp-inv]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const inv = parseInt(btn.dataset.cpInv);
+      if (inv > cpMaxInv) return;
+      startChordPractice(cpCourse, cpTypeIdx, cpHand, inv);
+    });
+  });
+
+  document.querySelectorAll('[data-cp-hand]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      startChordPractice(cpCourse, cpTypeIdx, btn.dataset.cpHand);
+    });
+  });
+
   // ── Chords list page ──────────────────────────────────────────
   document.getElementById('back-to-2-chords').addEventListener('click', () => showPage('page-2'));
   document.getElementById('naming-btn-chords').addEventListener('click', () => toggleNaming());

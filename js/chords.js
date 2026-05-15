@@ -419,11 +419,26 @@ let cpAdvancing   = false; // true during the 800 ms auto-advance pause
 let cpCompleted   = false;
 let cpHintMode    = false; // true for ~2 s after a wrong press — reveals chord keys
 
-function startChordPractice(rootIdx, typeIdx, handStr) {
+function syncCpTabs() {
+  const type = CHORD_TYPES[cpTypeIdx];
+
+  document.querySelectorAll('[data-cp-type]').forEach(b =>
+    b.classList.toggle('active', b.dataset.cpType === type.id));
+
+  const inv3Btn = document.getElementById('cp-inv-3rd');
+  if (inv3Btn) inv3Btn.style.display = type.seventh ? '' : 'none';
+  document.querySelectorAll('[data-cp-inv]').forEach(b =>
+    b.classList.toggle('active', b.dataset.cpInv === String(cpInvIdx)));
+
+  document.querySelectorAll('[data-cp-hand]').forEach(b =>
+    b.classList.toggle('active', b.dataset.cpHand === cpHand));
+}
+
+function startChordPractice(rootIdx, typeIdx, handStr, startInv = 0) {
   cpCourse      = rootIdx;
   cpTypeIdx     = typeIdx;
   cpHand        = handStr;
-  cpInvIdx      = 0;
+  cpInvIdx      = startInv;
   cpMaxInv      = CHORD_TYPES[typeIdx].seventh ? 3 : 2;
   cpHit         = new Set();
   cpInvErrors   = 0;
@@ -441,6 +456,8 @@ function startChordPractice(rootIdx, typeIdx, handStr) {
 
 // ── Build the practice UI ────────────────────────────────────────
 function buildCpContainer() {
+  syncCpTabs();
+
   const rootData  = CHORD_ROOTS[cpCourse];
   const type      = CHORD_TYPES[cpTypeIdx];
   const isSeventh = type.seventh;
