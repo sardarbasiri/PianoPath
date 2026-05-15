@@ -631,10 +631,12 @@ function renderApCompletion(container, notes) {
   });
 
   const backBtn = document.createElement('button');
-  backBtn.textContent = '← Back to Arpeggio';
+  backBtn.textContent = '← Back to List';
   backBtn.addEventListener('click', () => {
-    showPage('page-arpeggios-course');
-    renderArpCourse();
+    arpPracticeMode = true;
+    document.getElementById('arps-list-subtitle').textContent = 'Choose an arpeggio to practice';
+    showPage('page-arpeggios-list');
+    renderArpList();
   });
 
   btnRow.appendChild(againBtn);

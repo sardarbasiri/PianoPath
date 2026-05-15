@@ -846,10 +846,12 @@ function renderSpCompletion(container, notes) {
   });
 
   const backBtn = document.createElement('button');
-  backBtn.textContent = '← Back to Scale';
+  backBtn.textContent = '← Back to List';
   backBtn.addEventListener('click', () => {
-    showPage('page-scales-course');
-    renderScaleCourse();
+    scalePracticeMode = true;
+    document.querySelector('#page-scales-list .subtitle').textContent = 'Choose a scale to practice';
+    showPage('page-scales-list');
+    renderScalesList();
   });
 
   btnRow.appendChild(againBtn);

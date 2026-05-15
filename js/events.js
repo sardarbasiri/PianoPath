@@ -60,8 +60,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // ── Scale Practice Page ────────────────────────────────────
   document.getElementById('back-to-scales-course-prac').addEventListener('click', () => {
-    showPage('page-scales-course');
-    renderScaleCourse();
+    scalePracticeMode = true;
+    document.querySelector('#page-scales-list .subtitle').textContent = 'Choose a scale to practice';
+    showPage('page-scales-list');
+    renderScalesList();
   });
 
   document.querySelectorAll('[data-sp-mode]').forEach(btn => {
@@ -142,8 +144,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // ── Arpeggio practice page ───────────────────────────────────────
   document.getElementById('back-to-arps-course-prac').addEventListener('click', () => {
-    showPage('page-arpeggios-course');
-    renderArpCourse();
+    arpPracticeMode = true;
+    document.getElementById('arps-list-subtitle').textContent = 'Choose an arpeggio to practice';
+    showPage('page-arpeggios-list');
+    renderArpList();
   });
 
   document.querySelectorAll('[data-ap-mode]').forEach(btn => {
