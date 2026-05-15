@@ -64,7 +64,8 @@ body {
 #page-1, #page-2, #page-3, #page-4, #page-5, #page-6,
 #page-7, #page-8, #page-9, #page-10, #page-11, #page-12,
 #page-scales-list, #page-scales-course, #page-scales-practice,
-#page-arpeggios-list, #page-arpeggios-course {
+#page-arpeggios-list, #page-arpeggios-course, #page-arpeggios-practice,
+#page-chords-list, #page-chords-course, #page-chords-practice {
   text-align: center;
   padding: 0.5rem 0.75rem;
   padding-bottom: max(0.5rem, env(safe-area-inset-bottom));
@@ -104,7 +105,8 @@ body {
 }
 
 #page-scales-course,
-#page-scales-practice {
+#page-scales-practice,
+#page-arpeggios-practice {
   justify-content: flex-start;
   padding-top: 0.3rem;
   overflow: hidden;
@@ -177,7 +179,11 @@ button:hover, button:active {
 #page-scales-course .back-btn,
 #page-scales-practice .back-btn,
 #page-arpeggios-list .back-btn,
-#page-arpeggios-course .back-btn {
+#page-arpeggios-course .back-btn,
+#page-arpeggios-practice .back-btn,
+#page-chords-list .back-btn,
+#page-chords-course .back-btn,
+#page-chords-practice .back-btn {
   align-self: flex-start;
   margin-bottom: 0.2rem;
 }
@@ -595,9 +601,30 @@ button:hover, button:active {
   color: #0d0d0f;
 }
 
+/* ── Arpeggio keyboard area ──────────────────────────────────────── */
+/* Wrapper that gives finger rows and keyboard an identical pixel width
+   so left:X% finger positions always line up with key positions. */
+.arp-keyboard-inner {
+  width: 100%;
+  max-width: 700px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
+
+/* One row of finger numbers per crossing group */
+.arp-group-fingers {
+  position: relative;
+  min-height: clamp(16px, 2.5vh, 22px);
+  flex-shrink: 0;
+}
+
 /* ── Scale Practice Mode ─────────────────────────────────── */
 
-#sp-container {
+#sp-container,
+#ap-container {
   width: 100%;
   flex: 1;
   display: flex;
@@ -698,6 +725,9 @@ button:hover, button:active {
 .scale-key-white.sp-key-wrong { background: #c94444 !important; }
 .scale-key-black.sp-key-wrong { background: #a03030 !important; }
 
+/* Neutral key label in practice mode — visible but not a hint */
+.scale-key-label.sp-label-neutral { color: #888; }
+
 /* Hint key (correct key shown after wrong press) — green */
 .scale-key-white.sp-key-hint {
   background: #3a7a56 !important;
@@ -786,4 +816,330 @@ button:hover, button:active {
   margin-top: 0.3rem;
   flex-wrap: wrap;
   justify-content: center;
+}
+
+/* ── Chord pages layout ──────────────────────────────────────── */
+
+#page-chords-list {
+  justify-content: flex-start;
+  padding-top: 0.4rem;
+  overflow: hidden;
+}
+
+#page-chords-course {
+  justify-content: flex-start;
+  padding-top: 0.3rem;
+  overflow: hidden;
+}
+
+/* Chord keyboard container — fills remaining vertical space */
+#chord-keyboard-container {
+  width: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-height: 0;
+  gap: 0.2rem;
+}
+
+/* ── Chord info panel ──────────────────────────────────────────── */
+.chord-info-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.08rem;
+  padding: 0.15rem 0 0.05rem;
+  flex-shrink: 0;
+}
+
+.chord-symbol {
+  font-size: clamp(1.4rem, 3.5vw, 2.2rem);
+  font-weight: 700;
+  color: #c9a84c;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+}
+
+.chord-desc {
+  font-size: clamp(0.6rem, 1.25vw, 0.78rem);
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+}
+
+.chord-notes {
+  font-size: clamp(0.75rem, 1.7vw, 1rem);
+  color: #d0ccc4;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+/* ── Finger badge row ──────────────────────────────────────────── */
+.chord-finger-row {
+  position: relative;
+  width: 100%;
+  max-width: 700px;
+  margin: 0 auto;
+  height: clamp(22px, 3.5vw, 28px);
+  flex-shrink: 0;
+}
+
+.chord-finger-badge {
+  position: absolute;
+  transform: translateX(-50%);
+  width: clamp(18px, 3vw, 24px);
+  height: clamp(18px, 3vw, 24px);
+  border-radius: 50%;
+  background: #c9a84c;
+  color: #0d0d0f;
+  font-size: clamp(0.58rem, 1.2vw, 0.75rem);
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  top: 50%;
+  margin-top: calc(clamp(18px, 3vw, 24px) / -2);
+  pointer-events: none;
+}
+
+/* ── Chord keyboard ────────────────────────────────────────────── */
+/* Inherits .scale-keyboard sizing but overrides height to be taller
+   (chord keys are wider since range is ~1 octave, not 2). */
+.chord-keyboard {
+  height: clamp(90px, 19dvh, 155px) !important;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+/* Chord notes highlighted in warm amber, not the scale blue */
+.scale-key-white.chord-key-active {
+  background: rgba(201, 168, 76, 0.22) !important;
+  border-color: #c9a84c !important;
+}
+
+.scale-key-black.chord-key-active {
+  background: #7a5a14 !important;
+  border-color: #c9a84c !important;
+}
+
+/* Note label on chord keys */
+.chord-note-label {
+  color: #c9a84c !important;
+  font-weight: 700 !important;
+  font-size: clamp(0.48rem, 1vw, 0.62rem) !important;
+}
+
+.scale-key-black .chord-note-label {
+  color: #f5d98a !important;
+  font-size: clamp(0.4rem, 0.9vw, 0.55rem) !important;
+}
+
+/* ── Chord legend ──────────────────────────────────────────────── */
+.chord-legend {
+  text-align: center;
+  font-size: clamp(0.55rem, 1.1vw, 0.68rem);
+  color: #444;
+  flex-shrink: 0;
+  padding: 0.05rem 0;
+  letter-spacing: 0.04em;
+}
+
+/* ── Chord practice page ───────────────────────────────────────── */
+
+#page-chords-practice {
+  justify-content: flex-start;
+  padding-top: 0.3rem;
+  overflow: hidden;
+}
+
+#cp-container {
+  width: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-height: 0;
+  gap: 0.18rem;
+}
+
+/* Prompt */
+.cp-prompt {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.04rem;
+  padding: 0.1rem 0 0.05rem;
+  flex-shrink: 0;
+}
+
+.cp-cue {
+  font-size: clamp(0.58rem, 1.1vw, 0.72rem);
+  color: #555;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+}
+
+.cp-symbol {
+  font-size: clamp(1.7rem, 4.2vw, 2.8rem);
+  font-weight: 700;
+  color: #c9a84c;
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+}
+
+.cp-symbol-done { color: #4c9a6a; }
+
+.cp-type-label {
+  font-size: clamp(0.6rem, 1.25vw, 0.75rem);
+  color: #666;
+}
+
+.cp-inv-label {
+  font-size: clamp(0.65rem, 1.35vw, 0.82rem);
+  color: #c9a84c;
+  font-weight: 600;
+}
+
+/* Practice key states */
+@keyframes cp-target-glow {
+  0%, 100% { box-shadow: 0 0 0 2px rgba(201,168,76,0.45), 0 0 7px rgba(201,168,76,0.25); }
+  50%       { box-shadow: 0 0 0 3px rgba(201,168,76,0.7),  0 0 16px rgba(201,168,76,0.55); }
+}
+
+.scale-key-white.cp-key-target {
+  background: rgba(201,168,76,0.12) !important;
+  animation: cp-target-glow 1.1s ease-in-out infinite;
+  z-index: 1;
+}
+
+.scale-key-black.cp-key-target {
+  background: #4a3808 !important;
+  animation: cp-target-glow 1.1s ease-in-out infinite;
+}
+
+/* Hint key — revealed after a wrong press */
+.scale-key-white.cp-key-hint {
+  background: rgba(201,168,76,0.14) !important;
+  animation: cp-target-glow 1.1s ease-in-out infinite;
+  z-index: 1;
+}
+
+.scale-key-black.cp-key-hint {
+  background: #4a3808 !important;
+  animation: cp-target-glow 1.1s ease-in-out infinite;
+}
+
+.scale-key-white.cp-key-correct {
+  background: rgba(76,154,106,0.35) !important;
+  border-color: #4c9a6a !important;
+  z-index: 1;
+}
+
+.scale-key-black.cp-key-correct {
+  background: #245538 !important;
+  border-color: #4c9a6a !important;
+}
+
+.scale-key-white.cp-key-wrong { background: #c94444 !important; }
+.scale-key-black.cp-key-wrong { background: #8f2c2c !important; }
+
+/* Finger badge states in practice mode */
+.chord-finger-badge.cp-badge-done {
+  background: #4c9a6a;
+  color: #fff;
+}
+
+.chord-finger-badge.cp-badge-hint {
+  background: transparent;
+  color: #c9a84c;
+  border: 2px solid #c9a84c;
+}
+
+/* Note name labels on practice keys */
+.cp-note-neutral {
+  color: rgba(130, 128, 140, 0.45) !important;
+}
+
+.scale-key-black .cp-note-neutral {
+  color: rgba(220, 215, 200, 0.3) !important;
+}
+
+.cp-note-hint {
+  color: rgba(201, 168, 76, 0.9) !important;
+  font-weight: 600 !important;
+}
+
+.scale-key-black .cp-note-hint {
+  color: rgba(245, 217, 138, 0.95) !important;
+  font-weight: 600 !important;
+}
+
+.cp-note-target {
+  color: rgba(201,168,76,0.45) !important;
+  font-weight: 600 !important;
+}
+
+.cp-note-done {
+  color: #4c9a6a !important;
+  font-weight: 700 !important;
+}
+
+.scale-key-black .cp-note-target { color: rgba(201,168,76,0.5) !important; }
+.scale-key-black .cp-note-done   { color: #6dd9a0 !important; }
+
+/* Note completion dots */
+.cp-dots-row {
+  display: flex;
+  gap: 0.45rem;
+  justify-content: center;
+  flex-shrink: 0;
+  padding: 0.05rem 0;
+}
+
+.cp-dot {
+  width: clamp(9px, 1.8vw, 14px);
+  height: clamp(9px, 1.8vw, 14px);
+  border-radius: 50%;
+  background: #1e1e22;
+  border: 2px solid #3a3a3e;
+  flex-shrink: 0;
+  transition: background 0.15s, border-color 0.15s, box-shadow 0.15s;
+}
+
+.cp-dot.cp-dot-found {
+  background: #4c9a6a;
+  border-color: #4c9a6a;
+  box-shadow: 0 0 5px rgba(76,154,106,0.5);
+}
+
+/* Feedback */
+.cp-feedback {
+  text-align: center;
+  font-size: clamp(0.68rem, 1.4vw, 0.85rem);
+  min-height: 1.4em;
+  flex-shrink: 0;
+  padding: 0.02rem 0.5rem;
+}
+
+.cp-fb-ok    { color: #4c9a6a; font-weight: 600; }
+.cp-fb-wrong { color: #e07070; }
+.cp-fb-hint  { color: #4a4a50; font-style: italic; }
+
+/* Per-inversion breakdown in completion */
+.cp-breakdown {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  font-size: clamp(0.62rem, 1.25vw, 0.78rem);
+  font-weight: 600;
+  padding: 0.1rem 0;
+}
+
+.cp-breakdown-chip {
+  padding: 0.1rem 0.45rem;
+  border-radius: 20px;
+  border: 1px solid currentColor;
+  opacity: 0.85;
 }

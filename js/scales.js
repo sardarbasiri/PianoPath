@@ -591,6 +591,7 @@ let spHand      = 'rh';
 let spNoteIdx   = 0;     // next note to play (play-order index 0–14)
 let spErrors    = 0;
 let spWrongKey  = null;  // semitone of last incorrect key pressed
+let spHintMode  = false; // true while showing correct-key hint after a mistake
 let spWaiting   = false; // blocks rapid wrong-key spam
 let spCompleted = false;
 
@@ -625,12 +626,14 @@ function getSpRange() {
 
 function startScalePractice(courseIdx) {
   spCourse    = courseIdx;
+  scaleCourse = courseIdx;
   spMode      = scaleTab;  // inherit current learn-mode settings
   spDir       = scaleDir;
   spHand      = scaleHand;
   spNoteIdx   = 0;
   spErrors    = 0;
   spWrongKey  = null;
+  spHintMode  = false;
   spWaiting   = false;
   spCompleted = false;
   clearInterval(scalePlayTimer);
@@ -667,12 +670,9 @@ function buildSpContainer() {
   }
 
   // Play-order index → spatial (low→high) index
-  const spatialIdx   = spDir === 'asc' ? spNoteIdx : (notes.length - 1 - spNoteIdx);
-  const currentNote  = notes[spNoteIdx];
+  const spatialIdx    = spDir === 'asc' ? spNoteIdx : (notes.length - 1 - spNoteIdx);
+  const currentNote   = notes[spNoteIdx];
   const currentFinger = fingering[spatialIdx];
-
-  // Spatial (low→high) order for key/finger rendering
-  const spatialNotes = spDir === 'asc' ? notes : [...notes].reverse();
 
   // Progress badge
   document.getElementById('sp-progress').textContent = `${spNoteIdx + 1} / ${notes.length}`;
@@ -688,8 +688,8 @@ function buildSpContainer() {
   const noteInfo = document.createElement('div');
   noteInfo.className = 'sp-note-info';
   noteInfo.innerHTML =
-    `<span class="sp-note-label">${spHand === 'rh' ? 'Right Hand' : 'Left Hand'} — finger</span>` +
-    `<span class="sp-note-name">${displayName(currentNote, c.useFlat)}</span>`;
+    `<span class="sp-note-label">${spHand === 'rh' ? 'Right Hand' : 'Left Hand'}</span>` +
+    `<span class="sp-note-label">Finger ${currentFinger} — what's the note?</span>`;
 
   infoRow.appendChild(circle);
   infoRow.appendChild(noteInfo);
@@ -702,66 +702,32 @@ function buildSpContainer() {
   const whiteKeys = allKeys.filter(s => !isBlackKey(s));
   const numW      = whiteKeys.length;
   const wPct      = 100 / numW;
-  const wkIdx     = {};
-  whiteKeys.forEach((s, i) => { wkIdx[s] = i; });
-
-  // ── Finger number row ──
-  const fRow = document.createElement('div');
-  fRow.className = 'scale-finger-display';
-  fRow.style.cssText = 'position:relative;display:block;min-height:1.4em;width:100%;max-width:700px;margin:0 auto;';
-
-  for (let i = 0; i < spatialNotes.length; i++) {
-    const s = spatialNotes[i];
-    let ctrPct;
-    if (!isBlackKey(s)) {
-      ctrPct = (wkIdx[s] + 0.5) * wPct;
-    } else {
-      ctrPct = (wkIdx[s - 1] + 1.0) * wPct;
-    }
-
-    // Determine if this spatial note is done / current / upcoming
-    const playIdx = spDir === 'asc' ? i : (notes.length - 1 - i);
-    let cls = 'scale-finger-num';
-    if (i === spatialIdx)      cls += ' sp-finger-current';
-    else if (playIdx < spNoteIdx) cls += ' sp-finger-done';
-    else                          cls += ' sp-finger-upcoming';
-
-    const sp = document.createElement('span');
-    sp.className = cls;
-    sp.textContent = fingering[i];
-    sp.style.cssText = `position:absolute;left:${ctrPct}%;transform:translateX(-50%);`;
-    fRow.appendChild(sp);
-  }
-  container.appendChild(fRow);
 
   // ── Piano keyboard ──
-  const scaleSet = new Set(notes);
+  // No scale highlighting — user must recall which keys to play from memory.
+  // All white keys labeled so the user can navigate; correct key revealed (green)
+  // only after a wrong press.
   const kb = document.createElement('div');
   kb.className = 'scale-keyboard';
   kb.style.cssText = 'position:relative;width:100%;flex-shrink:0;';
 
   function makeKey(s, leftPct, widthPct, heightPct, isBlack) {
-    const inScale  = scaleSet.has(s);
-    const isCurrent = s === currentNote && spWrongKey === null;
-    const isWrong   = s === spWrongKey;
-    const isHint    = spWrongKey !== null && s === currentNote;
+    const isWrong = s === spWrongKey;
+    const isHint  = spHintMode && s === currentNote;
 
     const el = document.createElement('div');
     el.className = (isBlack ? 'scale-key-black' : 'scale-key-white') +
-      (inScale   ? ' in-scale'        : '') +
-      (isCurrent ? ' sp-key-current'  : '') +
-      (isWrong   ? ' sp-key-wrong'    : '') +
-      (isHint    ? ' sp-key-hint'     : '');
+      (isWrong ? ' sp-key-wrong' : '') +
+      (isHint  ? ' sp-key-hint'  : '');
 
-    const zIdx = isBlack ? 2 : (inScale ? 1 : 0);
     el.style.cssText =
       `left:${leftPct}%;width:${widthPct}%;position:absolute;` +
-      `height:${heightPct}%;top:0;z-index:${zIdx};box-sizing:border-box;`;
+      `height:${heightPct}%;top:0;z-index:${isBlack ? 2 : 0};box-sizing:border-box;`;
     el.addEventListener('click', () => spHandleClick(s));
 
-    if (inScale) {
+    if (!isBlack) {
       const lbl = document.createElement('span');
-      lbl.className = 'scale-key-label' + (isHint || isCurrent ? ' highlighted' : '');
+      lbl.className = 'scale-key-label' + (isHint ? ' highlighted' : ' sp-label-neutral');
       lbl.textContent = displayName(s, c.useFlat);
       el.appendChild(lbl);
     }
@@ -797,12 +763,7 @@ function buildSpContainer() {
   fb.className = 'sp-feedback';
   if (spWrongKey !== null) {
     fb.innerHTML =
-      `<span class="sp-feedback-wrong">✗ You pressed <strong>${displayName(spWrongKey, c.useFlat)}</strong>` +
-      ` — the correct note is <strong>${displayName(currentNote, c.useFlat)}</strong> (finger ${currentFinger})</span>`;
-  } else if (spNoteIdx === 0) {
-    fb.innerHTML = `<span class="sp-feedback-hint">Tap the glowing key to start</span>`;
-  } else {
-    fb.textContent = '';
+      `<span class="sp-feedback-wrong">✗ Wrong — correct note is <strong>${displayName(currentNote, c.useFlat)}</strong></span>`;
   }
   container.appendChild(fb);
 }
@@ -815,14 +776,14 @@ function spHandleClick(semi) {
   const baseMidi = 60;
 
   if (semi === expected) {
-    // Correct — always process even if a wrong-key timeout is pending
-    spWrongKey  = null;
-    spWaiting   = false;
+    // Correct — clear hint state and advance
+    spWrongKey = null;
+    spHintMode = false;
+    spWaiting  = false;
     playPiano(midiToFreq(baseMidi + semi));
     spNoteIdx++;
     if (spNoteIdx >= notes.length) spCompleted = true;
 
-    // Bounce the finger circle briefly then rebuild
     buildSpContainer();
     const circle = document.querySelector('.sp-finger-circle');
     if (circle) {
@@ -830,16 +791,18 @@ function spHandleClick(semi) {
       setTimeout(() => circle.classList.remove('changed'), 200);
     }
   } else {
-    // Wrong key
+    // Wrong key — flash red, then show correct key in green
     if (spWaiting) return;
     spErrors++;
     spWrongKey = semi;
+    spHintMode = true;
     spWaiting  = true;
     playPiano(midiToFreq(baseMidi + semi));
     buildSpContainer();
     setTimeout(() => {
       if (spWrongKey === semi) {
         spWrongKey = null;
+        spHintMode = false;
         spWaiting  = false;
         buildSpContainer();
       }
@@ -884,7 +847,10 @@ function renderSpCompletion(container, notes) {
 
   const backBtn = document.createElement('button');
   backBtn.textContent = '← Back to Scale';
-  backBtn.addEventListener('click', () => showPage('page-scales-course'));
+  backBtn.addEventListener('click', () => {
+    showPage('page-scales-course');
+    renderScaleCourse();
+  });
 
   btnRow.appendChild(againBtn);
   btnRow.appendChild(backBtn);
@@ -896,6 +862,7 @@ function spReset() {
   spNoteIdx   = 0;
   spErrors    = 0;
   spWrongKey  = null;
+  spHintMode  = false;
   spWaiting   = false;
   spCompleted = false;
 }

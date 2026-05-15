@@ -131,8 +131,6 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   document.getElementById('btn-arp-major').addEventListener('click',  () => setArpMode('major'));
   document.getElementById('btn-arp-minor').addEventListener('click',  () => setArpMode('minor'));
-  document.getElementById('btn-arp-dom7').addEventListener('click',   () => setArpMode('dom7'));
-  document.getElementById('btn-arp-dim7').addEventListener('click',   () => setArpMode('dim7'));
   document.getElementById('btn-arp-asc').addEventListener('click',    () => setArpDirection('asc'));
   document.getElementById('btn-arp-desc').addEventListener('click',   () => setArpDirection('desc'));
   document.getElementById('btn-arp-rh').addEventListener('click',     () => setArpHand('rh'));
@@ -140,6 +138,75 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('naming-btn-arps-course').addEventListener('click', () => {
     toggleNaming();
     renderArpCourse();
+  });
+
+  // ── Arpeggio practice page ───────────────────────────────────────
+  document.getElementById('back-to-arps-course-prac').addEventListener('click', () => {
+    showPage('page-arpeggios-course');
+    renderArpCourse();
+  });
+
+  document.querySelectorAll('[data-ap-mode]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      apTab = btn.dataset.apMode;
+      apReset();
+      renderApPage();
+    });
+  });
+
+  document.querySelectorAll('[data-ap-dir]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      apDir = btn.dataset.apDir;
+      apReset();
+      renderApPage();
+    });
+  });
+
+  document.querySelectorAll('[data-ap-hand]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      apHand = btn.dataset.apHand;
+      apReset();
+      renderApPage();
+    });
+  });
+
+  // ── Chords practice page ─────────────────────────────────────
+  document.getElementById('back-to-chords-course-prac').addEventListener('click', () => {
+    clearInterval(chordPlayTimer);
+    showPage('page-chords-course');
+    renderChordCourse();
+  });
+
+  // ── Chords list page ──────────────────────────────────────────
+  document.getElementById('back-to-2-chords').addEventListener('click', () => showPage('page-2'));
+  document.getElementById('naming-btn-chords').addEventListener('click', () => toggleNaming());
+
+  // ── Chords course page ────────────────────────────────────────
+  document.getElementById('back-to-chords-list').addEventListener('click', () => {
+    clearInterval(chordPlayTimer);
+    showPage('page-chords-list');
+  });
+
+  document.getElementById('naming-btn-chords-course').addEventListener('click', () => {
+    toggleNaming();
+    renderChordCourse();
+  });
+
+  document.querySelectorAll('.chord-type-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      chordTypeIdx   = CHORD_TYPES.findIndex(t => t.id === btn.dataset.chordType);
+      chordInversion = 0;
+      renderChordCourse();
+    });
+  });
+
+  document.querySelectorAll('.chord-hand-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      chordHand = btn.dataset.chordHand;
+      document.querySelectorAll('.chord-hand-btn').forEach(b =>
+        b.classList.toggle('active', b === btn));
+      buildChordKeyboard();
+    });
   });
 
   // Hide browser bar on mobile

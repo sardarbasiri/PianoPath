@@ -167,8 +167,6 @@
       <div class="scale-tabs">
         <button class="scale-mode-btn arp-mode-btn active" data-arp-mode="major" id="btn-arp-major">Major</button>
         <button class="scale-mode-btn arp-mode-btn"        data-arp-mode="minor" id="btn-arp-minor">Minor</button>
-        <button class="scale-mode-btn arp-mode-btn"        data-arp-mode="dom7"  id="btn-arp-dom7">Dom 7th</button>
-        <button class="scale-mode-btn arp-mode-btn"        data-arp-mode="dim7"  id="btn-arp-dim7">Dim 7th</button>
       </div>
       <div class="scale-tabs">
         <button class="scale-dir-btn arp-dir-btn active"  data-arp-dir="asc"  id="btn-arp-asc">↑ Ascending</button>
@@ -178,6 +176,74 @@
         <button class="toggle-btn" id="naming-btn-arps-course">🇺🇸 American</button>
       </div>
       <div id="arp-keyboard-container"></div>
+    </div>
+
+    <!-- ARPEGGIOS PRACTICE -->
+    <div id="page-arpeggios-practice">
+      <button class="back-btn" id="back-to-arps-course-prac">← Back</button>
+      <div class="practice-header">
+        <span class="practice-title" id="ap-title">Practice</span>
+        <span class="accuracy-badge" id="ap-progress">1 / 7</span>
+      </div>
+      <div class="scale-tabs" id="ap-mode-tabs">
+        <button class="scale-mode-btn" data-ap-mode="major">Major</button>
+        <button class="scale-mode-btn" data-ap-mode="minor">Minor</button>
+      </div>
+      <div class="scale-tabs" id="ap-dir-hand-tabs">
+        <button class="scale-dir-btn" data-ap-dir="asc">↑ Ascending</button>
+        <button class="scale-dir-btn" data-ap-dir="desc">↓ Descending</button>
+        <button class="scale-hand-btn" data-ap-hand="rh">Right Hand</button>
+        <button class="scale-hand-btn" data-ap-hand="lh">Left Hand</button>
+      </div>
+      <div id="ap-container"></div>
+    </div>
+
+    <!-- CHORDS LIST -->
+    <div id="page-chords-list">
+      <button class="back-btn" id="back-to-2-chords">← Back</button>
+      <h1>🎹 Chords</h1>
+      <p class="subtitle">Choose a key to explore its chords</p>
+      <div class="option-row">
+        <span>Note naming:</span>
+        <button class="toggle-btn" id="naming-btn-chords">🇺🇸 American (C, D, E...)</button>
+      </div>
+      <div id="chords-courses-list" class="courses-grid"></div>
+    </div>
+
+    <!-- CHORDS COURSE -->
+    <div id="page-chords-course">
+      <button class="back-btn" id="back-to-chords-list">← Back</button>
+      <div class="practice-header">
+        <span class="practice-title" id="chord-course-title">C Chords</span>
+        <button class="toggle-btn" id="naming-btn-chords-course">🇺🇸 American</button>
+      </div>
+      <div class="scale-tabs" id="chord-type-tabs">
+        <button class="scale-mode-btn chord-type-btn active" data-chord-type="major">Major</button>
+        <button class="scale-mode-btn chord-type-btn" data-chord-type="minor">Minor</button>
+        <button class="scale-mode-btn chord-type-btn" data-chord-type="dim">Dim</button>
+        <button class="scale-mode-btn chord-type-btn" data-chord-type="aug">Aug</button>
+        <button class="scale-mode-btn chord-type-btn" data-chord-type="maj7">Maj7</button>
+        <button class="scale-mode-btn chord-type-btn" data-chord-type="dom7">Dom7</button>
+        <button class="scale-mode-btn chord-type-btn" data-chord-type="min7">Min7</button>
+        <button class="scale-mode-btn chord-type-btn" data-chord-type="hdim">Half-Dim</button>
+        <button class="scale-mode-btn chord-type-btn" data-chord-type="dim7">Dim7</button>
+      </div>
+      <div class="scale-tabs" id="chord-inv-tabs"></div>
+      <div class="scale-tabs">
+        <button class="scale-hand-btn chord-hand-btn active" data-chord-hand="rh">Right Hand</button>
+        <button class="scale-hand-btn chord-hand-btn" data-chord-hand="lh">Left Hand</button>
+      </div>
+      <div id="chord-keyboard-container"></div>
+    </div>
+
+    <!-- CHORDS PRACTICE -->
+    <div id="page-chords-practice">
+      <button class="back-btn" id="back-to-chords-course-prac">← Back</button>
+      <div class="practice-header">
+        <span class="practice-title" id="cp-title">Chord Practice</span>
+        <span class="accuracy-badge" id="cp-progress">1 / 3</span>
+      </div>
+      <div id="cp-container"></div>
     </div>
 
     <!-- SCALES LIST -->
@@ -245,6 +311,7 @@
   <script src="js/learn.js"></script>
   <script src="js/scales.js"></script>
   <script src="js/arpeggios.js"></script>
+  <script src="js/chords.js"></script>
   <script src="js/events.js"></script>
 </body>
 </html>
